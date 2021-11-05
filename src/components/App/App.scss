@@ -1,0 +1,159 @@
+.App {
+    position: relative;
+}
+.tools {
+    z-index: 100;
+    width: 700px; // cursor - 50xp, art - 150px
+    height: 90px;
+    position: absolute;
+    left: 50%;
+    bottom: 2vh;
+    margin-left: -350px;
+    border-radius: 15px;
+    border: 1px solid #bbbbbb;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+
+    // tools__item
+    &__item {
+        background-color: white;
+        height: 100%;
+    }
+    // tools__filter
+    &__filter{
+        display: inline-block;
+        width: 50px;
+        border-right: 1px solid #bbbbbb;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+    // tools__art
+    &__art{
+        display: inline-block;
+        width: 150px;
+        border-right: 1px solid #bbbbbb;
+    }
+    // tools__text
+    &__text{
+        display: inline-block;
+        width: 50px;
+        border-right: 1px solid #bbbbbb;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+    }
+    // tools__img
+    &__img{
+        display: inline-block;
+        width: 50px;
+        border-right: 1px solid #bbbbbb;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+    }
+    // tools__template
+    &__template{
+        display: inline-block;
+        width: 50px;
+        border-right: 1px solid #bbbbbb;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+    }
+    // tools__container
+    &__container{
+        display: inline-block;
+        height: 100%;
+    }
+    // tools__history
+    &__history{
+        height: 50%;
+        border-right: 1px solid #bbbbbb;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+    }
+    // tools__save
+    &__save{
+        height: 50%;
+        border-right: 1px solid #bbbbbb;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+    }
+}
+.art-tool {
+    position: relative;
+    // atr-tool__body
+    &__body {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+        // atr-tool__body_active
+        &_active {
+            background-color: #f0f0f0;
+        }
+    }
+    //art-tool__select
+    &__select {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        transition: margin-top 0.3s;
+        // art-tool__select_active
+        &_active {
+            border: 1px solid #bbbbbb;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+            margin-top: -100px;
+        }
+    }
+}
+.filter-tool {
+    position: relative;
+    // filter-tool__body
+    &__body {
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+        &:hover {
+            transition: background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+        // filter-tool__body_active
+        &_active {
+            background-color: #f0f0f0;
+        }
+    }
+    // filter-tool__select
+    &__select {
+        display: inline-block;
+        position: absolute;
+        z-index: -1;
+        width: 100px;
+        height: 100%;
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        transition: margin-left 0.3s;
+        // filter-tool__select_active
+        &_active {
+            margin-left: -160px;
+            border: 1px solid #bbbbbb;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+        }
+    }
+}
