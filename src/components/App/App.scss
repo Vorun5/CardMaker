@@ -2,6 +2,8 @@
     position: relative;
 }
 .tools {
+    display: flex;
+    align-items: stretch;
     z-index: 100;
     width: 700px; // cursor - 50xp, art - 150px
     height: 90px;
@@ -19,7 +21,6 @@
     }
     // tools__filter
     &__filter {
-        display: inline-block;
         width: 50px;
         border-right: 1px solid #bbbbbb;
         border-top-left-radius: 15px;
@@ -27,13 +28,11 @@
     }
     // tools__art
     &__art {
-        display: inline-block;
         width: 150px;
         border-right: 1px solid #bbbbbb;
     }
     // tools__text
     &__text {
-        display: inline-block;
         width: 50px;
         border-right: 1px solid #bbbbbb;
         &:hover {
@@ -43,7 +42,6 @@
     }
     // tools__img
     &__img {
-        display: inline-block;
         width: 50px;
         border-right: 1px solid #bbbbbb;
         &:hover {
@@ -53,7 +51,6 @@
     }
     // tools__template
     &__template {
-        display: inline-block;
         width: 50px;
         border-right: 1px solid #bbbbbb;
         &:hover {
@@ -63,7 +60,6 @@
     }
     // tools__container
     &__container {
-        display: inline-block;
         height: 100%;
     }
     // tools__history

@@ -1,27 +1,37 @@
 import React, {useState} from 'react';
 import './App.scss';
 import AppBackground from "../AppBackground/AppBackground";
-import FilterTool from '../Tools/FilterTool';
-import ArtTool from "../Tools/ArtTool";
-import TextTool from "../Tools/TextTool";
-import IMGTool from "../Tools/IMGTool";
-import TemplateTool from "../Tools/TemplateTool";
-import HistoryTool from "../Tools/HistoryTool";
-import SaveTool from "../Tools/SaveTool";
+import FilterTool from '../FilterTool/FilterTool';
+import ArtTool from "../ArtTool/ArtTool";
+import TextTool from "../TextTool/TextTool";
+import IMGTool from "../IMGTool/IMGTool";
+import TemplateTool from "../TemplateTool/TemplateTool";
+import HistoryTool from "../HistoryTool/HistoryTool";
+import SaveTool from "../SaveTool/SaveTool";
 
 
 function App() {
     const [filterToolActive, setFilterToolActive] = useState(false);
     const [artToolActive, setArtToolActive] = useState(false);
     return (
-        <div className="App" onClick={() => setFilterToolActive(false)}>
+        <div className="App" onClick={() => {
+            setFilterToolActive(false);
+            setArtToolActive(false);
+        }}>
             <AppBackground>
-
-
-                <div  className="tools">
-
-                    <div onClick={e => e.stopPropagation()}><FilterTool active={filterToolActive} setActive={setFilterToolActive}/></div>
-                    <ArtTool active={artToolActive} setActive={setArtToolActive}/>
+                <div className="tools">
+                    <div onClick={e => {
+                        e.stopPropagation();
+                        setArtToolActive(false);
+                    }}>
+                        <FilterTool active={filterToolActive} setActive={setFilterToolActive}/>
+                    </div>
+                    <div onClick={e => {
+                        e.stopPropagation();
+                        setFilterToolActive(false);
+                    }}>
+                        <ArtTool active={artToolActive} setActive={setArtToolActive}/>
+                    </div>
                     <TextTool/>
                     <IMGTool/>
                     <TemplateTool/>
