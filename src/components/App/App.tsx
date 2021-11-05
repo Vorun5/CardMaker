@@ -14,14 +14,13 @@ function App() {
     const [filterToolActive, setFilterToolActive] = useState(false);
     const [artToolActive, setArtToolActive] = useState(false);
     return (
-        <div className="App">
+        <div className="App" onClick={() => setFilterToolActive(false)}>
             <AppBackground>
 
 
-                <div className="tools">
+                <div  className="tools">
 
-
-                    <FilterTool active={filterToolActive} setActive={setFilterToolActive}/>
+                    <div onClick={e => e.stopPropagation()}><FilterTool active={filterToolActive} setActive={setFilterToolActive}/></div>
                     <ArtTool active={artToolActive} setActive={setArtToolActive}/>
                     <TextTool/>
                     <IMGTool/>
