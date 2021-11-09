@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import c from './FilterTool.module.scss'
+import {Colors} from "../App/App";
 
 interface FilterToolProps {
     active: boolean;
@@ -6,25 +8,29 @@ interface FilterToolProps {
 }
 
 const FilterTool: React.FC<FilterToolProps> = ({active, setActive}) => {
-    const [s, setS] = useState('none');
+    const [s, setS] = useState(Colors.Pink);
     const colorView = {
         backgroundColor: s,
     }
+    const allColors = [1, 2, 3, 4];
     return (
-        <div className="tools__filter tools__item filter-tool">
+        <div className="tools__filter tools__item">
 
-            <div className={active ? 'filter-tool__body filter-tool__body_active' : 'filter-tool__body'}
-                 onClick={() => setActive(!active)}>
+            <div className={c.body}>
 
-                <div className="body-filter__color">
-                    <div className="body-filter__color_view" style={colorView}/>
+                <div className={active ? c.face + ' ' + c.face_active : c.face} onClick={() => setActive(!active)}>
+
+                    <div className={c.face__color}>
+                        <div className={c.face__color_view} style={colorView}/>
+                    </div>
+                    <div className={c.face__icon}/>
                 </div>
-                <div className="body-filter__icon"/>
 
-            </div>
-            <div className={active ? 'filter-tool__select filter-tool__select_active' : 'filter-tool__select'}>
+                <div className={active ? c.select + ' ' + c.select_active : c.select}>
 
+                </div>
             </div>
+
         </div>
     );
 };

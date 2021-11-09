@@ -4,10 +4,10 @@
 .tools {
     display: flex;
     align-items: stretch;
-    z-index: 100;
-    width: 700px; // cursor - 50xp, art - 150px
-    height: 90px;
     position: absolute;
+    z-index: 1100;
+    width: 700px; // filter - 50xp, art - 150px
+    height: 90px;
     left: 50%;
     bottom: 2vh;
     margin-left: -350px;
@@ -116,62 +116,4 @@
         }
     }
 }
-.filter-tool {
-    position: relative;
-    // filter-tool__body
-    &__body {
-        display: inline-block;
-        height: 100%;
-        width: 100%;
-        border-top-left-radius: 15px;
-        border-bottom-left-radius: 15px;
-        &:hover {
-            transition: background-color 0.3s;
-            background-color: #f0f0f0;
-        }
-        // filter-tool__body_active
-        &_active {
-            background-color: #f0f0f0;
-        }
-    }
-    // filter-tool__select
-    &__select {
-        display: inline-block;
-        position: absolute;
-        z-index: -1;
-        width: 100px;
-        height: 100%;
-        border-radius: 15px;
-        background-color: #f0f0f0;
-        transition: margin-left 0.3s;
-        margin-left: -45px;
-        // filter-tool__select_active
-        &_active {
-            margin-left: -160px;
-            border: 1px solid #bbbbbb;
-            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
-        }
-    }
-}
-.body-filter__color {
-    height: 50%;
-    width: 100%;
-    position: relative;
-    &_view {
-        position: absolute;
-        top: 13px;
-        left: 15px;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 1px solid #bbbbbb;
-        //background-color: red;
-    }
-}
-.body-filter__icon {
-    display: inline-block;
-    height: 50%;
-    width: 100%;
-    background: url("../../static/icon/filter.svg") center no-repeat;
-    background-size: 30px;
-}
+
