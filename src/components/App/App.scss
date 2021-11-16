@@ -1,16 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 .App {
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+.header {
+    flex: 0 0 30px;
+    width: 100%;
+    background-color: #8dcbf5;
+}
+.work-space {
+    width: 100%;
+    flex: 100 0 auto;
+    background-color: rgba(218, 227, 128, 0.11);
+}
+.card {
     position: relative;
+    border: 3px solid #eca878;
 }
 .tools {
     display: flex;
+    flex: 0 0 90px;
+    margin: 0 auto 10px auto;
     align-items: stretch;
-    position: absolute;
     z-index: 1100;
-    width: 700px; // filter - 50xp, art - 150px
-    height: 90px;
-    left: 50%;
-    bottom: 2vh;
-    margin-left: -350px;
+    width: 700px;
     border-radius: 15px;
     border: 1px solid #bbbbbb;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);

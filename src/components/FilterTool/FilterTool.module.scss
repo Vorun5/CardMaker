@@ -1,8 +1,9 @@
-.body {
+.container {
     position: relative;
 }
 
 .face {
+    cursor: pointer;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     transition: background-color 0.3s;
@@ -21,6 +22,7 @@
             height: 20px;
             border-radius: 50%;
             border: 1px solid #bbbbbb;
+            transition: background-color 0.2s;
         }
     }
 
@@ -40,18 +42,17 @@
 .select {
     position: absolute;
     z-index: -1;
-    width: 100px;
-    height: 45px;
-    border-radius: 15px;
-    border: 1px solid #bbbbbb;
-    background-color: #f0f0f0;
     top: 0;
     transition: top 0.3s;
 
     // select_active
     &_active {
-        border: 1px solid #bbbbbb;
-        box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
-        top: -60px;
+        top: -50px;
+    }
+
+    // select_color
+    &_color {
+        width: 10px;
+        height: 10px;
     }
 }
