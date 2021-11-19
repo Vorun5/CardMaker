@@ -1,13 +1,6 @@
 import React, {useState} from 'react';
 import './App.scss';
-import AppBackground from "../AppBackground/AppBackground";
 import FilterTool from '../FilterTool/FilterTool';
-import ArtTool from "../ArtTool/ArtTool";
-import TextTool from "../TextTool/TextTool";
-import IMGTool from "../IMGTool/IMGTool";
-import TemplateTool from "../TemplateTool/TemplateTool";
-import HistoryTool from "../HistoryTool/HistoryTool";
-import SaveTool from "../SaveTool/SaveTool";
 
 export enum Figures {
     Circle = 'url("../../static/icon/figures/circle.svg")',
@@ -20,24 +13,25 @@ export enum Colors {
     Yellow = 'rgb(255, 200, 0)', //#ffc800
     Purple = 'rgb(152, 69, 255)', //#9845ff
     Grey = 'rgb(128, 128, 128)', //#808080
-    None = 'rgb(255, 255, 255)',
+    None = 'transparent'//'rgb(255, 255, 255)',
 }
 
 function App() {
-    const allColors = [Colors.None, Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Purple, Colors.Grey];
+    const allColors = [Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Purple, Colors.Grey];
     const [filterToolActive, setFilterToolActive] = useState(false);
     const [artToolActive, setArtToolActive] = useState(false);
     const [filter, setFilter] = useState(Colors.None);
 
     const [w, setW] = useState(800);
     const [h, setH] = useState(600);
-    const [x, setX] = useState(0);
-    const [y, setY] = useState(0);
+    const [x, setX] = useState(20);
+    const [y, setY] = useState(50);
     const styleCard = {
         width: w,
         height: h,
         top: x,
         left: y,
+        backgroundColor: Colors.Red,
     }
     const onClick = (e: any) => {
         const parent = e.target.parentNode.getBoundingClientRect();
@@ -54,37 +48,24 @@ function App() {
             setArtToolActive(false);
         }}>
             <div className="container">
-            <div className="header"></div>
-            <div className="work-space">
-
-                <div id="card" style={styleCard} onClick={onClick} className="card"></div>
-
-            </div>
-            <div className="tools">
-                <div onClick={e => {
-                    e.stopPropagation();
-                    setArtToolActive(false);
-                }}>
-                    <FilterTool
-                        color={filter}
-                        setColor={setFilter}
-                        colorList={allColors}
-                        active={filterToolActive} setActive={setFilterToolActive}/>
+                <div className="header"></div>
+                <div className="work-space">
+                    <div className="tools">
+                        <div onClick={e => {
+                            e.stopPropagation();
+                            setArtToolActive(false);
+                        }}>
+                            <FilterTool
+                                color={filter}
+                                setColor={setFilter}
+                                colorList={allColors}
+                                active={filterToolActive} setActive={setFilterToolActive}/>
+                        </div>
+                    </div>
+                    <div id="card" style={styleCard} onClick={onClick} className="card">
+                        <div className="card__filter" style={{backgroundColor: filter}}></div>
+                    </div>
                 </div>
-                <div onClick={e => {
-                    e.stopPropagation();
-                    setFilterToolActive(false);
-                }}>
-                    <ArtTool active={artToolActive} setActive={setArtToolActive}/>
-                </div>
-                <TextTool/>
-                <IMGTool/>
-                <TemplateTool/>
-                <div className="tools__container">
-                    <HistoryTool/>
-                    <SaveTool/>
-                </div>
-            </div>
             </div>
         </div>
     );
