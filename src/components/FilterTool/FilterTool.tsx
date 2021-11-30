@@ -1,7 +1,8 @@
 import React from 'react';
 import c from './FilterTool.module.scss'
-import {Colors} from "../App/App";
+
 import ColorSelect from "../ColorSelect/ColorSelect";
+import {Colors} from "../../models/types";
 
 interface FilterToolProps {
     active: boolean;
@@ -23,10 +24,14 @@ const FilterTool: React.FC<FilterToolProps> = ({active, setActive, color, setCol
                     Filter
                 </div>
                 <div className={c.body__remove_color}>
-                    <div className={c.body__remove_color_button} onClick={() => setColor(Colors.None)}/>
+                    <div className={c.body__remove_color_button} onClick={() => {
+                        setColor(Colors.None);
+                        setActive(false);
+                    }}/>
                 </div>
-                <div className={c.body__color} >
-                    <div onClick={() => setActive(!active)} className={c.body__color_view} style={{backgroundColor: color}}/>
+                <div className={c.body__color}>
+                    <div onClick={() => setActive(!active)} className={c.body__color_view}
+                         style={{backgroundColor: color}}/>
                 </div>
             </div>
 

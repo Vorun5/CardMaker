@@ -1,20 +1,10 @@
 import React, {useState} from 'react';
 import './App.scss';
 import FilterTool from '../FilterTool/FilterTool';
+import {CardMaker, Colors} from "../../models/types";
+import {id} from "../../models/id";
+import {addItem, isArt, isTextCard, movingItem} from "../../models/functions";
 
-export enum Figures {
-    Circle = 'url("../../static/icon/figures/circle.svg")',
-}
-
-export enum Colors {
-    Red = 'rgb(255, 77, 24)', //#f24d18
-    Blue = 'rgb(105, 156, 247)', //#699cf7
-    Green = 'rgb(6, 171, 87)', //#06ab57
-    Yellow = 'rgb(255, 200, 0)', //#ffc800
-    Purple = 'rgb(152, 69, 255)', //#9845ff
-    Grey = 'rgb(128, 128, 128)', //#808080
-    None = 'transparent'//'rgb(255, 255, 255)',
-}
 
 function App() {
     const allColors = [Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Purple, Colors.Grey];
@@ -42,6 +32,98 @@ function App() {
 
         console.log(x, y);
     };
+    let testId = id();
+    let test: CardMaker = {
+        templates: [],
+        history: {
+            list: [],
+            currentIndex: 0
+        },
+        card: {
+            location: {
+                x: 100,
+                y: 100,
+            },
+            zone: {
+                location: {
+                    x: 0,
+                    y: 0,
+                },
+                size: {
+                    width: 0,
+                    height: 0,
+                }
+            },
+            background: Colors.Purple,
+            filter: Colors.Yellow,
+            size: {
+                width: 600,
+                height: 800
+            },
+            items: [
+                {
+                    id: testId,
+                    data: {
+                        body: "Hi world!",
+                        color: Colors.Blue,
+                        fontFamily: 'Areal',
+                        fontStyle: {
+                            italic: false,
+                            bolt: true,
+                            strikethrough: false,
+                        }
+                    },
+                    size: {
+                        width: 50,
+                        height: 100,
+                    },
+                    location: {
+                        x: 100,
+                        y: 200,
+                    }
+                }
+            ],
+            focusItems: [testId]
+        }
+    }
+    console.log(test)
+    test = addItem(test,
+        {
+        id: id(),
+        data: {
+            body: "Hi world!",
+            color: Colors.Blue,
+            fontFamily: 'Areal',
+            fontStyle: {
+                italic: false,
+                bolt: true,
+                strikethrough: false,
+            }
+        },
+        size: {
+            width: 50,
+            height: 100,
+        },
+        location: {
+            x: 100,
+            y: 200,
+        }
+    })
+    console.log(test)
+    test = movingItem(test, {x: 102, y: 201})
+    console.log('после измененния координат', testId)
+    console.log(test)
+
+    console.log(isArt({
+        body: "Hi world!",
+        color: Colors.Blue,
+        fontFamily: 'Areal',
+        fontStyle: {
+            italic: false,
+            bolt: true,
+            strikethrough: false,
+        }
+    }))
     return (
         <div className="App" onClick={() => {
             setFilterToolActive(false);
