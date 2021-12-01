@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import c from './FilterTool.module.scss'
 
 import ColorSelect from "../ColorSelect/ColorSelect";
@@ -14,6 +14,15 @@ interface FilterToolProps {
 
 const FilterTool: React.FC<FilterToolProps> = ({active, setActive, color, setColor, colorList}) => {
     const positionSelectBlock = colorList.length * 30 + 20;
+
+    useEffect(() => {
+        document.addEventListener('click', (event: Event) => {
+                if (!event.defaultPrevented) {
+                    
+            }
+        })
+    }, [])
+
     return (
 
         <div className={c.container}>

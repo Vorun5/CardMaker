@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import './App.scss';
 import FilterTool from '../FilterTool/FilterTool';
-import {CardMaker, Colors} from "../../models/types";
+import {CardMaker, Colors, TypeDate} from "../../models/types";
 import {id} from "../../models/id";
-import {addItem, isArt, isTextCard, movingItem} from "../../models/functions";
+import {addItem, movingItem} from "../../models/functions";
 
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
             currentIndex: 0
         },
         card: {
-            location: {
+            coordinates: {
                 x: 100,
                 y: 100,
             },
@@ -63,6 +63,7 @@ function App() {
             items: [
                 {
                     id: testId,
+                    type: TypeDate.TextCard,
                     data: {
                         body: "Hi world!",
                         color: Colors.Blue,
@@ -77,7 +78,7 @@ function App() {
                         width: 50,
                         height: 100,
                     },
-                    location: {
+                    coordinates: {
                         x: 100,
                         y: 200,
                     }
@@ -89,41 +90,32 @@ function App() {
     console.log(test)
     test = addItem(test,
         {
-        id: id(),
-        data: {
-            body: "Hi world!",
-            color: Colors.Blue,
-            fontFamily: 'Areal',
-            fontStyle: {
-                italic: false,
-                bolt: true,
-                strikethrough: false,
+            id: id(),
+            type: TypeDate.TextCard,
+
+            data: {
+                body: "Hi world!",
+                color: Colors.Blue,
+                fontFamily: 'Areal',
+                fontStyle: {
+                    italic: false,
+                    bolt: true,
+                    strikethrough: false,
+                }
+            },
+            size: {
+                width: 50,
+                height: 100,
+            },
+            coordinates: {
+                x: 100,
+                y: 200,
             }
-        },
-        size: {
-            width: 50,
-            height: 100,
-        },
-        location: {
-            x: 100,
-            y: 200,
-        }
-    })
+        })
     console.log(test)
     test = movingItem(test, {x: 102, y: 201})
     console.log('после измененния координат', testId)
     console.log(test)
-
-    console.log(isArt({
-        body: "Hi world!",
-        color: Colors.Blue,
-        fontFamily: 'Areal',
-        fontStyle: {
-            italic: false,
-            bolt: true,
-            strikethrough: false,
-        }
-    }))
     return (
         <div className="App" onClick={() => {
             setFilterToolActive(false);
