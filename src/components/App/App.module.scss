@@ -35,11 +35,10 @@ table {
     border-spacing: 0;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@100;200;300;400;500&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 
 .App {
-
 }
 
 .container{
@@ -63,7 +62,6 @@ table {
 .tools {
     z-index: 1100;
     width: 200px;
-    //border-right: 1px solid #bbbbbb;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
 
 }

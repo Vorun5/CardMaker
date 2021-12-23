@@ -4,20 +4,18 @@ import c from './FilterTool.module.scss'
 import ColorSelect from "../ColorSelect/ColorSelect";
 import {CardMaker, Colors} from "../../models/types";
 import {connect} from "react-redux";
-import {addFilter, removeFilter} from "../../actions/actionsCreaters";
-import {AddFilterActionsType, RemoveFilterActionsType} from "../../actions/actions";
+import {changeFilter} from "../../actions/actionsCreaters";
+import {ChangeFilterActionsType} from "../../actions/actions";
 
 interface FilterToolProps {
     colorList: Colors[],
     filter: Colors,
-    addFilter: (filter: Colors) => AddFilterActionsType,
-    removeFilter: () => RemoveFilterActionsType,
+    changeFilter: (filter: Colors) => ChangeFilterActionsType,
 }
 
-const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, addFilter, removeFilter}) => {
+const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, changeFilter}) => {
     const positionSelectBlock = colorList.length * 30 + 20;
     const [active, setActive] = useState(false);
-    const [color, setColor] = useState(Colors.Purple);
 
     function useOutsideClick(ref: React.MutableRefObject<any>) {
         useEffect(() => {
@@ -49,9 +47,7 @@ const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, addFilter, re
                 </div>
                 <div className={c.body__remove_color}>
                     <div className={c.body__remove_color_button} onClick={() => {
-                         //setColor(Colors.None);
-                        removeFilter();
-                        setColor(Colors.None);
+                        changeFilter(Colors.None);
                         setActive(false);
                     }}/>
                 </div>
@@ -63,7 +59,7 @@ const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, addFilter, re
 
             <div style={active ? {right: -positionSelectBlock + 'px'} : {right: "0"}}
                  className={c.select}>
-                <ColorSelect addFilter={addFilter} color={color} setColor={setColor} colorList={colorList}/>
+                <ColorSelect changeColor={changeFilter} colorList={colorList}/>
             </div>
         </div>
     );
@@ -76,7 +72,6 @@ function mapStateToProps(state: CardMaker) {
 
 
 const mapDispatchToProps = {
-    addFilter,
-    removeFilter,
+    changeFilter
 }
-export default connect(mapStateToProps, mapDispatchToProps)(FilterTool);
+export default connect(mapStateToProps, mapDispatchToProps)(FilterTool)

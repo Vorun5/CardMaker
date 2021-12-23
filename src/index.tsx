@@ -7,6 +7,7 @@ import {store} from "./reduser/redusers";
 
 ReactDOM.render(
     <Provider store={store}>
-        <App/></Provider>,
+        <App/>
+    </Provider>,
     document.getElementById('root')
 );
