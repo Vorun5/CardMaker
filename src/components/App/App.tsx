@@ -13,21 +13,21 @@ function App() {
     const allColors = [Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Purple, Colors.Grey];
     return (
         <div className={c.App}>
-            <TextEditor/>
-            {/*<div className={c.container}>*/}
-            {/*    <div className={c.header}></div>*/}
-            {/*    <div className={c.workspace}>*/}
-            {/*        <div className={c.tools}>*/}
-            {/*            <div>*/}
-            {/*                <FilterTool*/}
-            {/*                    colorList={allColors}*/}
-            {/*                    />*/}
-            {/*                <BackgroundTool colorList={allColors} />*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*        <CardView />*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+
+            <div className={c.container}>
+                <div className={c.header}></div>
+                <div className={c.workspace}>
+                    <div className={c.tools}>
+                        <div>
+                            <FilterTool
+                                colorList={allColors}
+                                />
+                            <BackgroundTool colorList={allColors} />
+                        </div>
+                    </div>
+                    <CardView />
+                </div>
+            </div>
         </div>
     );
 }
