@@ -1,0 +1,13 @@
+.container {
+  position: absolute;
+  padding: 0.5rem;
+  &:hover {
+    border-radius: 5px;
+    border: 0.1rem solid #bbbbbb;
+    padding: 0.4rem;
+  }
+}
+
+.text {
+  word-break: break-all;
+}

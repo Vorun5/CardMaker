@@ -1,0 +1,35 @@
+.container {
+  border: 2px solid #f3c398;// #6667ad;
+  background-color: white;
+
+}
+
+
+.fs {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &_item {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #bbbbbb;
+    border-radius: 20px;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+    &__bolt {
+      background: url("../../static/icon/text/bolt.svg") center no-repeat;
+    }
+
+    &__strikethrough {
+      background: url("../../static/icon/text/strikethrough.svg") center no-repeat;
+    }
+
+    &__italic {
+      background: url("../../static/icon/text/italic.svg") center no-repeat;
+    }
+
+  }
+}

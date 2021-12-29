@@ -1,0 +1,58 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  z-index: 1000;
+  border: 1px solid #bbbbbb;
+  border-radius: 5px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  // card__background
+  &__background {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  // card__filter
+  &__filter{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.centered {
+  position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 100px;
+  margin: -50px 0 0 -100px;
+}
+.test {
+  width: 100px;
+  height: 100px;
+  background-color: #1c1c1c;
+}
+.border {
+  position: absolute;
+  background-color: black;//#1aa4fb;
+  &_top {
+    height: 0.4vh;
+  }
+  &_button {
+    height: 0.4vh;
+  }
+  &_right {
+    width: 0.4vh;
+  }
+  &_left {
+    width: 0.4vh;
+  }
+}
