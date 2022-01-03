@@ -105,25 +105,28 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
     switch (action.type) {
         case ActionType.ADD_ITEM:
             return [...state, action.item];
-        case ActionType.MOVING_ITEM: {
-            let bufState = state
-            let bufItem: Item
-            bufState = bufState.filter(item => item.id !== action.id)
-            for (let i = 0; i < state.length; i++) {
-                if (state[i].id == action.id) {
-                    bufItem = state[i]
-                    state = [...bufState, {...bufItem, coordinates: action.coordinates}]
-                    return state
+        case ActionType.MOVING_ITEMS: {
+            for (let i = 0; i < action.focusItems.length; i++) {
+
+                for (let j = 0; j < state.length; j++) {
+                    if (state[j].id == action.focusItems[i]) {
+                        state[j] = {
+                            ...state[j],
+                            coordinates: action.coordinates
+                        }
+                    }
+
                 }
+
             }
             return state
         }
         case ActionType.RESTYLE_TEXT: {
-            for (let i = 0; i < action.focusItem.length; i++) {
+            for (let i = 0; i < action.focusItems.length; i++) {
 
                 for (let j = 0; j < state.length; j++) {
 
-                    if (state[j].id == action.focusItem[i]) {
+                    if (state[j].id == action.focusItems[i]) {
                         let bufDate = state[j].data
                         if (bufDate.type == TypeDate.TextCard) {
 
@@ -148,20 +151,78 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
 
             return state
         }
-        case ActionType.RECOLOR_ITEMS: {
-            for (let i = 0; i < action.focusItem.length; i++) {
+        case ActionType.RECOLOR_TEXTS: {
+            for (let i = 0; i < action.focusItems.length; i++) {
 
                 for (let j = 0; j < state.length; j++) {
 
-                    if (state[j].id == action.focusItem[i]) {
+                    if (state[j].id == action.focusItems[i]) {
                         let bufDate = state[j].data
-                        if (bufDate.type == TypeDate.TextCard || bufDate.type == TypeDate.Art) {
+                        if (bufDate.type == TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
                                 color: action.color
                             }
+                            state[j] = {
+                                ...state[j],
+                                data: {
+                                    ...bufDate
+                                }
+                            }
 
+                        }
+                    }
+
+                }
+
+            }
+
+            return state
+        }
+        case ActionType.RECOLOR_ARTS: {
+            for (let i = 0; i < action.focusItems.length; i++) {
+
+                for (let j = 0; j < state.length; j++) {
+
+                    if (state[j].id == action.focusItems[i]) {
+                        let bufDate = state[j].data
+                        if (bufDate.type == TypeDate.TextCard) {
+
+                            bufDate = {
+                                ...bufDate,
+                                color: action.color
+                            }
+                            state[j] = {
+                                ...state[j],
+                                data: {
+                                    ...bufDate
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+            return state
+        }
+
+        case ActionType.CHANGE_FONT_SIZE_TEXTS: {
+            for (let i = 0; i < action.focusItems.length; i++) {
+
+                for (let j = 0; j < state.length; j++) {
+
+                    if (state[j].id == action.focusItems[i]) {
+                        let bufDate = state[j].data
+                        if (bufDate.type == TypeDate.TextCard) {
+
+                            bufDate = {
+                                ...bufDate,
+                                fontSize: action.fontSize
+                            }
                             state[j] = {
                                 ...state[j],
                                 data: {
@@ -179,11 +240,11 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
             return state
         }
         case ActionType.CHANGE_FONT_TEXT: {
-            for (let i = 0; i < action.focusItem.length; i++) {
+            for (let i = 0; i < action.focusItems.length; i++) {
 
                 for (let j = 0; j < state.length; j++) {
 
-                    if (state[j].id == action.focusItem[i]) {
+                    if (state[j].id == action.focusItems[i]) {
                         let bufDate = state[j].data
                         if (bufDate.type == TypeDate.TextCard) {
 
@@ -191,7 +252,6 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
                                 ...bufDate,
                                 fontFamily: action.fontFamily
                             }
-
                             state[j] = {
                                 ...state[j],
                                 data: {
@@ -209,11 +269,11 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
             return state
         }
         case ActionType.CHANGE_TEXTS: {
-            for (let i = 0; i < action.focusItem.length; i++) {
+            for (let i = 0; i < action.focusItems.length; i++) {
 
                 for (let j = 0; j < state.length; j++) {
 
-                    if (state[j].id == action.focusItem[i]) {
+                    if (state[j].id == action.focusItems[i]) {
                         let bufDate = state[j].data
                         if (bufDate.type == TypeDate.TextCard) {
 
@@ -267,7 +327,7 @@ const focusItemReducer = (state = initialFocusItem, action: ActionsType): ID[] =
     switch (action.type) {
         case ActionType.ADD_FOCUS_ITEM:
             return [...state, action.id]
-        case ActionType.REMOVE_FOCUS_ITEM:
+        case ActionType.REMOVE_FOCUS_ITEMS:
             return []
         default:
             return state;
@@ -440,16 +500,14 @@ store.dispatch(selectZone({
 
 store.dispatch(changeFilter(Colors.None))
 
-store.dispatch(restyleText({
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.italic,
-        textDecoration: TextDecoration.normal
-    },
-    [store.getState().card.items[0].id]))
+store.dispatch(restyleText([store.getState().card.items[0].id], {
+    fontWeight: FontWeight.normal,
+    fontStyle: FontStyle.italic,
+    textDecoration: TextDecoration.normal
+}))
 
-store.dispatch(restyleText({
-        fontWeight: FontWeight.bolt,
-        fontStyle: FontStyle.italic,
-        textDecoration: TextDecoration.normal
-    },
-    [store.getState().card.items[1].id]))
+store.dispatch(restyleText([store.getState().card.items[1].id], {
+    fontWeight: FontWeight.bolt,
+    fontStyle: FontStyle.italic,
+    textDecoration: TextDecoration.normal
+}))

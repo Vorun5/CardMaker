@@ -1,39 +1,96 @@
 import React from 'react';
 import {ID} from "../../models/id";
-import {CardMaker, Colors, Fonts, FontStyleText, FontWeight, Item, TextCard, TypeDate} from "../../models/types";
-import c from './EditPanel.module.scss'
-import {connect} from "react-redux";
-import {changeFontText, changeTexts, recolorItems, restyleText} from "../../actions/actionsCreaters";
 import {
+    Art,
+    CardMaker,
+    Colors,
+    Fonts,
+    FontStyleText,
+    IMG,
+    Item,
+    TextCard,
+    TypeDate
+} from "../../models/types";
+
+import {connect} from "react-redux";
+import {
+    changeFontSizeText,
+    changeFontText,
+    changeTexts,
+    recolorTexts,
+    restyleText
+} from "../../actions/actionsCreaters";
+import {
+    ChangeFontSizeTexts,
     ChangeFontTextActionsType,
-    ChangeTextsActionsType,
-    RecolorItemsActionsType,
+    ChangeTextsActionsType, RecolorTextsActionsType,
     RestyleTextActionsType
 } from "../../actions/actions";
 import EditText from "./EditText/EditText";
+import EditArt from "./EditArt/EditArt";
+import EditImg from "./EditImg/EditImg";
 
 interface EditPanelToProps {
-    focusItem: ID[];
+    focusItems: ID[];
     items: Item[];
-    restyleText: (fontStyleText: FontStyleText, focusItem: ID[]) => RestyleTextActionsType,
-    recolorItems: (color: Colors, focusItem: string[]) => RecolorItemsActionsType,
-    changeFontText: (fontFamily: Fonts, focusItems: string[]) => ChangeFontTextActionsType,
-    changeTexts: (focusItem: string[], body: string) => ChangeTextsActionsType
+    restyleText: (focusItem: ID[], fontStyleText: FontStyleText) => RestyleTextActionsType,
+    recolorTexts: (focusItem: ID[], color: Colors) => RecolorTextsActionsType,
+    changeFontText: (focusItems: ID[], fontFamily: Fonts) => ChangeFontTextActionsType,
+    changeTexts: (focusItem: ID[], body: string) => ChangeTextsActionsType,
+    changeFontSizeText: (focusItems: string[], fontSize: number) => ChangeFontSizeTexts
 }
 
-function oneTextIndex(id: ID, items: Item[]): TextCard | null {
-    for (let i = 0; i < items.length; i++) {
-        if (items[i].id == id) {
-            const itemData = items[i].data
-            if (itemData.type == TypeDate.TextCard) {
-                return itemData
+function firstTextIndex(focusItems: ID[], items: Item[]): TextCard | null {
+    for (let j = 0; j < focusItems.length; j++) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].id == focusItems[j]) {
+                const itemData = items[i].data
+                if (itemData.type == TypeDate.TextCard) {
+                    return itemData
+                }
             }
         }
     }
     return null
 }
 
-const EditPanel: React.FC<EditPanelToProps> = ({changeTexts, recolorItems, restyleText, focusItem, items, changeFontText}) => {
+function firstArtIndex(focusItems: ID[], items: Item[]): Art | null {
+    for (let j = 0; j < focusItems.length; j++) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].id == focusItems[j]) {
+                const itemData = items[i].data
+                if (itemData.type == TypeDate.Art) {
+                    return itemData
+                }
+            }
+        }
+    }
+    return null
+}
+
+function firstImgIndex(focusItems: ID[], items: Item[]): IMG | null {
+    for (let j = 0; j < focusItems.length; j++) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].id == focusItems[j]) {
+                const itemData = items[i].data
+                if (itemData.type == TypeDate.IMG) {
+                    return itemData
+                }
+            }
+        }
+    }
+    return null
+}
+
+const EditPanel: React.FC<EditPanelToProps> = ({
+                                                   changeFontSizeText,
+                                                   changeTexts,
+                                                   recolorTexts,
+                                                   restyleText,
+                                                   focusItems,
+                                                   items,
+                                                   changeFontText
+                                               }) => {
 
 
     function isOneText(id: ID, items: Item[]): boolean {
@@ -64,54 +121,36 @@ const EditPanel: React.FC<EditPanelToProps> = ({changeTexts, recolorItems, resty
     }
 
 
-    const textItemData = oneTextIndex(focusItem[0], items)
-
+    const textItemData = firstTextIndex(focusItems, items)
+    const artItemData = firstArtIndex(focusItems, items)
+    const imgItemData = firstImgIndex(focusItems, items)
     return (
         <div>
-            {
-                focusItem.length == 1 ? (
-                    isOneText(focusItem[0], items) ? (
-                            <div className={c.container}>
-                                {
-                                    textItemData
-                                        && <EditText
-                                            changeTexts={changeTexts}
-                                            title={"Edit text"}
-                                            changeFontText={changeFontText}
-                                            recolorText={recolorItems}
-                                            focusItem={focusItem}
-                                            restyleText={restyleText}
-                                            textCard={textItemData}
-                                        />
-                                }
+            {textItemData
+            && <EditText
+                changeTexts={changeTexts}
+                title={"Edit text"}
+                changeFontText={changeFontText}
+                recolorText={recolorTexts}
+                focusItems={focusItems}
+                restyleText={restyleText}
+                textCard={textItemData}
+                changeFontSizeText={changeFontSizeText}
+            />}
 
-                            </div>
-                        ) :
-                        (
-                            isOneArt(focusItem[0], items) ? (
-                                <div className={c.container}>
-                                    <div className={c.title}>
-                                        Edit art
-                                    </div>
-                                </div>
-                            ) : (
-                                isOneImg(focusItem[0], items) ? (
-                                    <div className={c.container}>
-                                        <div className={c.title}>
-                                            Edit img
-                                        </div>
-                                    </div>
-                                ) : null
-                            )
-                        )
-                ) : (
-                    <div className={c.container}>
-                        <div className={c.title}>
-                            Edit more
-                        </div>
-                    </div>
-                )
-            }
+            {artItemData
+            && <EditArt
+                title={"Edit art"}
+                art={artItemData}
+                focusItems={focusItems}
+            />}
+
+            {imgItemData
+            && <EditImg
+                title={"Edit img"}
+                focusItems={focusItems}
+                img={imgItemData}
+            />}
         </div>
     );
 };
@@ -119,16 +158,17 @@ const EditPanel: React.FC<EditPanelToProps> = ({changeTexts, recolorItems, resty
 
 function mapStateToProps(state: CardMaker) {
     return {
-        focusItem: state.card.focusItems,
+        focusItems: state.card.focusItems,
         items: state.card.items,
     }
 }
 
 const mapDispatchToProps = {
     restyleText,
-    recolorItems,
+    recolorTexts,
     changeFontText,
-    changeTexts
+    changeTexts,
+    changeFontSizeText
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EditPanel);
 

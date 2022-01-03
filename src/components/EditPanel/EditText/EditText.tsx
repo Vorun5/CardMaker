@@ -1,5 +1,6 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import c from './EditText.module.scss'
+import style from '../../../style/style.module.scss'
 import {
     allColorsList,
     allFontsList,
@@ -8,53 +9,45 @@ import {
     FontStyle,
     FontStyleText,
     FontWeight,
-    Item, TextCard,
-    TextDecoration,
-    TypeDate
+    TextCard,
+    TextDecoration
 } from "../../../models/types";
 import {id, ID} from "../../../models/id";
 import {
+    ChangeFontSizeTexts,
     ChangeFontTextActionsType,
     ChangeTextsActionsType,
-    RecolorItemsActionsType,
+    RecolorTextsActionsType,
     RestyleTextActionsType
 } from "../../../actions/actions";
 
 interface EditTextProps {
     title: string
     textCard: TextCard
-    restyleText: (fontStyleText: FontStyleText, focusItem: ID[]) => RestyleTextActionsType
-    recolorText: (color: Colors, focusItem: string[]) => RecolorItemsActionsType
-    changeFontText: (fontFamily: Fonts, focusItems: string[]) => ChangeFontTextActionsType
-    changeTexts: (focusItem: string[], body: string) => ChangeTextsActionsType
-    focusItem: ID[]
+    restyleText: (focusItem: ID[], fontStyleText: FontStyleText) => RestyleTextActionsType
+    recolorText: (focusItem: ID[], color: Colors) => RecolorTextsActionsType
+    changeFontText: (focusItem: ID[], fontFamily: Fonts) => ChangeFontTextActionsType
+    changeTexts: (focusItem: ID[], body: string) => ChangeTextsActionsType
+    focusItems: ID[],
+    changeFontSizeText: (focusItems: string[], fontSize: number) => ChangeFontSizeTexts
 }
 
 
 const EditText: React.FC<EditTextProps> = ({
-
+                                               changeFontSizeText,
                                                changeTexts,
                                                title,
                                                changeFontText,
                                                recolorText,
                                                restyleText,
                                                textCard,
-                                               focusItem
+                                               focusItems
                                            }) => {
     const [styleText, setStyleText] = useState<FontStyleText>(textCard.fontStyle)
     const [valueText, setValueText] = useState<string>(textCard.body)
     const [colorText, setColorText] = useState<Colors>(textCard.color)
     const [fontText, setFontText] = useState<Fonts>(textCard.fontFamily)
-
-    // let styleText: FontStyleText = {
-    //     fontWeight: FontWeight.normal,
-    //     fontStyle: FontStyle.normal,
-    //     textDecoration: TextDecoration.normal
-    // }
-    // let valueText: string = "";
-    // let colorText: Colors = Colors.None
-    // let fontText: Fonts = Fonts.Montserrat
-
+    const [fontSizeText, setFontSizeText] = useState<number>(textCard.fontSize)
 
     function reverseFontWeight(fw: FontWeight): FontWeight {
         if (fw == FontWeight.normal) {
@@ -80,7 +73,6 @@ const EditText: React.FC<EditTextProps> = ({
         }
     }
 
-    const viewColor: Colors = colorText
 
     const [activeSelectColor, setActiveSelectColor] = useState(false);
     const [activeFont, setActiveFont] = useState(false);
@@ -113,43 +105,68 @@ const EditText: React.FC<EditTextProps> = ({
 
     return (
         <div className={c.container} ref={wrapperRef}>
-            <div className={c.title}>
+
+            <div className={style.title}>
                 {title}
             </div>
-            <div className={c.edit_value}>
-                <input type="text" value={valueText} onChange={(event) => {
-                    setValueText(event.target.value)
-                    changeTexts(focusItem, valueText)
-                }}
-                       className={c.input + ' ' + c.edit_value__input}/>
+
+            <div className={c.input_container}>
+                <input type="text" value={valueText}
+                       onChange={(event) => {
+                           setValueText(event.target.value)
+                           changeTexts(focusItems, event.target.value)
+                       }}
+                       className={style.input + ' ' + c.input_container__icon_input}/>
+            </div>
+            <div className={c.range}>
+                <input className={c.range_input} type="range" value={fontSizeText} min="5" max="100"
+                       onChange={(event) => {
+                           setFontSizeText(Number(event.target.value))
+                           changeFontSizeText(focusItems, Number(event.target.value))
+                       }}
+                />
+                <p className={c.range_view}>{fontSizeText}</p>
             </div>
             <div className={c.fs}>
                 <div className={c.fs_item + ' ' + c.fs_item__bolt}
-
+                     style={styleText.fontWeight == FontWeight.bolt ? {
+                         backgroundColor: '#dadada'
+                     } : {}}
 
                      onClick={() => {
-                         restyleText({
+                         restyleText(focusItems, {
                              ...styleText, fontWeight: reverseFontWeight(styleText.fontWeight)
-                         }, focusItem)
+                         })
 
                          setStyleText({...styleText, fontWeight: reverseFontWeight(styleText.fontWeight)})
                      }}/>
 
-                <div className={c.fs_item + ' ' + c.fs_item__italic} onClick={() => {
-                    restyleText({
-                        ...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)
-                    }, focusItem)
+                <div className={c.fs_item + ' ' + c.fs_item__italic}
+                     style={styleText.fontStyle == FontStyle.italic ? {
+                         backgroundColor: '#dadada'
+                     } : {}}
 
-                    setStyleText({...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)})
-                }}/>
 
-                <div className={c.fs_item + ' ' + c.fs_item__strikethrough} onClick={() => {
-                    restyleText({
-                        ...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)
-                    }, focusItem)
+                     onClick={() => {
+                         restyleText(focusItems, {
+                             ...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)
+                         })
+                         setStyleText({...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)})
+                     }}/>
 
-                    setStyleText({...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)})
-                }}/>
+                <div className={c.fs_item + ' ' + c.fs_item__strikethrough}
+
+                     style={styleText.textDecoration == TextDecoration.lineThrough ? {
+                         backgroundColor: '#dadada'
+                     } : {}}
+
+                     onClick={() => {
+                         restyleText(focusItems, {
+                             ...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)
+                         })
+
+                         setStyleText({...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)})
+                     }}/>
 
                 <div>
                     <div className={c.fs_item + ' ' + c.fs_item__color}
@@ -165,7 +182,7 @@ const EditText: React.FC<EditTextProps> = ({
                         {allColorsList.map((color => <div key={id()} className={c.fs_select_colors__color}
                                                           style={{backgroundColor: color}}
                                                           onClick={() => {
-                                                              recolorText(color, focusItem)
+                                                              recolorText(focusItems, color)
                                                               setColorText(color)
                                                           }
                                                           }>
@@ -186,7 +203,7 @@ const EditText: React.FC<EditTextProps> = ({
                     <div style={{
                         fontFamily: fontText
                     }}>{fontText}</div>
-                    <div className={c.ff_view__icon}></div>
+                    <div className={c.ff_view__icon}/>
                 </div>
                 <div className={c.ff_list} style={activeFont ? {
                     display: "block"
@@ -196,11 +213,13 @@ const EditText: React.FC<EditTextProps> = ({
                     {allFontsList.map((font =>
                             <div style={
                                 {fontFamily: font}
-                            } className={c.ff_list__item} onClick={() => {
-                                changeFontText(font, focusItem)
-                                setActiveFont(false)
+                            } className={c.ff_list__item}
+                                 onClick={() => {
+                                     setFontText(font)
+                                     changeFontText(focusItems, font)
+                                     setActiveFont(false)
 
-                            }}>{font}</div>
+                                 }}>{font}</div>
                     ))}
                 </div>
             </div>

@@ -4,13 +4,20 @@ import {ID} from "../models/id";
 export enum ActionType {
     RESIZE_CARD = 'RESIZE_CARD',
     ADD_HISTORY = 'ADD_HISTORY',
+
+
     SELECT_ZONE = 'SELECT_ZONE',
     MOVING_ZONE = 'MOVING_ZONE',
     REMOVE_ZONE = 'REMOVE_ZONE',
+
+
     ADD_ITEM = 'ADD_ITEM',
-    MOVING_ITEM = 'MOVING_ITEM',
+    MOVING_ITEMS = 'MOVING_ITEMS',
     RESIZE_ITEM = 'RESIZE_ITEM',
-    RECOLOR_ITEMS = 'RECOLOR_ITEMS',
+
+    RECOLOR_TEXTS = 'RECOLOR_TEXTS',
+    RECOLOR_ARTS = 'RECOLOR_ARTS',
+    CHANGE_FONT_SIZE_TEXTS = 'CHANGE_FONT_SIZE_TEXTS',
     RESTYLE_TEXT = 'RESTYLE_TEXT',
     CHANGE_FONT_TEXT = 'CHANGE_FONT_TEXT',
     CHANGE_FILTER = 'CHANGE_FILTER',
@@ -18,7 +25,7 @@ export enum ActionType {
     REDO_HISTORY = 'REDO_HISTORY',
     UNDO_HISTORY = 'UNDO_HISTORY',
     ADD_FOCUS_ITEM = 'ADD_FOCUS_ITEM',
-    REMOVE_FOCUS_ITEM = 'REMOVE_FOCUS_ITEM',
+    REMOVE_FOCUS_ITEMS = 'REMOVE_FOCUS_ITEMS',
     CHANGE_TEXTS = 'CHANGE_TEXTS',
 }
 
@@ -28,8 +35,8 @@ export type AddFocusItemActionsType = {
 }
 
 
-export type RemoveFocusItemActionsType = {
-    type: ActionType.REMOVE_FOCUS_ITEM,
+export type RemoveFocusItemsActionsType = {
+    type: ActionType.REMOVE_FOCUS_ITEMS,
 }
 
 
@@ -62,9 +69,9 @@ export type AddItemActionsType = {
     item: Item,
 }
 
-export type MovingItemActionsType = {
-    type: ActionType.MOVING_ITEM,
-    id: ID,
+export type MovingItemsActionsType = {
+    type: ActionType.MOVING_ITEMS,
+    focusItems: ID[],
     coordinates: Coordinates,
 }
 
@@ -74,28 +81,22 @@ export type ResizeItemActionsType = {
     id: ID,
 }
 
-export type RecolorItemsActionsType = {
-    type: ActionType.RECOLOR_ITEMS,
-    color: Colors,
-    focusItem: ID[],
-}
-
 export type ChangeTextsActionsType = {
     type: ActionType.CHANGE_TEXTS,
-    focusItem: ID[],
+    focusItems: ID[],
     body: string,
 }
 
 export type RestyleTextActionsType = {
     type: ActionType.RESTYLE_TEXT,
     fontStyleText: FontStyleText,
-    focusItem: ID[],
+    focusItems: ID[],
 }
 
 export type ChangeFontTextActionsType = {
     type: ActionType.CHANGE_FONT_TEXT,
     fontFamily: Fonts,
-    focusItem: ID[],
+    focusItems: ID[],
 }
 
 export type ChangeFilterActionsType = {
@@ -118,15 +119,37 @@ export type UndoHistoryActionsType = {
     type: ActionType.UNDO_HISTORY,
 }
 
+export type RecolorTextsActionsType = {
+    type: ActionType.RECOLOR_TEXTS,
+    color: Colors,
+    focusItems: ID[],
+}
+
+export type RecolorArtsActionsType = {
+    type: ActionType.RECOLOR_ARTS,
+    color: Colors,
+    focusItems: ID[],
+}
+
+export type ChangeFontSizeTexts = {
+    type: ActionType.CHANGE_FONT_SIZE_TEXTS,
+    focusItems: ID[],
+    fontSize: number,
+}
+
+
+
+
+
+
 export type ActionsType =
     UndoHistoryActionsType
     | RedoHistoryActionsType
     | ChangeBackgroundActionsType
     | ChangeFilterActionsType
     | RestyleTextActionsType
-    | RecolorItemsActionsType
     | ResizeItemActionsType
-    | MovingItemActionsType
+    | MovingItemsActionsType
     | AddItemActionsType
     | RemoveZoneActionsType
     | MovingZoneActionsType
@@ -134,6 +157,9 @@ export type ActionsType =
     | AddHistoryActionsType
     | ResizeCardActionsType
     | AddFocusItemActionsType
-    | RemoveFocusItemActionsType
+    | RemoveFocusItemsActionsType
     | ChangeFontTextActionsType
     | ChangeTextsActionsType
+    | RecolorTextsActionsType
+    | RecolorArtsActionsType
+    | ChangeFontSizeTexts

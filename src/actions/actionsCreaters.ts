@@ -4,14 +4,13 @@ import {
     AddHistoryActionsType,
     AddItemActionsType,
     ChangeBackgroundActionsType,
-    ChangeFilterActionsType,
+    ChangeFilterActionsType, ChangeFontSizeTexts,
     ChangeFontTextActionsType,
     ChangeTextsActionsType,
-    MovingItemActionsType,
-    MovingZoneActionsType,
-    RecolorItemsActionsType,
+    MovingItemsActionsType,
+    MovingZoneActionsType, RecolorArtsActionsType, RecolorTextsActionsType,
     RedoHistoryActionsType,
-    RemoveFocusItemActionsType,
+    RemoveFocusItemsActionsType,
     RemoveZoneActionsType,
     ResizeCardActionsType,
     ResizeItemActionsType,
@@ -37,9 +36,9 @@ export const addFocusItem = (id: ID): AddFocusItemActionsType => {
     }
 }
 
-export const removeFocusItem = (): RemoveFocusItemActionsType => {
+export const removeFocusItems = (): RemoveFocusItemsActionsType => {
     return {
-        type: ActionType.REMOVE_FOCUS_ITEM,
+        type: ActionType.REMOVE_FOCUS_ITEMS,
     }
 }
 
@@ -77,11 +76,11 @@ export const addItem = (item: Item): AddItemActionsType => {
     }
 }
 
-export const movingItem = (coordinate: Coordinates, id: ID): MovingItemActionsType => {
+export const movingItems = (focusItems: ID[], coordinate: Coordinates): MovingItemsActionsType => {
     return {
-        type: ActionType.MOVING_ITEM,
+        type: ActionType.MOVING_ITEMS,
         coordinates: coordinate,
-        id: id,
+        focusItems: focusItems,
     }
 }
 
@@ -93,38 +92,58 @@ export const resizeItem = (size: Size, id: ID): ResizeItemActionsType => {
     }
 }
 
-export const recolorItems = (color: Colors, focusItem: ID[]): RecolorItemsActionsType => {
-    return {
-        type: ActionType.RECOLOR_ITEMS,
-        color: color,
-        focusItem: focusItem,
-    }
-}
 
-
-export const changeFontText = (fontFamily: Fonts, focusItems: ID[]): ChangeFontTextActionsType => {
+export const changeFontText = (focusItems: ID[], fontFamily: Fonts): ChangeFontTextActionsType => {
     return {
         type: ActionType.CHANGE_FONT_TEXT,
         fontFamily: fontFamily,
-        focusItem: focusItems
+        focusItems: focusItems
     }
 }
 
-export const changeTexts = (focusItem: ID[], body: string): ChangeTextsActionsType => {
+export const changeTexts = (focusItems: ID[], body: string): ChangeTextsActionsType => {
     return {
         type: ActionType.CHANGE_TEXTS,
         body: body,
-        focusItem: focusItem,
+        focusItems: focusItems,
     }
 }
 
-export const restyleText = (fontStyleText: FontStyleText, focusItem: ID[]): RestyleTextActionsType => {
+export const restyleText = (focusItems: ID[], fontStyleText: FontStyleText): RestyleTextActionsType => {
     return {
         type: ActionType.RESTYLE_TEXT,
         fontStyleText: fontStyleText,
-        focusItem: focusItem,
+        focusItems: focusItems,
     }
 }
+
+
+export const recolorTexts = (focusItems: ID[], color: Colors): RecolorTextsActionsType => {
+    return {
+        type: ActionType.RECOLOR_TEXTS,
+        color: color,
+        focusItems: focusItems,
+    }
+}
+
+export const recolorArts = (focusItems: ID[], color: Colors): RecolorArtsActionsType => {
+    return {
+        type: ActionType.RECOLOR_ARTS,
+        color: color,
+        focusItems: focusItems,
+    }
+}
+
+export const changeFontSizeText = (focusItems: ID[], fontSize: number): ChangeFontSizeTexts => {
+    return {
+        type: ActionType.CHANGE_FONT_SIZE_TEXTS,
+        fontSize: fontSize,
+        focusItems: focusItems,
+    }
+}
+
+
+
 
 export const changeFilter = (filter: Colors): ChangeFilterActionsType => {
     return {
@@ -152,4 +171,5 @@ export const undoHistory = (): UndoHistoryActionsType => {
         type: ActionType.UNDO_HISTORY,
     }
 }
+
 

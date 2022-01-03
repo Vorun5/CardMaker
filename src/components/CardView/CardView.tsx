@@ -1,26 +1,38 @@
-import React from 'react';
-import {Card, CardMaker, Colors, emptyZone, History, TypeDate} from "../../models/types";
+import React, {useState} from 'react';
+import {Card, CardMaker, Colors, Coordinates, emptyZone, History, TypeDate} from "../../models/types";
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
-import TextCardView from "./TextCardView/TextCardView";
+import style from './../../style/style.module.scss'
 import {ID} from "../../models/id";
-import {addFocusItem, removeFocusItem, removeZone} from "../../actions/actionsCreaters";
-import {AddFocusItemActionsType, RemoveFocusItemActionsType, RemoveZoneActionsType} from "../../actions/actions";
-import ArtCardView from "./ArtCardView/ArtCardView";
-import ImgCardView from "./ImgCardView/ImgCardView";
-import ZoneCardView from "./ZoneCardView/ZoneCardView";
-import BorderFocusItems from "./BorderFocusItems/BorderFocusItems";
-import EditPanel from "../EditPanel/EditPanel";
+import {addFocusItem, movingItems, removeFocusItems, removeZone} from "../../actions/actionsCreaters";
+import {
+    AddFocusItemActionsType,
+    MovingItemsActionsType,
+    RemoveFocusItemsActionsType,
+    RemoveZoneActionsType
+} from "../../actions/actions";
+import TextCardView from "./TextCardView/TextCardView";
+import ItemView from "./ItemView/ItemView";
 
 interface CardViewProps {
     card: Card,
     history: History,
+    focusItems: ID[],
     addFocusItem: (id: ID) => AddFocusItemActionsType,
-    removeFocusItem: () => RemoveFocusItemActionsType,
+    removeFocusItems: () => RemoveFocusItemsActionsType,
     removeZone: () => RemoveZoneActionsType,
+    movingItems: (focusItems: ID[], coordinate: Coordinates) => MovingItemsActionsType
 }
 
-const CardView: React.FC<CardViewProps> = ({card, history, addFocusItem, removeFocusItem, removeZone}) => {
+const CardView: React.FC<CardViewProps> = ({
+                                               movingItems,
+                                               focusItems,
+                                               card,
+                                               history,
+                                               addFocusItem,
+                                               removeFocusItems,
+                                               removeZone
+                                           }) => {
     const styleCard = {
         width: card.size.width,
         height: card.size.height,
@@ -37,12 +49,39 @@ const CardView: React.FC<CardViewProps> = ({card, history, addFocusItem, removeF
         return false
     }
 
+    const [editCoordinatesMood, setEditCoordinatesMood] = useState<boolean>(false)
+    const [startCoordinates, setStartCoordinates] = useState<Coordinates>({x: 0, y: 0})
+    const [coordinates, setCoordinates] = useState<Coordinates>({x: 0, y: 0})
+
+    function onMouseDownHandler(event: React.MouseEvent, coordinates: Coordinates, focus: boolean) {
+        if (focus) {
+            setStartCoordinates({
+                x: event.pageX,
+                y: event.pageY,
+            })
+            setCoordinates(coordinates)
+            setEditCoordinatesMood(true)
+        }
+    }
+
+    function onMouseOverCaptureHandler(event: React.MouseEvent, editCoordinatesMood: boolean, startCoordinates: Coordinates, coordinates: Coordinates) {
+        if (editCoordinatesMood) {
+            const buffer = {
+                x: event.pageX - startCoordinates.x + coordinates.x,
+                y: event.pageY - startCoordinates.y + coordinates.y
+            }
+            movingItems(focusItems, buffer)
+            setEditCoordinatesMood(false)
+        }
+    }
+
     return (
-        <div className={c.container} onClick={() => {
+        <div
+            className={c.container} onClick={() => {
             if (card.zone == emptyZone) {
                 return;
             }
-            removeFocusItem();
+            removeFocusItems();
             card.items.forEach((el, i) => {
                 if (((card.zone.coordinates.x + card.zone.size.width >= el.coordinates.x) && (card.zone.coordinates.y + card.zone.size.height >= el.coordinates.y) && ((card.zone.coordinates.y <= el.coordinates.y) || (card.zone.coordinates.x <= el.coordinates.x)))
                     ||
@@ -51,39 +90,66 @@ const CardView: React.FC<CardViewProps> = ({card, history, addFocusItem, removeF
                 }
             })
         }}>
-            <div style={styleCard} className={c.card}>
-
+            <div style={styleCard} className={c.card} onMouseOverCapture={(event) => {
+                onMouseOverCaptureHandler(event, editCoordinatesMood, startCoordinates, coordinates)
+            }}>
                 <div className={c.card__background} style={{backgroundColor: card.background}}>
                     <div className={c.card__filter} style={card.filter == Colors.None ? {opacity: 1} : {
                         backgroundColor: card.filter,
                         opacity: 0.5
                     }}>
-                        {card.items.map((item) => {
-                                if (item.data.type == TypeDate.TextCard) {
-                                    return <TextCardView removeZone={removeZone} removeFocusItem={removeFocusItem}
-                                                         addFocusItem={addFocusItem}
-                                                         id={item.id} focus={itsFocus(item.id, card.focusItems)}
-                                                         key={item.id}
-                                                         size={item.size} coordinates={item.coordinates}
-                                                         textCard={item.data}/>
-                                } else if (item.data.type == TypeDate.Art) {
-                                    return <ArtCardView removeZone={removeZone} id={item.id} size={item.size}
-                                                        coordinates={item.coordinates}
-                                                        art={item.data} focus={itsFocus(item.id, card.focusItems)}
-                                                        addFocusItem={addFocusItem} removeFocusItem={removeFocusItem}
-                                                        key={item.id}/>
-                                } else if (item.data.type == TypeDate.IMG) {
-                                    return <ImgCardView removeZone={removeZone} id={item.id} size={item.size}
-                                                        coordinates={item.coordinates}
-                                                        img={item.data} focus={itsFocus(item.id, card.focusItems)}
-                                                        addFocusItem={addFocusItem} removeFocusItem={removeFocusItem}/>
-                                }
-                            }
+                        {card.items.map((item) =>
+                                <div
+                                    className={style.view_container}
+                                    key={item.id}
+                                    style={itsFocus(item.id, card.focusItems) ? {
+                                        margin: '-0.4vh',
+                                        border: '0.4vh solid #1aa4fb',
+                                        cursor: "move",
+                                        position: "absolute",
+                                        top: item.coordinates.y,
+                                        left: item.coordinates.x,
+                                        width: item.size.width,
+                                        height: item.size.height
+                                    } : {
+                                        cursor: "pointer",
+                                        position: "absolute",
+                                        top: item.coordinates.y,
+                                        left: item.coordinates.x,
+                                        width: item.size.width,
+                                        height: item.size.height
+                                    }}
+                                    draggable={itsFocus(item.id, card.focusItems)}
+                                    onMouseDown={(event) => {
+                                        onMouseDownHandler(event, item.coordinates, itsFocus(item.id, card.focusItems))
+                                    }}
+                                    onMouseUp={(event) => {
+                                        setEditCoordinatesMood(true)
+                                    }}
+                                    onClick={() => {
+                                        if (focusItems.length == 0) {
+                                            addFocusItem(item.id)
+                                        } else {
+                                            removeZone()
+                                            removeFocusItems()
+                                        }
+                                    }}
+                                >
+                                    <ItemView
+                                        removeFocusItems={removeFocusItems}
+                                        item={item}
+                                        focus={itsFocus(item.id, card.focusItems)}
+                                        focusItems={focusItems}
+                                        addFocusItem={addFocusItem}
+                                        removeZone={removeZone}
+                                    />
+                                </div>
                         )}
                         {/*<ZoneCardView zone={card.zone}/>*/}
                         {/*<BorderFocusItems focusItems={card.focusItems}  items={card.items}/>*/}
                         <div>
-                            <div className={c.border + " " + c.border_top} style={card.zone != emptyZone ? {
+                            <div
+                                className={c.border + " " + c.border_top} style={card.zone != emptyZone ? {
                                 top: card.zone.coordinates.y,
                                 left: card.zone.coordinates.x,
                                 width: card.zone.size.width
@@ -107,6 +173,8 @@ const CardView: React.FC<CardViewProps> = ({card, history, addFocusItem, removeF
                                 height: card.zone.size.height
                             } : {display: "none"}}/>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -116,6 +184,7 @@ const CardView: React.FC<CardViewProps> = ({card, history, addFocusItem, removeF
 
 function mapStateToProps(state: CardMaker) {
     return {
+        focusItems: state.card.focusItems,
         card: state.card,
         history: state.history
     }
@@ -123,8 +192,9 @@ function mapStateToProps(state: CardMaker) {
 
 const mapDispatchToProps = {
     addFocusItem,
-    removeFocusItem,
+    removeFocusItems,
     removeZone,
+    movingItems
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView);
