@@ -6,7 +6,7 @@ import {
     ChangeBackgroundActionsType,
     ChangeFilterActionsType, ChangeFontSizeTexts,
     ChangeFontTextActionsType,
-    ChangeTextsActionsType,
+    ChangeTextsActionsType, MovingItemActionsType,
     MovingItemsActionsType,
     MovingZoneActionsType, RecolorArtsActionsType, RecolorTextsActionsType,
     RedoHistoryActionsType,
@@ -76,6 +76,15 @@ export const addItem = (item: Item): AddItemActionsType => {
     }
 }
 
+export const movingItem = (id: ID, coordinate: Coordinates): MovingItemActionsType => {
+    return {
+        type: ActionType.MOVING_ITEM,
+        coordinates: coordinate,
+        id: id,
+    }
+}
+
+
 export const movingItems = (focusItems: ID[], coordinate: Coordinates): MovingItemsActionsType => {
     return {
         type: ActionType.MOVING_ITEMS,
@@ -84,7 +93,7 @@ export const movingItems = (focusItems: ID[], coordinate: Coordinates): MovingIt
     }
 }
 
-export const resizeItem = (size: Size, id: ID): ResizeItemActionsType => {
+export const resizeItem = (id: ID, size: Size): ResizeItemActionsType => {
     return {
         type: ActionType.RESIZE_ITEM,
         size: size,

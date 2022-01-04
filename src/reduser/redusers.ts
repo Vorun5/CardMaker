@@ -105,6 +105,30 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
     switch (action.type) {
         case ActionType.ADD_ITEM:
             return [...state, action.item];
+        case ActionType.MOVING_ITEM: {
+            for (let j = 0; j < state.length; j++) {
+                if (state[j].id == action.id) {
+                    state[j] = {
+                        ...state[j],
+                        coordinates: action.coordinates
+                    }
+                }
+
+            }
+            return state
+        }
+        case ActionType.RESIZE_ITEM: {
+            for (let j = 0; j < state.length; j++) {
+                if (state[j].id == action.id) {
+                    state[j] = {
+                        ...state[j],
+                        size: action.size
+                    }
+                }
+
+            }
+            return state
+        }
         case ActionType.MOVING_ITEMS: {
             for (let i = 0; i < action.focusItems.length; i++) {
 
@@ -209,7 +233,6 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
 
             return state
         }
-
         case ActionType.CHANGE_FONT_SIZE_TEXTS: {
             for (let i = 0; i < action.focusItems.length; i++) {
 

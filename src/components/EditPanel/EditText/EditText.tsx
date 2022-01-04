@@ -211,7 +211,9 @@ const EditText: React.FC<EditTextProps> = ({
                     display: "none"
                 }}>
                     {allFontsList.map((font =>
-                            <div style={
+                            <div
+                                key={id()}
+                                style={
                                 {fontFamily: font}
                             } className={c.ff_list__item}
                                  onClick={() => {

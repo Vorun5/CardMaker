@@ -12,6 +12,7 @@ export enum ActionType {
 
 
     ADD_ITEM = 'ADD_ITEM',
+    MOVING_ITEM = 'MOVING_ITEM',
     MOVING_ITEMS = 'MOVING_ITEMS',
     RESIZE_ITEM = 'RESIZE_ITEM',
 
@@ -67,6 +68,13 @@ export type RemoveZoneActionsType = {
 export type AddItemActionsType = {
     type: ActionType.ADD_ITEM,
     item: Item,
+}
+
+
+export type MovingItemActionsType = {
+    type: ActionType.MOVING_ITEM,
+    id: ID,
+    coordinates: Coordinates,
 }
 
 export type MovingItemsActionsType = {
@@ -150,6 +158,7 @@ export type ActionsType =
     | RestyleTextActionsType
     | ResizeItemActionsType
     | MovingItemsActionsType
+    | MovingItemActionsType
     | AddItemActionsType
     | RemoveZoneActionsType
     | MovingZoneActionsType

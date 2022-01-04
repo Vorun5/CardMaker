@@ -19,8 +19,9 @@
     height: 100%;
     width: 100%;
   }
+
   // card__filter
-  &__filter{
+  &__filter {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -35,24 +36,48 @@
   height: 100px;
   margin: -50px 0 0 -100px;
 }
+
 .test {
   width: 100px;
   height: 100px;
   background-color: #1c1c1c;
 }
+
 .border {
   position: absolute;
-  background-color: black;//#1aa4fb;
+  z-index: 1001;
   &_top {
-    height: 0.4vh;
+    height: 16px;
   }
+
   &_button {
-    height: 0.4vh;
+    height: 16px;
   }
+
   &_right {
-    width: 0.4vh;
+    width: 16px;
   }
+
   &_left {
-    width: 0.4vh;
+    width: 16px;
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #1aa4fb;
+  z-index: 1001;
+  &_top {
+  }
+
+  &_button {
+  }
+
+  &_right {
+  }
+
+  &_left {
   }
 }
