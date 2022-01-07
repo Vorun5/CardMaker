@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  margin: 0 0 0 0.5rem;
+}
+.icon {
+  padding: 0 15px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: 30px;
+}
+
+.redo_icon {
+  background: url("../../static/icon/redo.svg") center no-repeat;
+}
+
+.undo_icon {
+  background: url("../../static/icon/undo.svg") center no-repeat;
+}

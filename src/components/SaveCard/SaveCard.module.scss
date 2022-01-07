@@ -1,0 +1,12 @@
+.save {
+  // .save _icon
+  &_icon {
+    padding: 0 15px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("../../static/icon/save.svg") center no-repeat;
+  }
+}
