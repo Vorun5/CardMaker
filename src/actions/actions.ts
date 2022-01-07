@@ -9,9 +9,12 @@ export enum ActionType {
     SELECT_ZONE = 'SELECT_ZONE',
     MOVING_ZONE = 'MOVING_ZONE',
     REMOVE_ZONE = 'REMOVE_ZONE',
+    CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
+    CHANGE_CARD = 'CHANGE_CARD',
 
 
     ADD_ITEM = 'ADD_ITEM',
+    REMOVE_ITEMS = 'REMOVE_ITEMS',
     MOVING_ITEM = 'MOVING_ITEM',
     MOVING_ITEMS = 'MOVING_ITEMS',
     RESIZE_ITEM = 'RESIZE_ITEM',
@@ -29,6 +32,13 @@ export enum ActionType {
     REMOVE_FOCUS_ITEMS = 'REMOVE_FOCUS_ITEMS',
     CHANGE_TEXTS = 'CHANGE_TEXTS',
 }
+
+
+export type RemoveItemsActionsType = {
+    type: ActionType.REMOVE_ITEMS,
+    focusItems: ID[],
+}
+
 
 export type AddFocusItemActionsType = {
     type: ActionType.ADD_FOCUS_ITEM,
@@ -172,3 +182,4 @@ export type ActionsType =
     | RecolorTextsActionsType
     | RecolorArtsActionsType
     | ChangeFontSizeTexts
+    | RemoveItemsActionsType

@@ -3,7 +3,7 @@ import {Card, CardMaker, Colors, Coordinates, emptyZone, History, Size, TypeDate
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
 import style from './../../style/style.module.scss'
-import {ID} from "../../models/id";
+import {id, ID} from "../../models/id";
 import {
     addFocusItem,
     movingItem,
@@ -20,6 +20,7 @@ import {
 } from "../../actions/actions";
 import TextCardView from "./TextCardView/TextCardView";
 import ItemView from "./ItemView/ItemView";
+import {Simulate} from "react-dom/test-utils";
 
 interface CardViewProps {
     card: Card,
@@ -47,8 +48,7 @@ const CardView: React.FC<CardViewProps> = ({
     const styleCard = {
         width: card.size.width,
         height: card.size.height,
-        marginTop: -card.size.height / 2,
-        marginLeft: -card.size.width / 2,
+        transition: "all 0.3s",
     }
 
     function itsFocus(el: ID, listID: ID[]): boolean {
@@ -201,7 +201,7 @@ const CardView: React.FC<CardViewProps> = ({
     }
 
     function changeSizeItem(event: React.MouseEvent, id: ID, editSizeMode: editSizeMode, startCoordinates: Coordinates, coordinates: Coordinates, size: Size) {
-        const minSize = 24
+        const minSize = 30
 
         if (editSizeMode.cornerTopLeft) {
             console.log("editSizeMode.cornerTopLeft")
@@ -364,8 +364,7 @@ const CardView: React.FC<CardViewProps> = ({
     }
 
     return (
-        <div
-            className={c.container} onClick={() => {
+        <div className={c.container} onClick={() => {
             if (card.zone == emptyZone) {
                 return;
             }
@@ -378,7 +377,8 @@ const CardView: React.FC<CardViewProps> = ({
                 }
             })
         }}>
-            <div style={styleCard} className={c.card} onMouseOverCapture={(event) => {
+            <div style={styleCard}
+                 className={c.card} onMouseOverCapture={(event) => {
                 changeCoordinatesItem(event, itemId, editCoordinatesMode, startCoordinates, coordinates)
                 changeSizeItem(event, itemId, editSizeMode, startCoordinates, coordinates, size)
             }}>
@@ -388,15 +388,15 @@ const CardView: React.FC<CardViewProps> = ({
                         opacity: 0.5
                     }}>
                         {card.items.map((item) =>
-                            <div>
+                            <div key={item.id}>
                                 <div className={style.view_container}
-                                     key={item.id}
+
                                      style={itsFocus(item.id, card.focusItems) ? {
                                          margin: '-0.4vh',
-                                         border: '0.4vh solid #1aa4fb',
+                                         border: '0.4vh solid #FF6779',
                                          cursor: "move",
                                          position: "absolute",
-                                         zIndex: 1000,
+                                         zIndex: 300,
                                          top: item.coordinates.y,
                                          left: item.coordinates.x,
                                          width: item.size.width,
@@ -537,7 +537,7 @@ const CardView: React.FC<CardViewProps> = ({
                                 />
                                 <div className={c.corner}
                                     //corner button-right
-                                    draggable={true}
+                                     draggable={true}
                                      onMouseDown={(event) => {
                                          editCornerButtonRightItem(event, item.id, item.size, item.coordinates)
                                      }}
@@ -592,8 +592,6 @@ const CardView: React.FC<CardViewProps> = ({
 function mapStateToProps(state: CardMaker) {
     return {
         focusItems: state.card.focusItems,
-        card: state.card,
-        history: state.history
     }
 }
 

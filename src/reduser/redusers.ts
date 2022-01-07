@@ -9,6 +9,7 @@ import {
     FontWeight,
     History,
     Item,
+    Size,
     TextDecoration,
     TypeArt,
     TypeDate,
@@ -18,32 +19,14 @@ import {ID, id} from "../models/id";
 import {createStore} from "redux";
 import {addFocusItem, addItem, changeFilter, restyleText, selectZone} from "../actions/actionsCreaters";
 
-const initialCard: Card = {
-    background: Colors.White,
-    focusItems: [],
-    zone: {
-        coordinates: {
-            x: 0, y: 0,
-        },
-        size: {
-            width: 0,
-            height: 0,
-        }
-    },
-    filter: Colors.None,
-    size: {
-        width: 800,
-        height: 600,
-    },
-    items: []
+const initialSizeCard: Size = {
+    width: 600,
+    height: 800,
 }
-const cardReducer = (state = initialCard, action: ActionsType): Card => {
+const sizeCardReducer = (state = initialSizeCard, action: ActionsType): Size => {
     switch (action.type) {
         case ActionType.RESIZE_CARD:
-            return {
-                ...state,
-                size: action.size
-            };
+            return action.size
         default:
             return state;
     }
@@ -321,10 +304,51 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
 
             return state
         }
+        case ActionType.REMOVE_ITEMS: {
+            for (let i = 0; i < action.focusItems.length; i++) {
+
+                for (let j = 0; j < state.length; j++) {
+
+                    if (state[j].id == action.focusItems[i]) {
+
+
+                        state = state.filter((el) => {
+                            if (!(el.id == action.focusItems[i])) {
+                                return el
+                            }
+                        })
+
+
+                        // state = state.filter((el, i) => {
+                        //     for (let key in action.focusItems) {
+                        //         if (!(el.id == key)) {
+                        //             return el
+                        //         }
+                        //     }
+                        // })
+
+                    }
+
+                }
+
+            }
+
+            return state
+        }
         default:
             return state;
     }
 }
+
+// const cardReducer = (state: Card, action: ActionType): Card => {
+//     switch (action) {
+//         case ActionType.RESIZE_ITEM: {
+//
+//         }
+//         default:
+//             return state;
+//     }
+// }
 
 const filterReducer = (state: Colors, action: ActionsType): Colors => {
     switch (action.type) {
@@ -414,6 +438,7 @@ const rootReducer = (state = initialState, action: ActionsType): CardMaker => {
         history: historyReducer(state.history, action),
         card: {
             ...state.card,
+            size: sizeCardReducer(state.card.size, action),
             filter: filterReducer(state.card.filter, action),
             items: itemsReducer(state.card.items, action),
             zone: zoneReducer(state.card.zone, action),

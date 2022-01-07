@@ -4,6 +4,8 @@ export enum TypeArt {
     Circle = 'Circle',
     Square = 'Square',
     Triangle = 'Triangle',
+    // Star = 'Star',
+    // Heart = 'Heart'
 }
 
 export enum TypeDate {

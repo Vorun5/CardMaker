@@ -10,7 +10,7 @@ import {
     MovingItemsActionsType,
     MovingZoneActionsType, RecolorArtsActionsType, RecolorTextsActionsType,
     RedoHistoryActionsType,
-    RemoveFocusItemsActionsType,
+    RemoveFocusItemsActionsType, RemoveItemsActionsType,
     RemoveZoneActionsType,
     ResizeCardActionsType,
     ResizeItemActionsType,
@@ -27,7 +27,6 @@ export const resizeCard = (size: Size): ResizeCardActionsType => {
         size: size,
     }
 }
-
 
 export const addFocusItem = (id: ID): AddFocusItemActionsType => {
     return {
@@ -76,6 +75,13 @@ export const addItem = (item: Item): AddItemActionsType => {
     }
 }
 
+export const removeItems = (focusItems: ID[]): RemoveItemsActionsType => {
+    return {
+        type: ActionType.REMOVE_ITEMS,
+        focusItems: focusItems,
+    }
+}
+
 export const movingItem = (id: ID, coordinate: Coordinates): MovingItemActionsType => {
     return {
         type: ActionType.MOVING_ITEM,
@@ -83,7 +89,6 @@ export const movingItem = (id: ID, coordinate: Coordinates): MovingItemActionsTy
         id: id,
     }
 }
-
 
 export const movingItems = (focusItems: ID[], coordinate: Coordinates): MovingItemsActionsType => {
     return {
@@ -100,7 +105,6 @@ export const resizeItem = (id: ID, size: Size): ResizeItemActionsType => {
         id: id,
     }
 }
-
 
 export const changeFontText = (focusItems: ID[], fontFamily: Fonts): ChangeFontTextActionsType => {
     return {
@@ -126,7 +130,6 @@ export const restyleText = (focusItems: ID[], fontStyleText: FontStyleText): Res
     }
 }
 
-
 export const recolorTexts = (focusItems: ID[], color: Colors): RecolorTextsActionsType => {
     return {
         type: ActionType.RECOLOR_TEXTS,
@@ -151,16 +154,12 @@ export const changeFontSizeText = (focusItems: ID[], fontSize: number): ChangeFo
     }
 }
 
-
-
-
 export const changeFilter = (filter: Colors): ChangeFilterActionsType => {
     return {
         type: ActionType.CHANGE_FILTER,
         filter: filter,
     }
 }
-
 
 export const changeBackground = (background: Colors): ChangeBackgroundActionsType => {
     return {

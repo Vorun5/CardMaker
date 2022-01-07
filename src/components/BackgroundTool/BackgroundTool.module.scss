@@ -15,7 +15,7 @@
   align-items: stretch;
   // face__remove_color_button
   &:hover &__remove_color_button {
-    background-size: 22px;
+    display: block;
   }
   // face__text
   &__text {
@@ -52,9 +52,10 @@
       width: 22px;
       height: 22px;
       background: url("../../static/icon/remove.svg")  center no-repeat;
-      background-size: 0;
+      background-size: 22px;
       transition: background-size 0.1s;
       transition-delay: 0.2s;
+      display: none;
     }
   }
 

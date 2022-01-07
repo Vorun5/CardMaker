@@ -46,8 +46,38 @@
   width: 100%;
   overflow: hidden;
   border-radius: 0.25rem;
+
   &:hover {
     margin: -0.4vh;
     border: 0.4vh solid #bbbbbb;
+  }
+}
+
+.button {
+  transition: box-shadow 0.2s;
+  background-color: #11a1fb;
+  color: #e8f6ff;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  height: 30px;
+  border-radius: 0.25rem;
+  padding: 0 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+
+  &:hover {
+    box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+  }
+}
+
+.button_inactive {
+  cursor: default;
+  background-color: #4d5660;
+  color: #2b2d31;
+  &:hover {
+    box-shadow: none;
   }
 }
