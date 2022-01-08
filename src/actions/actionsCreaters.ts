@@ -4,13 +4,21 @@ import {
     AddHistoryActionsType,
     AddItemActionsType,
     ChangeBackgroundActionsType,
-    ChangeFilterActionsType, ChangeFontSizeTexts,
+    ChangeCardActionType,
+    ChangeFilterActionsType,
+    ChangeFontSizeTexts,
     ChangeFontTextActionsType,
-    ChangeTextsActionsType, MovingItemActionsType,
+    ChangeTextsActionsType,
+    CreateNewCardMakerActionType,
+    MovingItemActionsType,
     MovingItemsActionsType,
-    MovingZoneActionsType, RecolorArtsActionsType, RecolorTextsActionsType,
+    MovingZoneActionsType,
+    RecolorArtsActionsType,
+    RecolorTextsActionsType,
     RedoHistoryActionsType,
-    RemoveFocusItemsActionsType, RemoveItemsActionsType,
+    RemoveAllHistoryActionType, RemoveAllItemsActionType,
+    RemoveFocusItemsActionsType,
+    RemoveItemsActionsType,
     RemoveZoneActionsType,
     ResizeCardActionsType,
     ResizeItemActionsType,
@@ -20,6 +28,20 @@ import {
 } from "./actions";
 import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, Zone} from "../models/types";
 import {ID} from "../models/id";
+
+
+export const createNewCardMaker = (): CreateNewCardMakerActionType => {
+    return {
+        type: ActionType.CREATE_NEW_CARD_MAKER,
+    }
+}
+
+export const changeCard = (card: Card): ChangeCardActionType => {
+    return {
+        type: ActionType.CHANGE_CARD,
+        card: card
+    }
+}
 
 export const resizeCard = (size: Size): ResizeCardActionsType => {
     return {
@@ -48,6 +70,12 @@ export const addHistory = (card: Card): AddHistoryActionsType => {
     }
 }
 
+export const removeAllHistory = (): RemoveAllHistoryActionType => {
+    return {
+        type: ActionType.REMOVE_ALL_HISTORY,
+    }
+}
+
 export const selectZone = (zone: Zone): SelectZoneActionsType => {
     return {
         type: ActionType.SELECT_ZONE,
@@ -72,6 +100,12 @@ export const addItem = (item: Item): AddItemActionsType => {
     return {
         type: ActionType.ADD_ITEM,
         item: item,
+    }
+}
+
+export const removeAllItems = (): RemoveAllItemsActionType => {
+    return {
+        type: ActionType.REMOVE_ALL_ITEMS,
     }
 }
 

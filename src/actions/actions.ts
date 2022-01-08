@@ -9,10 +9,8 @@ export enum ActionType {
     SELECT_ZONE = 'SELECT_ZONE',
     MOVING_ZONE = 'MOVING_ZONE',
     REMOVE_ZONE = 'REMOVE_ZONE',
-    CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
-    CHANGE_CARD = 'CHANGE_CARD',
 
-
+    REMOVE_ALL_ITEMS = 'REMOVE_ALL_ITEMS',
     ADD_ITEM = 'ADD_ITEM',
     REMOVE_ITEMS = 'REMOVE_ITEMS',
     MOVING_ITEM = 'MOVING_ITEM',
@@ -26,13 +24,35 @@ export enum ActionType {
     CHANGE_FONT_TEXT = 'CHANGE_FONT_TEXT',
     CHANGE_FILTER = 'CHANGE_FILTER',
     CHANGE_BACKGROUND = 'CHANGE_BACKGROUND',
+    REMOVE_ALL_HISTORY = 'REMOVE_ALL_HISTORY',
     REDO_HISTORY = 'REDO_HISTORY',
     UNDO_HISTORY = 'UNDO_HISTORY',
     ADD_FOCUS_ITEM = 'ADD_FOCUS_ITEM',
     REMOVE_FOCUS_ITEMS = 'REMOVE_FOCUS_ITEMS',
     CHANGE_TEXTS = 'CHANGE_TEXTS',
+
+
+    CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
+    CHANGE_CARD = 'CHANGE_CARD',
 }
 
+export type RemoveAllItemsActionType = {
+    type: ActionType.REMOVE_ALL_ITEMS,
+}
+
+
+export type RemoveAllHistoryActionType = {
+    type: ActionType.REMOVE_ALL_HISTORY,
+}
+
+export type CreateNewCardMakerActionType = {
+    type: ActionType.CREATE_NEW_CARD_MAKER
+}
+
+export type ChangeCardActionType = {
+    type: ActionType.CHANGE_CARD,
+    card: Card,
+}
 
 export type RemoveItemsActionsType = {
     type: ActionType.REMOVE_ITEMS,
@@ -183,3 +203,7 @@ export type ActionsType =
     | RecolorArtsActionsType
     | ChangeFontSizeTexts
     | RemoveItemsActionsType
+    | CreateNewCardMakerActionType
+    | ChangeCardActionType
+    | RemoveAllHistoryActionType
+    | RemoveAllItemsActionType

@@ -19,6 +19,15 @@ import {ID, id} from "../models/id";
 import {createStore} from "redux";
 import {addFocusItem, addItem, changeFilter, restyleText, selectZone} from "../actions/actionsCreaters";
 
+const cardReducer = (state: Card, action: ActionsType): Card => {
+    switch (action.type) {
+        case ActionType.CHANGE_CARD:
+            return action.card
+        default:
+            return state
+    }
+}
+
 const initialSizeCard: Size = {
     width: 600,
     height: 800,
@@ -32,30 +41,33 @@ const sizeCardReducer = (state = initialSizeCard, action: ActionsType): Size => 
     }
 }
 
-
 const initialHistory: History = {
     list: [],
-    currentIndex: 0,
+    currentIndex: -1,
 }
 const historyReducer = (state = initialHistory, action: ActionsType): History => {
     switch (action.type) {
+        case ActionType.REMOVE_ALL_HISTORY:
+            return {
+                list: [],
+                currentIndex: -1
+            }
         case ActionType.ADD_HISTORY:
-            if (state.list.length > state.currentIndex) {
+            if (state.list.length > state.currentIndex + 1) {
                 state = {
                     ...state,
-                    list: state.list.slice(0, state.currentIndex + 1)
+                    list: state.list.slice(0, state.currentIndex)
                 }
             }
-            let list = state.list
+            let currentIndex = state.list.length
             return {
-                list: [...list, action.card],
-                currentIndex: state.list.length,
+                list: [...state.list, action.card],
+                currentIndex: currentIndex,
             }
         default:
             return state;
     }
 }
-
 
 const initialZone: Zone = {
     size: {
@@ -86,6 +98,8 @@ const zoneReducer = (state = initialZone, action: ActionsType): Zone => {
 const initialItems: Item[] = []
 const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
     switch (action.type) {
+        case ActionType.REMOVE_ALL_ITEMS:
+            return []
         case ActionType.ADD_ITEM:
             return [...state, action.item];
         case ActionType.MOVING_ITEM: {
@@ -318,15 +332,6 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
                             }
                         })
 
-
-                        // state = state.filter((el, i) => {
-                        //     for (let key in action.focusItems) {
-                        //         if (!(el.id == key)) {
-                        //             return el
-                        //         }
-                        //     }
-                        // })
-
                     }
 
                 }
@@ -339,16 +344,6 @@ const itemsReducer = (state = initialItems, action: ActionsType): Item[] => {
             return state;
     }
 }
-
-// const cardReducer = (state: Card, action: ActionType): Card => {
-//     switch (action) {
-//         case ActionType.RESIZE_ITEM: {
-//
-//         }
-//         default:
-//             return state;
-//     }
-// }
 
 const filterReducer = (state: Colors, action: ActionsType): Colors => {
     switch (action.type) {
@@ -381,11 +376,25 @@ const focusItemReducer = (state = initialFocusItem, action: ActionsType): ID[] =
     }
 }
 
+//const initialRootCard: Card = {}
+const rootCardReducer = (state: Card, action: ActionsType): Card => {
+    return {
+        ...state,
+        size: sizeCardReducer(state.size, action),
+        filter: filterReducer(state.filter, action),
+        items: itemsReducer(state.items, action),
+        zone: zoneReducer(state.zone, action),
+        focusItems: focusItemReducer(state.focusItems, action),
+        background: backgroundReducer(state.background, action)
+    }
+}
+
+
 const initialState: CardMaker = {
     templates: [],
     history: {
         list: [],
-        currentIndex: 0
+        currentIndex: -1
     },
     card: {
         zone: {
@@ -404,31 +413,7 @@ const initialState: CardMaker = {
             width: 800,
             height: 600
         },
-        items: [
-            {
-                id: id(),
-                data: {
-                    fontSize: 20,
-                    type: TypeDate.TextCard,
-                    body: "Hi world!",
-                    color: Colors.Purple,
-                    fontFamily: Fonts.Montserrat,
-                    fontStyle: {
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.bolt,
-                        textDecoration: TextDecoration.lineThrough,
-                    }
-                },
-                size: {
-                    width: 50,
-                    height: 100,
-                },
-                coordinates: {
-                    x: 100,
-                    y: 200,
-                }
-            }
-        ],
+        items: [],
         focusItems: []
     }
 }
@@ -438,6 +423,7 @@ const rootReducer = (state = initialState, action: ActionsType): CardMaker => {
         history: historyReducer(state.history, action),
         card: {
             ...state.card,
+            ...state,
             size: sizeCardReducer(state.card.size, action),
             filter: filterReducer(state.card.filter, action),
             items: itemsReducer(state.card.items, action),
@@ -448,114 +434,5 @@ const rootReducer = (state = initialState, action: ActionsType): CardMaker => {
     }
 }
 
-
 // @ts-ignore
 export let store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
-store.dispatch(selectZone({coordinates: {x: 101, y: 102}, size: {width: 0, height: 2}}))
-store.dispatch(selectZone({coordinates: {x: 3123, y: 123123}, size: {width: 0, height: 2}}))
-store.dispatch(changeFilter(Colors.Red))
-
-store.dispatch(addItem(
-    {
-        id: id(),
-        data: {
-            fontSize: 36,
-            type: TypeDate.TextCard,
-            body: "KEKWasdasdasdasdasdasd",
-            color: Colors.Red,
-            fontFamily: Fonts.Lora,
-            fontStyle: {
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.normal,
-                textDecoration: TextDecoration.normal
-            }
-        },
-        size: {
-            width: 100,
-            height: 155,
-        },
-        coordinates: {
-            x: 200,
-            y: 100,
-        }
-    }
-))
-
-const test = store.getState().card.items[0].id
-store.dispatch(addItem({
-    id: id(),
-    coordinates: {
-        x: 400,
-        y: 400,
-    },
-    size: {
-        width: 150,
-        height: 50,
-    },
-    data: {
-        type: TypeDate.Art,
-        typeArt: TypeArt.Circle,
-        color: Colors.Purple
-    }
-}))
-
-store.dispatch(addItem({
-    id: id(),
-    coordinates: {
-        x: 260,
-        y: 270,
-    },
-    size: {
-        width: 500,
-        height: 50,
-    },
-    data: {
-        type: TypeDate.Art,
-        typeArt: TypeArt.Square,
-        color: Colors.Red
-    }
-}))
-store.dispatch(addItem({
-    id: id(),
-    coordinates: {
-        x: 500,
-        y: 400,
-    },
-    size: {
-        width: 100,
-        height: 120,
-    },
-    data: {
-        type: TypeDate.IMG,
-        url: 'https://images.pexels.com/photos/5584265/pexels-photo-5584265.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    }
-}))
-const test2 = store.getState().card.items[2].id
-
-store.dispatch(addFocusItem(test2))
-
-store.dispatch(selectZone({
-    size: {
-        width: 300,
-        height: 250,
-    },
-    coordinates: {
-        x: 40,
-        y: 30,
-    }
-}))
-
-store.dispatch(changeFilter(Colors.None))
-
-store.dispatch(restyleText([store.getState().card.items[0].id], {
-    fontWeight: FontWeight.normal,
-    fontStyle: FontStyle.italic,
-    textDecoration: TextDecoration.normal
-}))
-
-store.dispatch(restyleText([store.getState().card.items[1].id], {
-    fontWeight: FontWeight.bolt,
-    fontStyle: FontStyle.italic,
-    textDecoration: TextDecoration.normal
-}))
