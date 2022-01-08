@@ -26,43 +26,43 @@ export const addHistory = (cardMaker: CardMaker, card: Card): CardMaker => {
     return {
         ...cardMaker,
         history: {
-            list: [...cardMaker.history.list, card],
+            list: [...cardMaker.history.list, JSON.stringify(card)],
             currentIndex: cardMaker.history.list.length
         }
     }
 }
 
 // Вперёд по истории команд
-export const redoHistory = (cardMaker: CardMaker): CardMaker => {
-    if (cardMaker.history.list.length == cardMaker.history.currentIndex || cardMaker.history.list.length <= 0) {
-        return cardMaker
-    } else {
-        return cardMaker = {
-            ...cardMaker,
-            card: cardMaker.history.list[cardMaker.history.currentIndex + 1],
-            history: {
-                ...cardMaker.history,
-                currentIndex: cardMaker.history.currentIndex + 1
-            }
-        }
-    }
-}
+// export const redoHistory = (cardMaker: CardMaker): CardMaker => {
+//     if (cardMaker.history.list.length == cardMaker.history.currentIndex || cardMaker.history.list.length <= 0) {
+//         return cardMaker
+//     } else {
+//         return cardMaker = {
+//             ...cardMaker,
+//             card: cardMaker.history.list[cardMaker.history.currentIndex + 1],
+//             history: {
+//                 ...cardMaker.history,
+//                 currentIndex: cardMaker.history.currentIndex + 1
+//             }
+//         }
+//     }
+// }
 
 // Назад по истории команд
-export const undoHistory = (cardMaker: CardMaker): CardMaker => {
-    if (cardMaker.history.list.length <= 0) {
-        return cardMaker
-    } else {
-        return cardMaker = {
-            ...cardMaker,
-            card: cardMaker.history.list[cardMaker.history.currentIndex - 1],
-            history: {
-                ...cardMaker.history,
-                currentIndex: cardMaker.history.currentIndex - 1
-            }
-        }
-    }
-}
+// export const undoHistory = (cardMaker: CardMaker): CardMaker => {
+//     if (cardMaker.history.list.length <= 0) {
+//         return cardMaker
+//     } else {
+//         return cardMaker = {
+//             ...cardMaker,
+//             card: cardMaker.history.list[cardMaker.history.currentIndex - 1],
+//             history: {
+//                 ...cardMaker.history,
+//                 currentIndex: cardMaker.history.currentIndex - 1
+//             }
+//         }
+//     }
+// }
 
 // Выделение области на карточке
 export const selectZone = (cardMaker: CardMaker, zone: Zone): CardMaker => {

@@ -25,7 +25,7 @@ interface AppProps {
     card: Card,
     history: History,
     resizeCard: (size: Size) => ResizeCardActionsType,
-    addHistory: (card: Card) => AddHistoryActionsType
+    addHistory: (card: string) => AddHistoryActionsType
 }
 
 const App: React.FC<AppProps> = ({

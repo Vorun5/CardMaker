@@ -48,7 +48,7 @@ export type Size = Readonly<{
 }>
 
 export type History = Readonly<{
-    list: Card[],
+    list: string[],
     currentIndex: number,
 }>
 

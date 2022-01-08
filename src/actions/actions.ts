@@ -78,7 +78,7 @@ export type ResizeCardActionsType = {
 
 export type AddHistoryActionsType = {
     type: ActionType.ADD_HISTORY,
-    card: Card
+    card: string
 }
 
 export type SelectZoneActionsType = {

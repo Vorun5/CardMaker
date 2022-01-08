@@ -1,23 +1,7 @@
 import {ActionsType, ActionType} from "../actions/actions";
-import {
-    Card,
-    CardMaker,
-    Colors,
-    emptyZone,
-    Fonts,
-    FontStyle,
-    FontWeight,
-    History,
-    Item,
-    Size,
-    TextDecoration,
-    TypeArt,
-    TypeDate,
-    Zone
-} from "../models/types";
-import {ID, id} from "../models/id";
+import {Card, CardMaker, Colors, emptyZone, History, Item, Size, TypeDate, Zone} from "../models/types";
+import {ID} from "../models/id";
 import {createStore} from "redux";
-import {addFocusItem, addItem, changeFilter, restyleText, selectZone} from "../actions/actionsCreaters";
 
 const cardReducer = (state: Card, action: ActionsType): Card => {
     switch (action.type) {
@@ -47,6 +31,38 @@ const initialHistory: History = {
 }
 const historyReducer = (state = initialHistory, action: ActionsType): History => {
     switch (action.type) {
+        case ActionType.REDO_HISTORY: {
+            if (state.currentIndex + 1 > state.list.length - 1) {
+                return {
+                    list: [...state.list],
+                    currentIndex: state.list.length - 1
+                }
+            }
+            return {
+                list: [...state.list],
+                currentIndex: state.currentIndex + 1
+            }
+        }
+        case ActionType.UNDO_HISTORY: {
+
+            if (state.list.length == 0) {
+                return {
+                    list: [...state.list],
+                    currentIndex: -1
+                }
+            }
+            if (state.currentIndex - 1 > 0) {
+                return {
+                    list: [...state.list],
+                    currentIndex: state.currentIndex - 1
+                }
+            } else {
+                return {
+                    list: [...state.list],
+                    currentIndex: 0
+                }
+            }
+        }
         case ActionType.REMOVE_ALL_HISTORY:
             return {
                 list: [],
@@ -423,8 +439,6 @@ const rootReducer = (state = initialState, action: ActionsType): CardMaker => {
         history: historyReducer(state.history, action),
         card: {
             ...state.card,
-            ...state,
-            size: sizeCardReducer(state.card.size, action),
             filter: filterReducer(state.card.filter, action),
             items: itemsReducer(state.card.items, action),
             zone: zoneReducer(state.card.zone, action),

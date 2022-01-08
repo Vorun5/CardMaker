@@ -63,7 +63,7 @@ export const removeFocusItems = (): RemoveFocusItemsActionsType => {
     }
 }
 
-export const addHistory = (card: Card): AddHistoryActionsType => {
+export const addHistory = (card: string): AddHistoryActionsType => {
     return {
         type: ActionType.ADD_HISTORY,
         card: card,
