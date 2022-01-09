@@ -155,6 +155,7 @@ export type RedoHistoryActionsType = {
 
 export type UndoHistoryActionsType = {
     type: ActionType.UNDO_HISTORY,
+    list: string[],
 }
 
 export type RecolorTextsActionsType = {

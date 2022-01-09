@@ -16,14 +16,8 @@ import style from "./../../style/style.module.scss"
 import {store} from "../../reduser/redusers";
 import {
     AddHistoryActionsType,
-    ChangeBackgroundActionsType,
     ChangeCardActionType,
-    ChangeFilterActionsType,
     RedoHistoryActionsType,
-    RemoveAllHistoryActionType,
-    RemoveAllItemsActionType,
-    RemoveFocusItemsActionsType,
-    ResizeCardActionsType,
     UndoHistoryActionsType
 } from "../../actions/actions";
 import {addHistory, changeCard, redoHistory, undoHistory} from "../../actions/actionsCreaters";
@@ -32,20 +26,15 @@ import {id} from "../../models/id";
 
 interface HistoryProps {
     //card: Card,
-    //history: History,
+    history: History,
     addHistory: (card: string) => AddHistoryActionsType,
     changeCard: (card: Card) => ChangeCardActionType,
     redoHistory: () => RedoHistoryActionsType,
-    undoHistory: () => UndoHistoryActionsType,
-
-    resizeCard: (size: Size) => ResizeCardActionsType,
-    changeBackground: (background: Colors) => ChangeBackgroundActionsType,
-    changeFilter: (filter: Colors) => ChangeFilterActionsType,
-    removeAllItems: () => RemoveAllItemsActionType
+    undoHistory: (list: string[]) => UndoHistoryActionsType,
 
 }
 
-const CardHistory: React.FC<HistoryProps> = ({addHistory, changeCard, redoHistory, undoHistory}) => {
+const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, redoHistory, undoHistory}) => {
 
     function handleChange() {
         const history: History = store.getState().history
@@ -63,19 +52,19 @@ const CardHistory: React.FC<HistoryProps> = ({addHistory, changeCard, redoHistor
 
     function undoHistoryClick() {
         const card: Card = JSON.parse(store.getState().history.list[store.getState().history.currentIndex - 1])
-        undoHistory()
-        console.log(card)
+        const list: string[] = store.getState().history.list
+        undoHistory(list)
     }
-
+//style.button + " " + c.button + " " + style.button_inactive
     return (
         <div className={c.container}>
             <div
                 onClick={() => undoHistoryClick()}
-
-                className={style.button + " " + c.button}>
+                className={history.currentIndex > 0 ? style.button + " " + c.button : style.button + " " + c.button + " " + style.button_inactive}>
                 <div className={c.undo_icon + " " + c.icon}/>
             </div>
-            <div className={style.button + " " + c.button}>
+            <div onClick={() => redoHistory()}
+                 className={history.currentIndex + 1 == history.list.length ? style.button + " " + c.button + " " + style.button_inactive : style.button + " " + c.button}>
                 <div className={c.redo_icon + " " + c.icon}/>
             </div>
         </div>
@@ -84,7 +73,6 @@ const CardHistory: React.FC<HistoryProps> = ({addHistory, changeCard, redoHistor
 
 function mapStateToProps(state: CardMaker) {
     return {
-        card: state.card,
         history: state.history
     }
 }
@@ -95,4 +83,4 @@ const mapDispatchToProps = {
     redoHistory,
     undoHistory
 }
-export default connect(null, mapDispatchToProps)(CardHistory);
+export default connect(mapStateToProps, mapDispatchToProps)(CardHistory);

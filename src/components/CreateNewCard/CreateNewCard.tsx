@@ -40,11 +40,11 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({
 
     function createNewCardMaker() {
         removeFocusItems()
-        removeAllHistory()
         resizeCard({width: 800, height: 600})
         changeBackground(Colors.White)
         changeFilter(Colors.None)
         removeAllItems()
+        removeAllHistory()
     }
     return (
 

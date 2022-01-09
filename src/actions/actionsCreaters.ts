@@ -208,9 +208,10 @@ export const redoHistory = (): RedoHistoryActionsType => {
     }
 }
 
-export const undoHistory = (): UndoHistoryActionsType => {
+export const undoHistory = (list: string[]): UndoHistoryActionsType => {
     return {
         type: ActionType.UNDO_HISTORY,
+        list: list
     }
 }
 
