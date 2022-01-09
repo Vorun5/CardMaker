@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import c from "./CreateNewCard.module.scss"
 import style from "./../../style/style.module.scss"
 import {connect} from "react-redux";
@@ -19,6 +19,8 @@ import {
     removeFocusItems,
     resizeCard
 } from "../../actions/actionsCreaters";
+import {findAllByDisplayValue} from "@testing-library/react";
+import Modal from "../Style components/Modal/Modal";
 
 interface CreateNewCardProps {
     removeFocusItems: () => RemoveFocusItemsActionsType,
@@ -38,6 +40,8 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({
                                                          removeAllItems
                                                      }) => {
 
+    const [warning, setWarning] = useState<boolean>(false)
+
     function createNewCardMaker() {
         removeFocusItems()
         resizeCard({width: 800, height: 600})
@@ -46,13 +50,46 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({
         removeAllItems()
         removeAllHistory()
     }
-    return (
 
+    return (
+        <div>
             <div className={style.button + " " + c.create}
-                 onClick={createNewCardMaker}
-            >
+                 onClick={() => {
+                     setWarning(true)
+                 }}>
                 <div className={c.create_icon}/>
             </div>
+            {warning ?
+                <Modal>
+                    <div className={c.warning}>
+
+                        <div className={c.warning_title}>Create new file.</div>
+                        <div className={c.warning_content}>
+                            Are you sure you want to create a new file? <br/> All unsaved changes will be deleted!
+                        </div>
+                        <div className={c.warning_buttons}>
+                            <div
+                                onClick={() => {
+                                    createNewCardMaker()
+                                    setWarning(false)
+                                }}
+                                className={c.warning_buttons_yes + " " + style.button}>Yes
+                            </div>
+                            <div
+
+                                onClick={() => {
+                                    setWarning(false)
+                                }
+                                }
+
+                                className={c.warning_buttons_no + " " + style.button}>No
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
+                : <div></div>}
+        </div>
+
     );
 };
 

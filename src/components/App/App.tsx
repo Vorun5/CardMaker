@@ -14,7 +14,6 @@ import {
 } from "../../actions/actionsCreaters";
 import {AddHistoryActionsType, ResizeCardActionsType} from "../../actions/actions";
 import SizeCardTool from "../SizeCardTool/SizeCardTool";
-import AddText from "../AddItems/AddText/AddText";
 import AddItems from "../AddItems/AddItems";
 import DeleteItems from "../DeleteItems/DeleteItems";
 import CardHistory from "../CardHistory/CardHistory";
