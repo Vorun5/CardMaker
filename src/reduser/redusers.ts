@@ -1,13 +1,43 @@
 import {ActionsType, ActionType} from "../actions/actions";
-import {Card, CardMaker, Colors, emptyZone, History, Item, Size, TypeDate, Zone} from "../models/types";
+import {
+    Card,
+    CardMaker,
+    Colors,
+    emptyFocusItems,
+    emptyZone,
+    History,
+    Item,
+    Size,
+    TypeDate,
+    Zone
+} from "../models/types";
 import {ID} from "../models/id";
 import {createStore} from "redux";
 
 const initialState: CardMaker = {
     templates: [],
     history: {
-        list: [],
-        currentIndex: -1
+        list: [JSON.stringify({
+            zone: {
+                coordinates: {
+                    x: 0,
+                    y: 0,
+                },
+                size: {
+                    width: 0,
+                    height: 0,
+                }
+            },
+            background: Colors.White,
+            filter: Colors.None,
+            size: {
+                width: 800,
+                height: 600
+            },
+            items: [],
+            focusItems: emptyFocusItems
+        })],
+        currentIndex: 0
     },
     card: {
         zone: {
@@ -32,6 +62,9 @@ const initialState: CardMaker = {
 }
 const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker => {
     switch (action.type) {
+        case ActionType.CREATE_NEW_CARD_MAKER: {
+            return initialState
+        }
         case ActionType.CHANGE_CARD:
             return {...state, card: action.card}
         case ActionType.RESIZE_CARD:
@@ -102,7 +135,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                 return {
                     ...state,
                     history: {
-                        list: [...action.list],
+                        ...state.history,
                         currentIndex: -1
                     }
                 }
@@ -112,7 +145,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                 return {
                     ...state,
                     history: {
-                        list: [...action.list],
+                        ...state.history,
                         currentIndex: state.history.currentIndex - 1
                     },
                     card: card
@@ -149,8 +182,6 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                     currentIndex: currentIndex,
                 }
             }
-
-
         case ActionType.REMOVE_ALL_ITEMS:
             return {...state, card: {...state.card, items: []}}
         case ActionType.ADD_ITEM:
@@ -255,17 +286,47 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             return state
         }
         case ActionType.RECOLOR_ARTS: {
-            for (let i = 0; i < action.focusItems.length; i++) {
+            for (let i = 0; i < state.card.focusItems.length; i++) {
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == action.focusItems[i]) {
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type == TypeDate.Art) {
 
                             bufDate = {
                                 ...bufDate,
                                 color: action.color
+                            }
+                            state.card.items[j] = {
+                                ...state.card.items[j],
+                                data: {
+                                    ...bufDate
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+            return state
+        }
+        case ActionType.CHANGE_TYPE_ARTS: {
+
+            for (let i = 0; i < state.card.focusItems.length; i++) {
+
+                for (let j = 0; j < state.card.items.length; j++) {
+
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                        let bufDate = state.card.items[j].data
+                        if (bufDate.type == TypeDate.Art) {
+
+                            bufDate = {
+                                ...bufDate,
+                                typeArt: action.typeArt
                             }
                             state.card.items[j] = {
                                 ...state.card.items[j],
@@ -537,7 +598,7 @@ const cardReducer = (state = initialCard, action: ActionsType): Card => {
 
                             bufDate = {
                                 ...bufDate,
-                                color: action.color
+                                color: action.color,
                             }
                             state.items[j] = {
                                 ...state.items[j],
@@ -566,7 +627,7 @@ const cardReducer = (state = initialCard, action: ActionsType): Card => {
 
                             bufDate = {
                                 ...bufDate,
-                                color: action.color
+                                color: action.color,
                             }
                             state.items[j] = {
                                 ...state.items[j],
@@ -725,21 +786,23 @@ const historyReducer = (state = initialHistory, action: ActionsType): History =>
             }
         }
         case ActionType.UNDO_HISTORY: {
+            const card: Card = JSON.parse(store.getState().history.list[store.getState().history.currentIndex - 1])
+            const list: string[] = store.getState().history.list
 
             if (state.list.length == 0) {
                 return {
-                    list: [...action.list],
+                    list: [...state.list],
                     currentIndex: -1
                 }
             }
             if (state.currentIndex - 1 > 0) {
                 return {
-                    list: [...action.list],
+                    list: [...state.list],
                     currentIndex: state.currentIndex - 1
                 }
             } else {
                 return {
-                    list: [...action.list],
+                    list: [...state.list],
                     currentIndex: 0
                 }
             }

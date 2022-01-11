@@ -99,17 +99,12 @@ const EditText: React.FC<EditTextProps> = ({
     const wrapperRef = useRef(null);
     useOutsideClick(wrapperRef);
 
-    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-
-    }
 
     return (
         <div className={c.container} ref={wrapperRef}>
-
             <div className={style.title}>
                 {title}
             </div>
-
             <div className={c.input_container}>
                 <input type="text" value={valueText}
                        onChange={(event) => {
@@ -214,14 +209,14 @@ const EditText: React.FC<EditTextProps> = ({
                             <div
                                 key={id()}
                                 style={
-                                {fontFamily: font}
-                            } className={c.ff_list__item}
-                                 onClick={() => {
-                                     setFontText(font)
-                                     changeFontText(focusItems, font)
-                                     setActiveFont(false)
+                                    {fontFamily: font}
+                                } className={c.ff_list__item}
+                                onClick={() => {
+                                    setFontText(font)
+                                    changeFontText(focusItems, font)
+                                    setActiveFont(false)
 
-                                 }}>{font}</div>
+                                }}>{font}</div>
                     ))}
                 </div>
             </div>

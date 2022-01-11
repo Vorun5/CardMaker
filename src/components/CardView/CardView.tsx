@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {Card, CardMaker, Colors, Coordinates, emptyZone, History, Size, TypeDate} from "../../models/types";
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
@@ -18,9 +18,10 @@ import {
     RemoveFocusItemsActionsType,
     RemoveZoneActionsType, ResizeItemActionsType
 } from "../../actions/actions";
-import TextCardView from "./TextCardView/TextCardView";
+import {toPng} from 'html-to-image';
 import ItemView from "./ItemView/ItemView";
-import {Simulate} from "react-dom/test-utils";
+import SaveCard from "../SaveCard/SaveCard";
+import Modal from "../Style components/Modal/Modal";
 
 interface CardViewProps {
     card: Card,
@@ -100,7 +101,6 @@ const CardView: React.FC<CardViewProps> = ({
         }
     }
 
-
     function editWidthRightItem(event: React.MouseEvent, id: ID, size: Size) {
         setStartCoordinates({
             x: event.pageX,
@@ -142,7 +142,6 @@ const CardView: React.FC<CardViewProps> = ({
         setItemID(id)
         setEditSizeMode({...editSizeMode, heightTop: true})
     }
-
 
     function editCornerTopLeftItem(event: React.MouseEvent, id: ID, size: Size, coordinates: Coordinates) {
         setStartCoordinates({
@@ -188,10 +187,8 @@ const CardView: React.FC<CardViewProps> = ({
         setEditSizeMode({...editSizeMode, cornerButtonLeft: true})
     }
 
-
     function changeCoordinatesItem(event: React.MouseEvent, id: ID, editCoordinatesMode: boolean, startCoordinates: Coordinates, coordinates: Coordinates) {
         if (editCoordinatesMode) {
-            console.log("editCoordinatesMode")
             movingItem(id, {
                 x: event.pageX - startCoordinates.x + coordinates.x,
                 y: event.pageY - startCoordinates.y + coordinates.y
@@ -204,7 +201,6 @@ const CardView: React.FC<CardViewProps> = ({
         const minSize = 30
 
         if (editSizeMode.cornerTopLeft) {
-            console.log("editSizeMode.cornerTopLeft")
             let width = size.width - (event.pageX - startCoordinates.x)
             if (width < minSize) {
                 width = minSize
@@ -233,7 +229,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, cornerTopLeft: false})
         }
         if (editSizeMode.cornerTopRight) {
-            console.log("editSizeMode.cornerTopRight")
             let width = event.pageX - startCoordinates.x + size.width
             if (width < minSize) {
                 width = minSize
@@ -258,7 +253,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, cornerTopRight: false})
         }
         if (editSizeMode.cornerButtonRight) {
-            console.log("editSizeMode.cornerButtonRight")
             let width = event.pageX - startCoordinates.x + size.width
             if (width < minSize) {
                 width = minSize
@@ -274,7 +268,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, cornerButtonRight: false})
         }
         if (editSizeMode.cornerButtonLeft) {
-            console.log("editSizeMode.cornerButtonLeft")
             let width = size.width - (event.pageX - startCoordinates.x)
             if (width < minSize) {
                 width = minSize
@@ -298,7 +291,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
         }
         if (editSizeMode.widthRight) {
-            console.log("editSizeMode.widthRight")
             let width = event.pageX - startCoordinates.x + size.width
             if (width < minSize) {
                 width = minSize
@@ -310,7 +302,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, widthRight: false})
         }
         if (editSizeMode.widthLeft) {
-            console.log("editSizeMode.widthLeft")
             let width = size.width - (event.pageX - startCoordinates.x)
             if (width < minSize) {
                 width = minSize
@@ -330,7 +321,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, widthLeft: false})
         }
         if (editSizeMode.heightButton) {
-            console.log("editSizeMode.heightButton")
             let height = event.pageY - startCoordinates.y + size.height
             if (height < minSize) {
                 height = minSize
@@ -342,7 +332,6 @@ const CardView: React.FC<CardViewProps> = ({
             setEditSizeMode({...editSizeMode, heightButton: false})
         }
         if (editSizeMode.heightTop) {
-            console.log("editSizeMode.heightTop")
             let height = size.height - (event.pageY - startCoordinates.y)
             if (height < minSize) {
                 height = minSize
@@ -363,6 +352,38 @@ const CardView: React.FC<CardViewProps> = ({
         }
     }
 
+    const ref = useRef<HTMLDivElement>(null)
+
+    const savePNG = useCallback(() => {
+        if (ref.current === null) {
+            return
+        }
+
+        toPng(ref.current, {cacheBust: true,})
+            .then((dataUrl) => {
+                const link = document.createElement('a')
+                link.download = 'card.png'
+                link.href = dataUrl
+                link.click()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [ref])
+    const saveJPEG = useCallback(() => {
+        if (ref.current === null) {
+            return
+        }
+
+        toPng(ref.current, {cacheBust: true,})
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = 'card.jpeg';
+                link.href = dataUrl;
+                link.click();
+            })
+    }, [ref])
+
     return (
         <div className={c.container} onClick={() => {
             if (card.zone == emptyZone) {
@@ -377,12 +398,14 @@ const CardView: React.FC<CardViewProps> = ({
                 }
             })
         }}>
+            <div className={c.save}><SaveCard removeFocusItems={removeFocusItems} saveJPEG={saveJPEG} savePNG={savePNG}/></div>
+
             <div style={styleCard}
                  className={c.card} onMouseOverCapture={(event) => {
                 changeCoordinatesItem(event, itemId, editCoordinatesMode, startCoordinates, coordinates)
                 changeSizeItem(event, itemId, editSizeMode, startCoordinates, coordinates, size)
             }}>
-                <div className={c.card__background} style={{backgroundColor: card.background}}>
+                <div ref={ref} className={c.card__background} style={{backgroundColor: card.background}}>
                     <div className={c.card__filter} style={card.filter == Colors.None ? {opacity: 1} : {
                         backgroundColor: card.filter,
                         opacity: 0.5

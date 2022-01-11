@@ -1,5 +1,7 @@
 import {ID} from "./id";
 
+export const emptyFocusItems: ID[] = []
+
 export enum TypeArt {
     Circle = 'Circle',
     Square = 'Square',
@@ -7,6 +9,7 @@ export enum TypeArt {
     // Star = 'Star',
     // Heart = 'Heart'
 }
+export const allTypeArtList = [TypeArt.Square, TypeArt.Triangle, TypeArt.Circle]
 
 export enum TypeDate {
     TextCard = 'TextCard',

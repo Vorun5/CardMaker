@@ -1,4 +1,9 @@
+
+
 .create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   // .create_icon
   &_icon {
     padding: 0 15px;
@@ -14,6 +19,7 @@
 .warning {
   font-family: 'Montserrat', sans-serif;
   font-weight: normal;
+
   // .warning_title
   &_title {
     text-align: center;
@@ -24,9 +30,7 @@
   // .warning_content
   &_content {
     text-align: center;
-    //font-family: 'Montserrat', sans-serif;
     font-size: 1.3rem;
-    //padding: 1rem;
     line-height: 2.5rem;
   }
   // .warning_buttons

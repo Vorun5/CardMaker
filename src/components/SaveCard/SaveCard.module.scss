@@ -9,4 +9,57 @@
     align-items: center;
     background: url("../../static/icon/save.svg") center no-repeat;
   }
+
+  // .save_title
+  &_title {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    padding: 1rem;
+  }
+
+  // .save_container
+  &_container {
+
+    border-bottom: 1px solid  #e8f6ff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    line-height: 2.5rem;
+    width: 300px;
+  }
+
+  // .save_description
+  &_description {
+    text-align: center;
+  }
+
+  // .save_buttons
+  &_buttons {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // .save_png
+  &_png {
+
+  }
+
+  // .save_or
+  &_or {
+    margin: 0 1rem;
+  }
+
+  // .save_jpeg
+  &_jpeg {
+
+  }
+
+  // .save_bottom
+  &_bottom {
+    margin: 2rem 0 0 0;
+    display: flex;
+    justify-content: flex-end;
+  }
 }

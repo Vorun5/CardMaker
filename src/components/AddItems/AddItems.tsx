@@ -79,7 +79,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         data: {
             type: TypeDate.Art,
             color: Colors.Yellow,
-            typeArt: TypeArt.Triangle
+            typeArt: TypeArt.Square
         },
         size: {
             width: 100,

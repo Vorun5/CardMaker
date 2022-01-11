@@ -16,7 +16,7 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
 
     const [width, setWidth] = useState<number>(size.width)
     const [height, setHeight] = useState<number>(size.height)
-    const max = 10000
+    const max = 9999
     const min = 100
     function onKeyDownHandle(event:  React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
@@ -48,7 +48,7 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
         <div className={c.container}>
             <div className={c.input_container}>
                 <input className={c.input} type="number"
-                       defaultValue={size.width}
+                       value={width}
                        onChange={(event) => {
                            setWidth(Number(event.target.value))
                        }}
@@ -58,7 +58,7 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
             <div className={c.input_x}></div>
             <div className={c.input_container}>
                 <input className={c.input} type="number"
-                       defaultValue={size.height}
+                       value={height}
                        onChange={(event) => {
                            setHeight(Number(event.target.value))
                        }}

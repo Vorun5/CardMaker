@@ -9,6 +9,7 @@ import {
     ChangeFontSizeTexts,
     ChangeFontTextActionsType,
     ChangeTextsActionsType,
+    ChangeTypeArtsActionType,
     CreateNewCardMakerActionType,
     MovingItemActionsType,
     MovingItemsActionsType,
@@ -16,7 +17,8 @@ import {
     RecolorArtsActionsType,
     RecolorTextsActionsType,
     RedoHistoryActionsType,
-    RemoveAllHistoryActionType, RemoveAllItemsActionType,
+    RemoveAllHistoryActionType,
+    RemoveAllItemsActionType,
     RemoveFocusItemsActionsType,
     RemoveItemsActionsType,
     RemoveZoneActionsType,
@@ -26,7 +28,7 @@ import {
     SelectZoneActionsType,
     UndoHistoryActionsType
 } from "./actions";
-import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, Zone} from "../models/types";
+import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt, Zone} from "../models/types";
 import {ID} from "../models/id";
 
 
@@ -172,6 +174,13 @@ export const recolorTexts = (focusItems: ID[], color: Colors): RecolorTextsActio
     }
 }
 
+export const changeTypeArts = (typeArt: TypeArt): ChangeTypeArtsActionType => {
+    return {
+        type: ActionType.CHANGE_TYPE_ARTS,
+        typeArt: typeArt,
+    }
+}
+
 export const recolorArts = (focusItems: ID[], color: Colors): RecolorArtsActionsType => {
     return {
         type: ActionType.RECOLOR_ARTS,
@@ -208,10 +217,9 @@ export const redoHistory = (): RedoHistoryActionsType => {
     }
 }
 
-export const undoHistory = (list: string[]): UndoHistoryActionsType => {
+export const undoHistory = (): UndoHistoryActionsType => {
     return {
         type: ActionType.UNDO_HISTORY,
-        list: list
     }
 }
 

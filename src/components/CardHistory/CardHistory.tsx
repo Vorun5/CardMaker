@@ -1,15 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Card,
-    CardMaker,
-    Colors,
-    emptyZone,
-    Fonts,
-    FontStyle,
-    FontWeight,
-    History, Size,
-    TextDecoration,
-    TypeDate
+    CardMaker, emptyFocusItems,
+    History,
 } from "../../models/types";
 import c from "./CardHistory.module.scss"
 import style from "./../../style/style.module.scss"
@@ -22,24 +15,69 @@ import {
 } from "../../actions/actions";
 import {addHistory, changeCard, redoHistory, undoHistory} from "../../actions/actionsCreaters";
 import {connect} from "react-redux";
-import {id} from "../../models/id";
+import * as fs from "fs";
 
 interface HistoryProps {
-    //card: Card,
     history: History,
     addHistory: (card: string) => AddHistoryActionsType,
     changeCard: (card: Card) => ChangeCardActionType,
     redoHistory: () => RedoHistoryActionsType,
-    undoHistory: (list: string[]) => UndoHistoryActionsType,
+    undoHistory: () => UndoHistoryActionsType,
 
 }
 
+let isPressed = false
+
+
 const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, redoHistory, undoHistory}) => {
+
+
+    function kyeUpHandler(event: KeyboardEvent) {
+
+        if (event.code == 'KeyZ') {
+            isPressed = false
+        }
+        if (event.code == 'KeyX') {
+            isPressed = false
+        }
+
+    }
+
+    function kyeDownHandler(event: KeyboardEvent) {
+        if (event.ctrlKey) {
+            if (event.code == 'KeyZ') {
+                isPressed = true
+                console.log("undo")
+                undoHistory()
+            }
+            if (event.code == 'KeyX') {
+                  isPressed = true
+
+                console.log("redo")
+                redoHistory()
+            }
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (!isPressed) {
+                kyeDownHandler(event)
+            }
+        })
+    })
+
+    useEffect(() => {
+        document.addEventListener("keyup", (event: KeyboardEvent) => {
+            if (isPressed) {
+                kyeUpHandler(event)
+            }
+        })
+    })
 
     function handleChange() {
         const history: History = store.getState().history
-        //const card: string = JSON.stringify({...selectCard(store.getState()), filter: []})
-        const card: Card = {...store.getState().card, focusItems: []}
+        const card: Card = {...store.getState().card, focusItems: emptyFocusItems}
         const cardString = JSON.stringify(card)
         if (history.list[history.currentIndex] !== cardString) {
             addHistory(cardString)
@@ -48,18 +86,10 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
 
     const unsubscribe = store.subscribe(handleChange)
 
-    //unsubscribe()
-
-    function undoHistoryClick() {
-        const card: Card = JSON.parse(store.getState().history.list[store.getState().history.currentIndex - 1])
-        const list: string[] = store.getState().history.list
-        undoHistory(list)
-    }
-//style.button + " " + c.button + " " + style.button_inactive
     return (
         <div className={c.container}>
             <div
-                onClick={() => undoHistoryClick()}
+                onClick={() => undoHistory()}
                 className={history.currentIndex > 0 ? style.button + " " + c.button : style.button + " " + c.button + " " + style.button_inactive}>
                 <div className={c.undo_icon + " " + c.icon}/>
             </div>

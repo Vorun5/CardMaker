@@ -1,4 +1,16 @@
-import {Card, Colors, Coordinates, Fonts, FontStyle, FontStyleText, History, Item, Size, Zone} from "../models/types";
+import {
+    Card,
+    Colors,
+    Coordinates,
+    Fonts,
+    FontStyle,
+    FontStyleText,
+    History,
+    Item,
+    Size,
+    TypeArt,
+    Zone
+} from "../models/types";
 import {ID} from "../models/id";
 
 export enum ActionType {
@@ -19,6 +31,7 @@ export enum ActionType {
 
     RECOLOR_TEXTS = 'RECOLOR_TEXTS',
     RECOLOR_ARTS = 'RECOLOR_ARTS',
+    CHANGE_TYPE_ARTS = 'CHANGE_TYPE_ARTS',
     CHANGE_FONT_SIZE_TEXTS = 'CHANGE_FONT_SIZE_TEXTS',
     RESTYLE_TEXT = 'RESTYLE_TEXT',
     CHANGE_FONT_TEXT = 'CHANGE_FONT_TEXT',
@@ -34,6 +47,11 @@ export enum ActionType {
 
     CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
     CHANGE_CARD = 'CHANGE_CARD',
+}
+
+export type ChangeTypeArtsActionType = {
+    type: ActionType.CHANGE_TYPE_ARTS,
+    typeArt: TypeArt,
 }
 
 export type RemoveAllItemsActionType = {
@@ -155,7 +173,6 @@ export type RedoHistoryActionsType = {
 
 export type UndoHistoryActionsType = {
     type: ActionType.UNDO_HISTORY,
-    list: string[],
 }
 
 export type RecolorTextsActionsType = {
@@ -175,10 +192,6 @@ export type ChangeFontSizeTexts = {
     focusItems: ID[],
     fontSize: number,
 }
-
-
-
-
 
 
 export type ActionsType =
@@ -208,3 +221,4 @@ export type ActionsType =
     | ChangeCardActionType
     | RemoveAllHistoryActionType
     | RemoveAllItemsActionType
+    | ChangeTypeArtsActionType

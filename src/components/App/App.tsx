@@ -41,7 +41,7 @@ const App: React.FC<AppProps> = ({
                 <div className={c.tools}>
                     <div className={c.header_tools}>
                         <div className={c.header_tools_item}><CreateNewCard/></div>
-                        <div className={c.header_tools_item}><SaveCard/></div>
+                        {/*<div className={c.header_tools_item}><SaveCard/></div>*/}
 
                     </div>
                     <AddItems/>
