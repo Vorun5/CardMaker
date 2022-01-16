@@ -28,10 +28,10 @@ const SaveCard: React.FC<SaveCardProps> = ({
             {saveModal ?
                 <Modal>
                     <div className={c.save_title}>
-                        Save file
+                        Скачать.
                     </div>
                     <div className={c.save_container}>
-                        <div className={c.save_description}>Download file as</div>
+                        <div className={c.save_description}>Скачать открытку как</div>
                         <div className={c.save_buttons}>
                             <div
                                 onClick={() => {
@@ -41,7 +41,7 @@ const SaveCard: React.FC<SaveCardProps> = ({
                                 }}
                                 className={c.save_png + " " + style.button}>PNG
                             </div>
-                            <div className={c.save_or}>OR</div>
+                            <div className={c.save_or}>или</div>
                             <div
                                 onClick={() => {
                                     removeFocusItems()

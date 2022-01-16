@@ -16,7 +16,6 @@ import {
 import {ID, id} from "../../models/id";
 import {
     addFocusItem,
-    addHistory,
     addItem,
     removeFocusItems,
     removeZone,
@@ -29,7 +28,6 @@ import {
     RemoveFocusItemsActionsType,
     RemoveZoneActionsType, ResizeCardActionsType
 } from "../../actions/actions";
-import {isBoolean} from "util";
 
 interface AddItemsProps {
     sizeCard: Size,
@@ -50,7 +48,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                                            }) => {
 
 
-    const padding = 10
+    const padding = 0
     const textItem: Item = {
         id: id(),
         data: {
@@ -296,7 +294,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             <div className={modalImg ? c.modal : c.modal_inactive}>
                 <div className={c.modal_content + " " + c.img_modal}>
                     <div className={c.img_modal_title}>
-                        {bigImg ? <p>Very big image 😱</p> : <p>Select image</p>}
+                        {bigImg ? <p>Большое изображение 😱</p> : <p>Выберете изображение</p>}
                     </div>
                     <div className={c.img_modal_content}>
 
@@ -325,15 +323,15 @@ const AddItems: React.FC<AddItemsProps> = ({
                                     onDragStart={e => dragStartHandler(e)}
                                     onDragLeave={e => dragLeaveHandler(e)}
                                     onDragOver={e => dragStartHandler(e)}>
-                                    <p> Drag <b style={warningOneImg ? {
+                                    <p> Перенести <b style={warningOneImg ? {
                                         color: '#E76363',
                                         fontWeight: 500
-                                    } : {fontWeight: "normal"}}> one image</b> to this upload area.
+                                    } : {fontWeight: "normal"}}> одно изображение </b> в зону для загрузки.
                                         <br/>
-                                        Available formats <b style={warningFormatFile ? {
+                                        Поддерживаемые форматы <b style={warningFormatFile ? {
                                             color: '#E76363',
                                             fontWeight: 500
-                                        } : {fontWeight: "normal"}}>PNG and JPEG</b>.</p>
+                                        } : {fontWeight: "normal"}}>PNG и JPEG</b>.</p>
 
                                 </div>
                         }
@@ -346,17 +344,16 @@ const AddItems: React.FC<AddItemsProps> = ({
                                 <div className={c.choice_button + " " + style.button}
                                      onClick={() => addImgAndEnlargeCard()}
                                 >
-                                    Enlarge the canvas to fit the
-                                    image.
+                                    Увеличить размер полотна до размеров картинки
                                 </div>
                                 <div className={c.choice_button + " " + style.button}
                                      onClick={() => addPartImg()}
-                                >Add part of the image.
+                                >Добавить часть фотографии
                                 </div>
 
                                 <div className={c.choice_button + " " + style.button}
                                      onClick={() => deleteImg()}
-                                >Undo pasting this image
+                                >Отменить вставку изображения
                                 </div>
                             </div>
                             :

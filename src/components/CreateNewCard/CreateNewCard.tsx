@@ -32,9 +32,9 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({createNewCardMaker}) => {
                 <Modal>
                     <div className={c.warning}>
 
-                        <div className={c.warning_title}>Create new file.</div>
+                        <div className={c.warning_title}>Создать новую открытку.</div>
                         <div className={c.warning_content}>
-                            Are you sure you want to create a new file? <br/> All unsaved changes will be deleted!
+                           Вы действительно хотите создать новую открытку? <br/>  Все несохраненные изменения будут удаленны!
                         </div>
                         <div className={c.warning_buttons}>
                             <div
