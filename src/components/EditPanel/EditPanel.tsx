@@ -16,30 +16,28 @@ import {connect} from "react-redux";
 import {
     changeFontSizeText,
     changeFontText,
-    changeTexts, changeTypeArts, recolorArts,
+    changeTexts, changeTypeArts,
     recolorTexts,
     restyleText
 } from "../../actions/actionsCreaters";
 import {
     ChangeFontSizeTexts,
     ChangeFontTextActionsType,
-    ChangeTextsActionsType, ChangeTypeArtsActionType, RecolorArtsActionsType, RecolorTextsActionsType,
+    ChangeTextsActionsType, ChangeTypeArtsActionType, RecolorTextsActionsType,
     RestyleTextActionsType
 } from "../../actions/actions";
 import EditText from "./EditText/EditText";
 import EditArt from "./EditArt/EditArt";
-import EditImg from "./EditImg/EditImg";
 
 interface EditPanelToProps {
     focusItems: ID[];
     items: Item[];
-    restyleText: (focusItem: ID[], fontStyleText: FontStyleText) => RestyleTextActionsType,
-    recolorTexts: (focusItem: ID[], color: Colors) => RecolorTextsActionsType,
-    changeFontText: (focusItems: ID[], fontFamily: Fonts) => ChangeFontTextActionsType,
-    changeTexts: (focusItem: ID[], body: string) => ChangeTextsActionsType,
-    changeFontSizeText: (focusItems: string[], fontSize: number) => ChangeFontSizeTexts,
+    restyleText: (fontStyleText: FontStyleText) => RestyleTextActionsType,
+    recolorTexts: (color: Colors) => RecolorTextsActionsType,
+    changeFontText: (fontFamily: Fonts) => ChangeFontTextActionsType,
+    changeTexts: (body: string) => ChangeTextsActionsType,
+    changeFontSizeText: (fontSize: number) => ChangeFontSizeTexts,
     changeTypeArts: (typeArt: TypeArt) => ChangeTypeArtsActionType,
-    recolorArts: (focusItems: ID[], color: Colors) => RecolorArtsActionsType,
 }
 
 function firstTextIndex(focusItems: ID[], items: Item[]): TextCard | null {
@@ -93,7 +91,6 @@ const EditPanel: React.FC<EditPanelToProps> = ({
                                                    items,
                                                    changeFontText,
                                                    changeTypeArts,
-                                                   recolorArts
                                                }) => {
 
 
@@ -136,7 +133,6 @@ const EditPanel: React.FC<EditPanelToProps> = ({
                 title={"Edit text"}
                 changeFontText={changeFontText}
                 recolorText={recolorTexts}
-                focusItems={focusItems}
                 restyleText={restyleText}
                 textCard={textItemData}
                 changeFontSizeText={changeFontSizeText}
@@ -148,7 +144,6 @@ const EditPanel: React.FC<EditPanelToProps> = ({
                 art={artItemData}
                 focusItems={focusItems}
                 changeTypeArts={changeTypeArts}
-                recolorArts={recolorArts}
             />}
 
         </div>
@@ -170,7 +165,6 @@ const mapDispatchToProps = {
     changeTexts,
     changeFontSizeText,
     changeTypeArts,
-    recolorArts
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EditPanel);
 

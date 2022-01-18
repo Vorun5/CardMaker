@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 100%;
   z-index: 9999;
   display: flex;
@@ -16,7 +16,6 @@
 
   // .modal_content
   &_content {
-    padding: 1rem;
     border-radius: 0.25rem;
     outline: 0;
     background-color: #2c2c2c;

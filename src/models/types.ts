@@ -3,13 +3,17 @@ import {ID} from "./id";
 export const emptyFocusItems: ID[] = []
 
 export enum TypeArt {
-    Circle = 'Circle',
-    Square = 'Square',
-    Triangle = 'Triangle',
-    // Star = 'Star',
-    // Heart = 'Heart'
+    Fox = "Лиса",
+    Bat = "Летучая мышь",
+    World = "Земной шар",
+    Butterfly = "Бабочка",
+    Moon = "Луна",
+    Rocket = "Ракета",
+    NewYear = "Новый год",
+    Sun = "Солнце",
+    ChristmasTree = "Новогодняя ёлка"
 }
-export const allTypeArtList = [TypeArt.Square, TypeArt.Triangle, TypeArt.Circle]
+export const allTypeArtList = [TypeArt.Fox, TypeArt.Bat, TypeArt.World, TypeArt.Butterfly, TypeArt.Moon, TypeArt.Rocket, TypeArt.Sun, TypeArt.NewYear, TypeArt.ChristmasTree]
 
 export enum TypeDate {
     TextCard = 'TextCard',
@@ -75,24 +79,13 @@ export type FontStyleText = Readonly<{
     textDecoration: TextDecoration, // text-decoration 'none' и 'line-through'
 }>
 
-export type Zone = Readonly<{
-    coordinates: Coordinates,
-    size: Size,
+
+export type Template = Readonly<{
+    title: string,
+    card: string
 }>
 
-export const emptyZone: Zone = {
-    size: {
-        width: 0,
-        height: 0,
-    },
-    coordinates: {
-        x: 0,
-        y: 0
-    }
-}
-
-
-export const emptyFocusItem: ID[] = []
+const allTemplates: Template[] = []
 
 export type IMG = Readonly<{
     type: TypeDate.IMG,
@@ -111,7 +104,6 @@ export type TextCard = Readonly<{
 export type Art = Readonly<{
     type: TypeDate.Art
     typeArt: TypeArt,
-    color: Colors
 }>
 
 export type Item = Readonly<{
@@ -122,7 +114,6 @@ export type Item = Readonly<{
 }>
 
 export type Card = Readonly<{
-    zone: Zone, // {size: {0, 0}, coordinates: {0, 0}} - нулевое значение
     filter: Colors, // Colors.None -  - нулевое значение
     background: Colors, // Colors.None  - нулевое значение
     items: Item[],
@@ -131,7 +122,7 @@ export type Card = Readonly<{
 }>
 
 export type CardMaker = Readonly<{
-    templates: Card[],
+    templates: Template[],
     history: History,
     card: Card
 }>

@@ -1,0 +1,41 @@
+
+.border {
+  position: absolute;
+  z-index: 1001;
+
+  &_top {
+    height: 16px;
+  }
+
+  &_button {
+    height: 16px;
+  }
+
+  &_right {
+    width: 16px;
+  }
+
+  &_left {
+    width: 16px;
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #FF6779;
+  z-index: 1001;
+
+  &_top {
+  }
+
+  &_button {
+  }
+
+  &_right {
+  }
+
+  &_left {
+  }
+}

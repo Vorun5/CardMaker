@@ -9,28 +9,20 @@ import {
     Item,
     Size,
     TypeArt,
-    Zone
 } from "../models/types";
 import {ID} from "../models/id";
 
 export enum ActionType {
     RESIZE_CARD = 'RESIZE_CARD',
     ADD_HISTORY = 'ADD_HISTORY',
-
-
-    SELECT_ZONE = 'SELECT_ZONE',
-    MOVING_ZONE = 'MOVING_ZONE',
-    REMOVE_ZONE = 'REMOVE_ZONE',
-
     REMOVE_ALL_ITEMS = 'REMOVE_ALL_ITEMS',
     ADD_ITEM = 'ADD_ITEM',
     REMOVE_ITEMS = 'REMOVE_ITEMS',
     MOVING_ITEM = 'MOVING_ITEM',
     MOVING_ITEMS = 'MOVING_ITEMS',
     RESIZE_ITEM = 'RESIZE_ITEM',
-
+    SCALE_ITEM = 'SCALE_ITEM',
     RECOLOR_TEXTS = 'RECOLOR_TEXTS',
-    RECOLOR_ARTS = 'RECOLOR_ARTS',
     CHANGE_TYPE_ARTS = 'CHANGE_TYPE_ARTS',
     CHANGE_FONT_SIZE_TEXTS = 'CHANGE_FONT_SIZE_TEXTS',
     RESTYLE_TEXT = 'RESTYLE_TEXT',
@@ -47,6 +39,12 @@ export enum ActionType {
 
     CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
     CHANGE_CARD = 'CHANGE_CARD',
+}
+
+
+export type ScaleItemActionType = {
+    type: ActionType.SCALE_ITEM,
+    scale: number
 }
 
 export type ChangeTypeArtsActionType = {
@@ -74,7 +72,6 @@ export type ChangeCardActionType = {
 
 export type RemoveItemsActionsType = {
     type: ActionType.REMOVE_ITEMS,
-    focusItems: ID[],
 }
 
 
@@ -99,19 +96,6 @@ export type AddHistoryActionsType = {
     card: string
 }
 
-export type SelectZoneActionsType = {
-    type: ActionType.SELECT_ZONE,
-    zone: Zone,
-}
-
-export type MovingZoneActionsType = {
-    type: ActionType.MOVING_ZONE,
-    coordinates: Coordinates,
-}
-
-export type RemoveZoneActionsType = {
-    type: ActionType.REMOVE_ZONE
-}
 
 export type AddItemActionsType = {
     type: ActionType.ADD_ITEM,
@@ -127,32 +111,29 @@ export type MovingItemActionsType = {
 
 export type MovingItemsActionsType = {
     type: ActionType.MOVING_ITEMS,
-    focusItems: ID[],
     coordinates: Coordinates,
 }
 
 export type ResizeItemActionsType = {
     type: ActionType.RESIZE_ITEM,
     size: Size,
+    coordinates: Coordinates,
     id: ID,
 }
 
 export type ChangeTextsActionsType = {
     type: ActionType.CHANGE_TEXTS,
-    focusItems: ID[],
     body: string,
 }
 
 export type RestyleTextActionsType = {
     type: ActionType.RESTYLE_TEXT,
     fontStyleText: FontStyleText,
-    focusItems: ID[],
 }
 
 export type ChangeFontTextActionsType = {
     type: ActionType.CHANGE_FONT_TEXT,
     fontFamily: Fonts,
-    focusItems: ID[],
 }
 
 export type ChangeFilterActionsType = {
@@ -178,18 +159,10 @@ export type UndoHistoryActionsType = {
 export type RecolorTextsActionsType = {
     type: ActionType.RECOLOR_TEXTS,
     color: Colors,
-    focusItems: ID[],
-}
-
-export type RecolorArtsActionsType = {
-    type: ActionType.RECOLOR_ARTS,
-    color: Colors,
-    focusItems: ID[],
 }
 
 export type ChangeFontSizeTexts = {
     type: ActionType.CHANGE_FONT_SIZE_TEXTS,
-    focusItems: ID[],
     fontSize: number,
 }
 
@@ -204,9 +177,6 @@ export type ActionsType =
     | MovingItemsActionsType
     | MovingItemActionsType
     | AddItemActionsType
-    | RemoveZoneActionsType
-    | MovingZoneActionsType
-    | SelectZoneActionsType
     | AddHistoryActionsType
     | ResizeCardActionsType
     | AddFocusItemActionsType
@@ -214,7 +184,6 @@ export type ActionsType =
     | ChangeFontTextActionsType
     | ChangeTextsActionsType
     | RecolorTextsActionsType
-    | RecolorArtsActionsType
     | ChangeFontSizeTexts
     | RemoveItemsActionsType
     | CreateNewCardMakerActionType
@@ -222,3 +191,4 @@ export type ActionsType =
     | RemoveAllHistoryActionType
     | RemoveAllItemsActionType
     | ChangeTypeArtsActionType
+    | ScaleItemActionType

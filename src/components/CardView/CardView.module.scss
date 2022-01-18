@@ -1,7 +1,7 @@
 
 .save {
   position: fixed;
-  z-index: 1100;
+  z-index: 304;
   top: 5px;
   left: calc(1rem + 50px);
 
@@ -15,7 +15,6 @@
 }
 
 .card {
-  z-index: 1000;
   border: 2px solid #bbbbbb;
   border-radius: 5px;
   overflow: hidden;
@@ -38,7 +37,7 @@
 
 .border {
   position: absolute;
-  z-index: 1001;
+  z-index: 301;
 
   &_top {
     height: 16px;
@@ -62,7 +61,7 @@
   width: 16px;
   height: 16px;
   background-color: #FF6779;
-  z-index: 1001;
+  z-index: 302;
 
   &_top {
   }

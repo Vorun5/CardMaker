@@ -1,12 +1,5 @@
 import React from 'react';
-import {Coordinates, Item, TypeDate} from "../../../models/types";
-import {ID} from "../../../models/id";
-import {
-    AddFocusItemActionsType,
-    MovingItemsActionsType,
-    RemoveFocusItemsActionsType,
-    RemoveZoneActionsType
-} from "../../../actions/actions";
+import {Item, TypeDate} from "../../../models/types";
 import TextCardView from "../TextCardView/TextCardView";
 import ImgCardView from "../ImgCardView/ImgCardView";
 import ArtCardView from "../ArtCardView/ArtCardView";

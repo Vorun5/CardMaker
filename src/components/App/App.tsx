@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.module.scss';
 import FilterTool from '../FilterTool/FilterTool';
-import {allColorsList, Card, CardMaker, Coordinates, History, Size} from "../../models/types";
+import {allColorsList, Card, CardMaker, History, Size} from "../../models/types";
 import c from './App.module.scss'
 import CardView from "../CardView/CardView";
 import BackgroundTool from "../BackgroundTool/BackgroundTool";
@@ -18,8 +18,8 @@ import AddItems from "../AddItems/AddItems";
 import DeleteItems from "../DeleteItems/DeleteItems";
 import CardHistory from "../CardHistory/CardHistory";
 import CreateNewCard from "../CreateNewCard/CreateNewCard";
-import SaveCard from "../SaveCard/SaveCard";
-
+import '../../static/art/Ворон.svg'
+import TemplatesTool from "../TemplatesTool/TemplatesTool";
 interface AppProps {
     card: Card,
     history: History,
@@ -33,22 +33,13 @@ const App: React.FC<AppProps> = ({
                                      resizeCard
                                  }) => {
 
+    const [color, setColor] = useState<string>('#FFFFFF')
+
     return (
         <div className={c.App}>
 
             <div>
 
-                <div className={c.tools}>
-                    <div className={c.header_tools}>
-                        <div className={c.header_tools_item}><CreateNewCard/></div>
-                        {/*<div className={c.header_tools_item}><SaveCard/></div>*/}
-
-                    </div>
-                    <AddItems/>
-                    <FilterTool colorList={allColorsList}/>
-                    <BackgroundTool colorList={allColorsList}/>
-                    <EditPanel/>
-                </div>
 
                 <div className={c.header_card}>
                     <div className={c.header_card_item}>
@@ -61,13 +52,24 @@ const App: React.FC<AppProps> = ({
                         <CardHistory/>
                     </div>
                 </div>
+
                 <div className={c.card_container}>
                     <CardView card={card} history={history}/>
                 </div>
 
+                <div className={c.tools}>
+                    <div className={c.header_tools}>
+                        <div className={c.header_tools_item}><CreateNewCard/></div>
+                    </div>
+                    <AddItems/>
+                    <TemplatesTool/>
+                    <FilterTool colorList={allColorsList}/>
+                    <BackgroundTool colorList={allColorsList}/>
+                    <EditPanel/>
+                </div>
+
 
             </div>
-
         </div>
     );
 }

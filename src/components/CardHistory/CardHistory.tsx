@@ -15,7 +15,6 @@ import {
 } from "../../actions/actions";
 import {addHistory, changeCard, redoHistory, undoHistory} from "../../actions/actionsCreaters";
 import {connect} from "react-redux";
-import * as fs from "fs";
 
 interface HistoryProps {
     history: History,
@@ -33,7 +32,6 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
 
 
     function kyeUpHandler(event: KeyboardEvent) {
-
         if (event.code == 'KeyZ') {
             isPressed = false
         }

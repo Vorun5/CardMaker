@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import c from './AddItems.module.scss'
 import style from "../../style/style.module.scss"
 import {
+    allTypeArtList,
     CardMaker,
     Colors,
     Fonts,
@@ -14,24 +15,17 @@ import {
     TypeDate
 } from "../../models/types";
 import {ID, id} from "../../models/id";
-import {
-    addFocusItem,
-    addItem,
-    removeFocusItems,
-    removeZone,
-    resizeCard
-} from "../../actions/actionsCreaters";
+import {addFocusItem, addItem, removeFocusItems, resizeCard} from "../../actions/actionsCreaters";
 import {connect} from "react-redux";
 import {
     AddFocusItemActionsType,
     AddItemActionsType,
     RemoveFocusItemsActionsType,
-    RemoveZoneActionsType, ResizeCardActionsType
+    ResizeCardActionsType
 } from "../../actions/actions";
 
 interface AddItemsProps {
     sizeCard: Size,
-    removeZone: () => RemoveZoneActionsType,
     addItem: (item: Item) => AddItemActionsType,
     addFocusItem: (id: ID) => AddFocusItemActionsType,
     removeFocusItems: () => RemoveFocusItemsActionsType,
@@ -39,7 +33,6 @@ interface AddItemsProps {
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
-                                               removeZone,
                                                addItem,
                                                addFocusItem,
                                                removeFocusItems,
@@ -48,7 +41,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                                            }) => {
 
 
-    const padding = 0
+    const padding = 20
     const textItem: Item = {
         id: id(),
         data: {
@@ -76,8 +69,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         id: id(),
         data: {
             type: TypeDate.Art,
-            color: Colors.Yellow,
-            typeArt: TypeArt.Square
+            typeArt: TypeArt.Bat
         },
         size: {
             width: 100,
@@ -91,7 +83,6 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     function add(item: Item) {
         const idItem = id()
-        removeZone()
         removeFocusItems()
         addItem(
             {
@@ -99,7 +90,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                 id: idItem
             }
         )
-        addFocusItem(idItem)
+        //addFocusItem(idItem)
     }
 
     const [imgSelected, setImgSelected] = useState<boolean>(false)
@@ -120,7 +111,6 @@ const AddItems: React.FC<AddItemsProps> = ({
         deleteImg()
         setModalImg(false)
     }
-
 
     function saveImg() {
         for (let i = 0; i < images.length; i++) {
@@ -264,6 +254,8 @@ const AddItems: React.FC<AddItemsProps> = ({
     }
 
 
+    const [modalArt, setModalArt] = useState<boolean>(false)
+
     return (
         <div>
             <div className={c.container}>
@@ -278,7 +270,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                         <div className={c.button_text}/>
                     </div>
                     <div className={c.button}
-                         onClick={() => add(artItem)}
+                         onClick={() => setModalArt(true)}
                     >
                         <div className={c.button_art}/>
                     </div>
@@ -292,8 +284,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                 </div>
             </div>
             <div className={modalImg ? c.modal : c.modal_inactive}>
-                <div className={c.modal_content + " " + c.img_modal}>
-                    <div className={c.img_modal_title}>
+                <div className={c.modal_content}>
+                    <div className={c.modal_title}>
                         {bigImg ? <p>Большое изображение 😱</p> : <p>Выберете изображение</p>}
                     </div>
                     <div className={c.img_modal_content}>
@@ -381,6 +373,38 @@ const AddItems: React.FC<AddItemsProps> = ({
 
                 </div>
             </div>
+            <div className={modalArt ? c.modal : c.modal_inactive}>
+                <div className={c.modal_content}>
+                    <div className={c.modal_title}>
+                        Выберете art объект
+                    </div>
+                    <div className={c.art_modal_content}>
+                        {allTypeArtList.map((art) =>
+                            <div className={c.art_modal_item}
+                                onClick={() => {
+                                    add({
+                                        ...artItem,
+                                        data: {
+                                            type: TypeDate.Art,
+                                            typeArt: art,
+                                        }
+                                    })
+                                    setModalArt(false)
+                                }}>
+
+                                <img className={c.art_modal_item_icon} width={50} src={require(`../../static/art/${String(art)}.svg`).default}
+                                     alt={String(art)}/></div>
+                        )}
+                    </div>
+                    <div className={c.modal_close}>
+                        <div className={style.button}
+                             onClick={() => setModalArt(false)}
+                        >Close
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     );
 };
@@ -392,9 +416,7 @@ function mapStateToProps(state: CardMaker) {
     }
 }
 
-
 const mapDispatchToProps = {
-    removeZone,
     addItem,
     addFocusItem,
     removeFocusItems,

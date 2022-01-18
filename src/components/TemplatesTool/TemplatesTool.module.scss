@@ -1,0 +1,51 @@
+.container {
+  cursor: pointer;
+  height: 40px;
+  border: 1px solid #bbbbbb;
+  border-bottom: none;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  background: url("../../static/icon/templates.svg") center no-repeat;
+}
+
+.title {
+  padding: 0 10px 0 0;
+  color: #6f6f6f;
+  font-size: 1rem;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.modal {
+  // .modal_title
+  &_title {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    padding: 1rem;
+  }
+
+
+  // .modal_content
+  &_content {
+  }
+
+
+  // .modal_button
+  &_button {
+    margin: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

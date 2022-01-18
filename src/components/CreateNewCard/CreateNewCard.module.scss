@@ -29,13 +29,14 @@
   }
   // .warning_content
   &_content {
+    padding: 0 2rem;
     text-align: center;
     font-size: 1.3rem;
     line-height: 2.5rem;
   }
   // .warning_buttons
   &_buttons {
-    margin: 2rem 0 0 0;
+    margin: 2rem 0 1rem 0;
     display: flex;
     justify-content: center;
     align-items: center;

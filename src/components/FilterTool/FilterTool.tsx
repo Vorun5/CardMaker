@@ -59,6 +59,7 @@ const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, changeFilter}
 
             <div style={active ? {right: -positionSelectBlock + 'px'} : {right: "0"}}
                  className={c.select}>
+
                 <ColorSelect changeColor={changeFilter} colorList={colorList}/>
             </div>
         </div>

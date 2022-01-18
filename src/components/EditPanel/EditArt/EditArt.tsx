@@ -13,14 +13,13 @@ import {
     TypeArt
 } from "../../../models/types";
 import {id, ID} from "../../../models/id";
-import {ChangeTypeArtsActionType, RecolorArtsActionsType} from "../../../actions/actions";
+import {ChangeTypeArtsActionType} from "../../../actions/actions";
 
 interface EditArtProps {
     title: string,
     art: Art,
     focusItems: ID[],
     changeTypeArts: (typeArt: TypeArt) => ChangeTypeArtsActionType,
-    recolorArts: (focusItems: ID[], color: Colors) => RecolorArtsActionsType,
 }
 
 const EditArt: React.FC<EditArtProps> = ({
@@ -28,13 +27,10 @@ const EditArt: React.FC<EditArtProps> = ({
                                              art,
                                              focusItems,
                                              changeTypeArts,
-                                             recolorArts
+
                                          }) => {
     const [activeTypeArt, setActiveTypeArt] = useState<boolean>(false)
     const [typeArt, setTypeArt] = useState<TypeArt>(art.typeArt)
-    const [colorArt, setColorArt] = useState<Colors>(art.color)
-    const [activeSelectColor, setActiveSelectColor] = useState<boolean>(false)
-    const positionSelectBlock = allColorsList.length * 30 + 20;
     return (
         <div className={c.container}>
             <div className={style.title}>
@@ -74,24 +70,6 @@ const EditArt: React.FC<EditArtProps> = ({
 
                                     }}>{type}</div>
                         ))}
-                    </div>
-                </div>
-                <div className={c.art_color_container}>
-                    <div className={c.art_color}
-                         style={{backgroundColor: colorArt}}
-                         onClick={() => {
-                             setActiveSelectColor(!activeSelectColor)
-                         }}/>
-                    <div style={activeSelectColor ? {right: -positionSelectBlock + 'px'} : {right: "0"}}
-                         className={c.art_select_colors} onClick={() => {
-                    }}>
-                        {allColorsList.map((color => <div key={id()} className={c.art_select_colors__color}
-                                                          style={{backgroundColor: color}}
-                                                          onClick={() => {
-                                                              recolorArts(focusItems, color)
-                                                              setColorArt(color)
-                                                          }}>
-                        </div>))}
                     </div>
                 </div>
             </div>

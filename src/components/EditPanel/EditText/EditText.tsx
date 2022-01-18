@@ -24,12 +24,11 @@ import {
 interface EditTextProps {
     title: string
     textCard: TextCard
-    restyleText: (focusItem: ID[], fontStyleText: FontStyleText) => RestyleTextActionsType
-    recolorText: (focusItem: ID[], color: Colors) => RecolorTextsActionsType
-    changeFontText: (focusItem: ID[], fontFamily: Fonts) => ChangeFontTextActionsType
-    changeTexts: (focusItem: ID[], body: string) => ChangeTextsActionsType
-    focusItems: ID[],
-    changeFontSizeText: (focusItems: string[], fontSize: number) => ChangeFontSizeTexts
+    restyleText: (fontStyleText: FontStyleText) => RestyleTextActionsType
+    recolorText: (color: Colors) => RecolorTextsActionsType
+    changeFontText: (fontFamily: Fonts) => ChangeFontTextActionsType
+    changeTexts: (body: string) => ChangeTextsActionsType
+    changeFontSizeText: (fontSize: number) => ChangeFontSizeTexts
 }
 
 
@@ -41,7 +40,6 @@ const EditText: React.FC<EditTextProps> = ({
                                                recolorText,
                                                restyleText,
                                                textCard,
-                                               focusItems
                                            }) => {
     const [styleText, setStyleText] = useState<FontStyleText>(textCard.fontStyle)
     const [valueText, setValueText] = useState<string>(textCard.body)
@@ -109,7 +107,7 @@ const EditText: React.FC<EditTextProps> = ({
                 <input type="text" value={valueText}
                        onChange={(event) => {
                            setValueText(event.target.value)
-                           changeTexts(focusItems, event.target.value)
+                           changeTexts(event.target.value)
                        }}
                        className={style.input + ' ' + c.input_container__icon_input}/>
             </div>
@@ -117,7 +115,7 @@ const EditText: React.FC<EditTextProps> = ({
                 <input className={c.range_input} type="range" value={fontSizeText} min="5" max="100"
                        onChange={(event) => {
                            setFontSizeText(Number(event.target.value))
-                           changeFontSizeText(focusItems, Number(event.target.value))
+                           changeFontSizeText(Number(event.target.value))
                        }}
                 />
                 <p className={c.range_view}>{fontSizeText}</p>
@@ -129,7 +127,7 @@ const EditText: React.FC<EditTextProps> = ({
                      } : {}}
 
                      onClick={() => {
-                         restyleText(focusItems, {
+                         restyleText({
                              ...styleText, fontWeight: reverseFontWeight(styleText.fontWeight)
                          })
 
@@ -143,7 +141,7 @@ const EditText: React.FC<EditTextProps> = ({
 
 
                      onClick={() => {
-                         restyleText(focusItems, {
+                         restyleText({
                              ...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)
                          })
                          setStyleText({...styleText, fontStyle: reverseFontStyle(styleText.fontStyle)})
@@ -156,7 +154,7 @@ const EditText: React.FC<EditTextProps> = ({
                      } : {}}
 
                      onClick={() => {
-                         restyleText(focusItems, {
+                         restyleText({
                              ...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)
                          })
 
@@ -177,7 +175,7 @@ const EditText: React.FC<EditTextProps> = ({
                         {allColorsList.map((color => <div key={id()} className={c.fs_select_colors__color}
                                                           style={{backgroundColor: color}}
                                                           onClick={() => {
-                                                              recolorText(focusItems, color)
+                                                              recolorText(color)
                                                               setColorText(color)
                                                           }
                                                           }>
@@ -213,7 +211,7 @@ const EditText: React.FC<EditTextProps> = ({
                                 } className={c.ff_list__item}
                                 onClick={() => {
                                     setFontText(font)
-                                    changeFontText(focusItems, font)
+                                    changeFontText(font)
                                     setActiveFont(false)
 
                                 }}>{font}</div>

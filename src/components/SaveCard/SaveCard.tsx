@@ -19,7 +19,7 @@ const SaveCard: React.FC<SaveCardProps> = ({
 
     const [saveModal, setSaveModal] = useState<boolean>(false)
     return (
-        <div>
+        <div className={c.container}>
 
 
             <div onClick={() => setSaveModal(true)} className={style.button + " " + c.save}>

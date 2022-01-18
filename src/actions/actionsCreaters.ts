@@ -13,22 +13,19 @@ import {
     CreateNewCardMakerActionType,
     MovingItemActionsType,
     MovingItemsActionsType,
-    MovingZoneActionsType,
-    RecolorArtsActionsType,
     RecolorTextsActionsType,
     RedoHistoryActionsType,
     RemoveAllHistoryActionType,
     RemoveAllItemsActionType,
     RemoveFocusItemsActionsType,
     RemoveItemsActionsType,
-    RemoveZoneActionsType,
     ResizeCardActionsType,
     ResizeItemActionsType,
     RestyleTextActionsType,
-    SelectZoneActionsType,
+    ScaleItemActionType,
     UndoHistoryActionsType
 } from "./actions";
-import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt, Zone} from "../models/types";
+import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../models/types";
 import {ID} from "../models/id";
 
 
@@ -78,25 +75,6 @@ export const removeAllHistory = (): RemoveAllHistoryActionType => {
     }
 }
 
-export const selectZone = (zone: Zone): SelectZoneActionsType => {
-    return {
-        type: ActionType.SELECT_ZONE,
-        zone: zone,
-    }
-}
-
-export const movingZone = (coordinates: Coordinates): MovingZoneActionsType => {
-    return {
-        type: ActionType.MOVING_ZONE,
-        coordinates: coordinates,
-    }
-}
-
-export const removeZone = (): RemoveZoneActionsType => {
-    return {
-        type: ActionType.REMOVE_ZONE,
-    }
-}
 
 export const addItem = (item: Item): AddItemActionsType => {
     return {
@@ -111,10 +89,9 @@ export const removeAllItems = (): RemoveAllItemsActionType => {
     }
 }
 
-export const removeItems = (focusItems: ID[]): RemoveItemsActionsType => {
+export const removeItems = (): RemoveItemsActionsType => {
     return {
         type: ActionType.REMOVE_ITEMS,
-        focusItems: focusItems,
     }
 }
 
@@ -126,51 +103,47 @@ export const movingItem = (id: ID, coordinate: Coordinates): MovingItemActionsTy
     }
 }
 
-export const movingItems = (focusItems: ID[], coordinate: Coordinates): MovingItemsActionsType => {
+export const movingItems = (coordinate: Coordinates): MovingItemsActionsType => {
     return {
         type: ActionType.MOVING_ITEMS,
         coordinates: coordinate,
-        focusItems: focusItems,
     }
 }
 
-export const resizeItem = (id: ID, size: Size): ResizeItemActionsType => {
+export const resizeItem = (id: ID, size: Size, coordinates: Coordinates): ResizeItemActionsType => {
     return {
         type: ActionType.RESIZE_ITEM,
         size: size,
         id: id,
+        coordinates: coordinates
     }
 }
 
-export const changeFontText = (focusItems: ID[], fontFamily: Fonts): ChangeFontTextActionsType => {
+export const changeFontText = (fontFamily: Fonts): ChangeFontTextActionsType => {
     return {
         type: ActionType.CHANGE_FONT_TEXT,
         fontFamily: fontFamily,
-        focusItems: focusItems
     }
 }
 
-export const changeTexts = (focusItems: ID[], body: string): ChangeTextsActionsType => {
+export const changeTexts = (body: string): ChangeTextsActionsType => {
     return {
         type: ActionType.CHANGE_TEXTS,
         body: body,
-        focusItems: focusItems,
     }
 }
 
-export const restyleText = (focusItems: ID[], fontStyleText: FontStyleText): RestyleTextActionsType => {
+export const restyleText = (fontStyleText: FontStyleText): RestyleTextActionsType => {
     return {
         type: ActionType.RESTYLE_TEXT,
         fontStyleText: fontStyleText,
-        focusItems: focusItems,
     }
 }
 
-export const recolorTexts = (focusItems: ID[], color: Colors): RecolorTextsActionsType => {
+export const recolorTexts = (color: Colors): RecolorTextsActionsType => {
     return {
         type: ActionType.RECOLOR_TEXTS,
         color: color,
-        focusItems: focusItems,
     }
 }
 
@@ -181,19 +154,11 @@ export const changeTypeArts = (typeArt: TypeArt): ChangeTypeArtsActionType => {
     }
 }
 
-export const recolorArts = (focusItems: ID[], color: Colors): RecolorArtsActionsType => {
-    return {
-        type: ActionType.RECOLOR_ARTS,
-        color: color,
-        focusItems: focusItems,
-    }
-}
 
-export const changeFontSizeText = (focusItems: ID[], fontSize: number): ChangeFontSizeTexts => {
+export const changeFontSizeText = (fontSize: number): ChangeFontSizeTexts => {
     return {
         type: ActionType.CHANGE_FONT_SIZE_TEXTS,
         fontSize: fontSize,
-        focusItems: focusItems,
     }
 }
 
@@ -223,4 +188,9 @@ export const undoHistory = (): UndoHistoryActionsType => {
     }
 }
 
-
+export const scaleItem = (scale: number): ScaleItemActionType => {
+    return  {
+        type: ActionType.SCALE_ITEM,
+        scale: scale
+    }
+}
