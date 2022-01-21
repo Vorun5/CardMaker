@@ -2,9 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import c from './EditText.module.scss'
 import style from '../../../style/style.module.scss'
 import {
-    allColorsList,
     allFontsList,
-    Colors,
     Fonts,
     FontStyle,
     FontStyleText,
@@ -25,7 +23,7 @@ interface EditTextProps {
     title: string
     textCard: TextCard
     restyleText: (fontStyleText: FontStyleText) => RestyleTextActionsType
-    recolorText: (color: Colors) => RecolorTextsActionsType
+    recolorText: (color: string) => RecolorTextsActionsType
     changeFontText: (fontFamily: Fonts) => ChangeFontTextActionsType
     changeTexts: (body: string) => ChangeTextsActionsType
     changeFontSizeText: (fontSize: number) => ChangeFontSizeTexts
@@ -43,7 +41,7 @@ const EditText: React.FC<EditTextProps> = ({
                                            }) => {
     const [styleText, setStyleText] = useState<FontStyleText>(textCard.fontStyle)
     const [valueText, setValueText] = useState<string>(textCard.body)
-    const [colorText, setColorText] = useState<Colors>(textCard.color)
+    const [colorText, setColorText] = useState<string>(textCard.color)
     const [fontText, setFontText] = useState<Fonts>(textCard.fontFamily)
     const [fontSizeText, setFontSizeText] = useState<number>(textCard.fontSize)
 
@@ -71,35 +69,12 @@ const EditText: React.FC<EditTextProps> = ({
         }
     }
 
-
-    const [activeSelectColor, setActiveSelectColor] = useState(false);
     const [activeFont, setActiveFont] = useState(false);
-    const positionSelectBlock = allColorsList.length * 30 + 20;
 
-
-    function useOutsideClick(ref: React.MutableRefObject<any>) {
-        useEffect(() => {
-            function handleClickOutside(event: Event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    setActiveSelectColor(false)
-                }
-            }
-
-            // Bind the event listener
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                // Unbind the event listener on clean up
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
-    }
-
-    const wrapperRef = useRef(null);
-    useOutsideClick(wrapperRef);
 
 
     return (
-        <div className={c.container} ref={wrapperRef}>
+        <div className={c.container} >
             <div className={style.title}>
                 {title}
             </div>
@@ -161,27 +136,14 @@ const EditText: React.FC<EditTextProps> = ({
                          setStyleText({...styleText, textDecoration: reverseTextDecoration(styleText.textDecoration)})
                      }}/>
 
-                <div>
-                    <div className={c.fs_item + ' ' + c.fs_item__color}
-                         style={{backgroundColor: colorText}}
-                         onClick={() => {
-                             setActiveSelectColor(!activeSelectColor)
-                         }}/>
+                    <label className={style.input_color_label}>
+                        <input type="color" value={colorText} onChange={(event) => {
+                            setColorText(event.target.value)
+                        }}
+                               onBlur={() => recolorText(colorText)}
+                        />
+                    </label>
 
-
-                    <div style={activeSelectColor ? {right: -positionSelectBlock + 'px'} : {right: "0"}}
-                         className={c.fs_select_colors} onClick={() => {
-                    }}>
-                        {allColorsList.map((color => <div key={id()} className={c.fs_select_colors__color}
-                                                          style={{backgroundColor: color}}
-                                                          onClick={() => {
-                                                              recolorText(color)
-                                                              setColorText(color)
-                                                          }
-                                                          }>
-                        </div>))}
-                    </div>
-                </div>
             </div>
             <div className={c.ff}>
                 <div className={c.ff_view} style={activeFont ? {

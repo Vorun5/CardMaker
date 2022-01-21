@@ -1,66 +1,46 @@
 import React, {useEffect, useRef, useState} from 'react';
 import c from './FilterTool.module.scss'
-
+import style from '../../style/style.module.scss'
 import ColorSelect from "../ColorSelect/ColorSelect";
-import {CardMaker, Colors} from "../../models/types";
+import {CardMaker} from "../../models/types";
 import {connect} from "react-redux";
 import {changeFilter} from "../../actions/actionsCreaters";
 import {ChangeFilterActionsType} from "../../actions/actions";
 
 interface FilterToolProps {
-    colorList: Colors[],
-    filter: Colors,
-    changeFilter: (filter: Colors) => ChangeFilterActionsType,
+    filter: string,
+    changeFilter: (filter: string) => ChangeFilterActionsType,
 }
 
-const FilterTool: React.FC<FilterToolProps> = ({filter, colorList, changeFilter}) => {
-    const positionSelectBlock = colorList.length * 30 + 20;
-    const [active, setActive] = useState(false);
+const FilterTool: React.FC<FilterToolProps> = ({filter, changeFilter}) => {
 
-    function useOutsideClick(ref: React.MutableRefObject<any>) {
-        useEffect(() => {
-            function handleClickOutside(event: Event) {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    setActive(false);
-                }
-            }
-
-            // Bind the event listener
-            document.addEventListener("mousedown", handleClickOutside);
-            return () => {
-                // Unbind the event listener on clean up
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }, [ref]);
-    }
-
-    const wrapperRef = useRef(null);
-    useOutsideClick(wrapperRef);
+    const [colorPreview, setColorPreview] = useState<string>(filter)
     return (
 
-        <div className={c.container} ref={wrapperRef}>
+        <div className={c.container}>
 
-            <div className={active ? c.body + ' ' + c.body_active : c.body}>
+            <div className={c.body}>
                 <div className={c.body__icon}/>
                 <div className={c.body__text}>
                     Filter
                 </div>
                 <div className={c.body__remove_color}>
                     <div className={c.body__remove_color_button} onClick={() => {
-                        changeFilter(Colors.None);
-                        setActive(false);
+                        setColorPreview('#FFFFFF')
+                        changeFilter('transparent');
                     }}/>
                 </div>
                 <div className={c.body__color}>
-                    <div onClick={() => setActive(!active)} className={c.body__color_view}
-                         style={{backgroundColor: filter}}/>
+
+                    <label className={style.input_color_label}>
+                        <input type="color" value={colorPreview} onChange={(event) => {
+                            setColorPreview(event.target.value)
+                        }}
+                               onBlur={() => changeFilter(colorPreview)}
+                        />
+                    </label>
+
                 </div>
-            </div>
-
-            <div style={active ? {right: -positionSelectBlock + 'px'} : {right: "0"}}
-                 className={c.select}>
-
-                <ColorSelect changeColor={changeFilter} colorList={colorList}/>
             </div>
         </div>
     );

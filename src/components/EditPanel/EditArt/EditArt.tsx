@@ -2,11 +2,9 @@ import React, {useState} from 'react';
 import c from './EditArt.module.scss'
 import style from '../../../style/style.module.scss'
 import {
-    allColorsList,
     allFontsList,
     allTypeArtList,
     Art,
-    Colors,
     Fonts,
     FontStyleText,
     TextCard,

@@ -1,11 +1,5 @@
 import {ActionsType, ActionType} from "../actions/actions";
-import {
-    Card,
-    CardMaker,
-    Colors,
-    emptyFocusItems,
-    TypeDate,
-} from "../models/types";
+import {Card, CardMaker, emptyFocusItems, Item, TypeDate,} from "../models/types";
 import {createStore} from "redux";
 
 const initialState: CardMaker = {
@@ -22,8 +16,8 @@ const initialState: CardMaker = {
                     height: 0,
                 }
             },
-            background: Colors.White,
-            filter: Colors.None,
+            background: '#FFFFFF',
+            filter: 'transparent',
             size: {
                 width: 800,
                 height: 600
@@ -34,8 +28,9 @@ const initialState: CardMaker = {
         currentIndex: 0
     },
     card: {
-        background: Colors.White,
-        filter: Colors.None,
+        multipleChoice: false,
+        background: '#FFFFFF',
+        filter: 'transparent',
         size: {
             width: 800,
             height: 600
@@ -46,6 +41,15 @@ const initialState: CardMaker = {
 }
 const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker => {
     switch (action.type) {
+        case ActionType.CHANGE_MULTIPLE_CHOICE: {
+            return {
+                ...state,
+                card: {
+                    ...state.card,
+                    multipleChoice: action.multipleChoice
+                }
+            }
+        }
         case ActionType.CREATE_NEW_CARD_MAKER: {
             return initialState
         }
@@ -389,6 +393,70 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
             }
 
+            return state
+        }
+        case ActionType.DOWN_LAYER: {
+            let bufItems: Item[] = []
+            for (let i = 0; i < state.card.focusItems.length; i++) {
+                for (let j = 0; j < state.card.items.length; j++) {
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                        bufItems = [...bufItems, state.card.items[j]]
+                        state = {
+                            ...state,
+                            card: {
+                                ...state.card,
+                                items: state.card.items.filter((el) => {
+                                    if (!(el.id == state.card.focusItems[i])) {
+                                        return el
+                                    }
+                                })
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+            state = {
+                ...state,
+                card: {
+                    ...state.card,
+                    items: [...bufItems, ...state.card.items]
+                }
+            }
+            return state
+        }
+        case ActionType.UP_LAYER: {
+            let bufItems: Item[] = []
+            for (let i = 0; i < state.card.focusItems.length; i++) {
+                for (let j = 0; j < state.card.items.length; j++) {
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                        bufItems = [...bufItems, state.card.items[j]]
+                        state = {
+                            ...state,
+                            card: {
+                                ...state.card,
+                                items: state.card.items.filter((el) => {
+                                    if (!(el.id == state.card.focusItems[i])) {
+                                        return el
+                                    }
+                                })
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+            state = {
+                ...state,
+                card: {
+                    ...state.card,
+                    items: [...state.card.items, ...bufItems,]
+                }
+            }
             return state
         }
         default:

@@ -8,9 +8,11 @@ import {
     ChangeFilterActionsType,
     ChangeFontSizeTexts,
     ChangeFontTextActionsType,
+    ChangeMultipleChoice,
     ChangeTextsActionsType,
     ChangeTypeArtsActionType,
     CreateNewCardMakerActionType,
+    DownLayerActionType,
     MovingItemActionsType,
     MovingItemsActionsType,
     RecolorTextsActionsType,
@@ -23,11 +25,19 @@ import {
     ResizeItemActionsType,
     RestyleTextActionsType,
     ScaleItemActionType,
-    UndoHistoryActionsType
+    UndoHistoryActionsType,
+    UpLayerActionType
 } from "./actions";
-import {Card, Colors, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../models/types";
+import {Card, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../models/types";
 import {ID} from "../models/id";
 
+
+export const changeMultipleChoice = (multipleChoice: boolean): ChangeMultipleChoice => {
+    return {
+        type: ActionType.CHANGE_MULTIPLE_CHOICE,
+        multipleChoice: multipleChoice
+    }
+}
 
 export const createNewCardMaker = (): CreateNewCardMakerActionType => {
     return {
@@ -140,7 +150,7 @@ export const restyleText = (fontStyleText: FontStyleText): RestyleTextActionsTyp
     }
 }
 
-export const recolorTexts = (color: Colors): RecolorTextsActionsType => {
+export const recolorTexts = (color: string): RecolorTextsActionsType => {
     return {
         type: ActionType.RECOLOR_TEXTS,
         color: color,
@@ -162,14 +172,14 @@ export const changeFontSizeText = (fontSize: number): ChangeFontSizeTexts => {
     }
 }
 
-export const changeFilter = (filter: Colors): ChangeFilterActionsType => {
+export const changeFilter = (filter: string): ChangeFilterActionsType => {
     return {
         type: ActionType.CHANGE_FILTER,
         filter: filter,
     }
 }
 
-export const changeBackground = (background: Colors): ChangeBackgroundActionsType => {
+export const changeBackground = (background: string): ChangeBackgroundActionsType => {
     return {
         type: ActionType.CHANGE_BACKGROUND,
         background: background,
@@ -192,5 +202,17 @@ export const scaleItem = (scale: number): ScaleItemActionType => {
     return  {
         type: ActionType.SCALE_ITEM,
         scale: scale
+    }
+}
+
+export const upLayer = (): UpLayerActionType => {
+    return {
+        type: ActionType.UP_LAYER
+    }
+}
+
+export const downLayer = (): DownLayerActionType => {
+    return {
+        type: ActionType.DOWN_LAYER
     }
 }

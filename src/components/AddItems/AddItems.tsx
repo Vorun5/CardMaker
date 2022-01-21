@@ -4,7 +4,6 @@ import style from "../../style/style.module.scss"
 import {
     allTypeArtList,
     CardMaker,
-    Colors,
     Fonts,
     FontStyle,
     FontWeight,
@@ -48,7 +47,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             fontSize: 16,
             type: TypeDate.TextCard,
             body: "Example text",
-            color: Colors.Grey,
+            color:  '#11a1fb',
             fontFamily: Fonts.Montserrat,
             fontStyle: {
                 fontStyle: FontStyle.normal,
@@ -309,7 +308,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                                      onDragLeave={e => dragLeaveHandler(e)}
                                      onDragOver={e => dragStartHandler(e)}
                                      onDrop={e => dragOnDropHandler(e)}>
-                                    Release the file to download</div>
+                                    Отпустите изображение, чтобы загрузить</div>
                                 : <div
                                     className={c.drag_areal}
                                     onDragStart={e => dragStartHandler(e)}
@@ -356,7 +355,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                                          onClick={() => saveImg()}
                                     >Save
                                     </div>
-                                    <div className={c.img_modal_delete + " " + style.button}
+                                    <div className={style.button}
                                          onClick={() => deleteImg()
                                          }
                                     >Delete

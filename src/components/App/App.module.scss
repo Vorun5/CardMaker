@@ -77,9 +77,28 @@ table {
   background-color: #2c2c2c;
   width: calc(100vw - 250px);
   height: 40px;
-  // .header_card_item
-  &_item {
-    margin: 0 0.5rem;
+
+  // .header_card_element_tool
+  &_element_tool {
+    margin: 0 0 0 0.25rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // .header_card_element_tool_item
+    &_item {
+      margin: 0 0.25rem ;
+    }
+  }
+
+  // .header_card_size_card
+  &_size_card {
+    //margin: 0 0.5rem;
+  }
+
+  // .header_card_history
+  &_history {
+    margin: 0 0.5rem 0 0;
   }
 }
 

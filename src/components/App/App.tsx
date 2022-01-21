@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './App.module.scss';
 import FilterTool from '../FilterTool/FilterTool';
-import {allColorsList, Card, CardMaker, History, Size} from "../../models/types";
+import {Card, CardMaker, History, Size} from "../../models/types";
 import c from './App.module.scss'
 import CardView from "../CardView/CardView";
 import BackgroundTool from "../BackgroundTool/BackgroundTool";
@@ -20,6 +20,9 @@ import CardHistory from "../CardHistory/CardHistory";
 import CreateNewCard from "../CreateNewCard/CreateNewCard";
 import '../../static/art/Ворон.svg'
 import TemplatesTool from "../TemplatesTool/TemplatesTool";
+import ElementLayers from "../ElementLayers/ElementLayers";
+import MultipleChoiceTool from "../MultipleChoiceTool/MultipleChoiceTool";
+
 interface AppProps {
     card: Card,
     history: History,
@@ -33,22 +36,26 @@ const App: React.FC<AppProps> = ({
                                      resizeCard
                                  }) => {
 
-    const [color, setColor] = useState<string>('#FFFFFF')
-
     return (
         <div className={c.App}>
 
-            <div>
+
 
 
                 <div className={c.header_card}>
-                    <div className={c.header_card_item}>
-                        <DeleteItems/>
+                    <div className={c.header_card_element_tool}>
+                        <div className={c.header_card_element_tool_item}>
+                            <DeleteItems/>
+                        </div>
+                        <div className={c.header_card_element_tool_item}>
+                            <ElementLayers/>
+                        </div>
+
                     </div>
-                    <div className={c.header_card_item}>
+                    <div className={c.header_card_size_card}>
                         <SizeCardTool resizeCard={resizeCard} size={card.size}/>
                     </div>
-                    <div className={c.header_card_item}>
+                    <div className={c.header_card_history}>
                         <CardHistory/>
                     </div>
                 </div>
@@ -63,13 +70,14 @@ const App: React.FC<AppProps> = ({
                     </div>
                     <AddItems/>
                     <TemplatesTool/>
-                    <FilterTool colorList={allColorsList}/>
-                    <BackgroundTool colorList={allColorsList}/>
+                    <MultipleChoiceTool/>
+                    <FilterTool/>
+                    <BackgroundTool/>
                     <EditPanel/>
                 </div>
 
 
-            </div>
+
         </div>
     );
 }

@@ -21,18 +21,6 @@ export enum TypeDate {
     Art = 'Art'
 }
 
-export enum Colors {
-    White = 'rgb(255, 255, 255)',
-    Red = 'rgb(255, 77, 24)', //#f24d18
-    Blue = 'rgb(105, 156, 247)', //#699cf7
-    Green = 'rgb(6, 171, 87)', //#06ab57
-    Yellow = 'rgb(255, 200, 0)', //#ffc800
-    Purple = 'rgb(152, 69, 255)', //#9845ff
-    Grey = 'rgb(128, 128, 128)', //#808080
-    None = 'transparent',
-}
-
-export const allColorsList: Colors[] = [Colors.White, Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Purple, Colors.Grey]
 
 export enum Fonts {
     TimeNewRoman = 'Times New Roman',
@@ -96,7 +84,7 @@ export type TextCard = Readonly<{
     type: TypeDate.TextCard
     body: string,
     fontFamily: Fonts,
-    color: Colors,
+    color: string,
     fontStyle: FontStyleText,
     fontSize: number,
 }>
@@ -114,8 +102,9 @@ export type Item = Readonly<{
 }>
 
 export type Card = Readonly<{
-    filter: Colors, // Colors.None -  - нулевое значение
-    background: Colors, // Colors.None  - нулевое значение
+    filter: string,
+    multipleChoice: boolean,
+    background: string,
     items: Item[],
     focusItems: ID[],
     size: Size,

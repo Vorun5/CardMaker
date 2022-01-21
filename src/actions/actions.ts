@@ -1,6 +1,5 @@
 import {
     Card,
-    Colors,
     Coordinates,
     Fonts,
     FontStyle,
@@ -35,12 +34,25 @@ export enum ActionType {
     ADD_FOCUS_ITEM = 'ADD_FOCUS_ITEM',
     REMOVE_FOCUS_ITEMS = 'REMOVE_FOCUS_ITEMS',
     CHANGE_TEXTS = 'CHANGE_TEXTS',
-
-
+    UP_LAYER = 'UP_LAYER',
+    DOWN_LAYER = 'DOWN_LAYER',
     CREATE_NEW_CARD_MAKER = 'CREATE_NEW_CARD',
     CHANGE_CARD = 'CHANGE_CARD',
+    CHANGE_MULTIPLE_CHOICE = 'CHANGE_MULTIPLE_CHOICE',
 }
 
+export type ChangeMultipleChoice = {
+    type: ActionType.CHANGE_MULTIPLE_CHOICE,
+    multipleChoice: boolean,
+}
+
+export type UpLayerActionType = {
+    type: ActionType.UP_LAYER,
+}
+
+export type DownLayerActionType = {
+    type: ActionType.DOWN_LAYER,
+}
 
 export type ScaleItemActionType = {
     type: ActionType.SCALE_ITEM,
@@ -138,13 +150,13 @@ export type ChangeFontTextActionsType = {
 
 export type ChangeFilterActionsType = {
     type: ActionType.CHANGE_FILTER,
-    filter: Colors,
+    filter: string,
 }
 
 
 export type ChangeBackgroundActionsType = {
     type: ActionType.CHANGE_BACKGROUND,
-    background: Colors,
+    background: string,
 }
 
 export type RedoHistoryActionsType = {
@@ -158,7 +170,7 @@ export type UndoHistoryActionsType = {
 
 export type RecolorTextsActionsType = {
     type: ActionType.RECOLOR_TEXTS,
-    color: Colors,
+    color: string,
 }
 
 export type ChangeFontSizeTexts = {
@@ -192,3 +204,6 @@ export type ActionsType =
     | RemoveAllItemsActionType
     | ChangeTypeArtsActionType
     | ScaleItemActionType
+    | UpLayerActionType
+    | DownLayerActionType
+    | ChangeMultipleChoice

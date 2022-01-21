@@ -14,11 +14,11 @@
   transition: background-color 0.3s;
   display: flex;
   align-items: stretch;
-  // face__remove_color_button
+  // body__remove_color_button
   &:hover &__remove_color_button {
     display: block;
   }
-  // face__text
+  // body__text
   &__text {
     flex-grow: 1;
     display: flex;
@@ -31,7 +31,7 @@
     height: 100%;
   }
 
-  // face__icon
+  // body__icon
   &__icon {
     width: 40px;
     height: 100%;
@@ -39,14 +39,14 @@
     background-size: 25px;
   }
 
-  // face__remove_color
+  // body__remove_color
   &__remove_color {
     height: 100%;
     width: 22px;
     display: flex;
     align-items: center;
 
-    // face__remove_color_button
+    // body__remove_color_button
     &_button {
       border-radius: 50%;
       cursor: pointer;
@@ -60,39 +60,13 @@
     }
   }
 
-  // face__color
+  // body__color
   &__color {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
-    &_view {
-      cursor: pointer;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1px solid #bbbbbb;
-      transition: background-color 0.2s;
-    }
-  }
 
-  // face_active
-  &_active {
-    background-color: #f0f0f0;
   }
 }
-
-.select {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  transition: right 0.3s;
-
-  // select_color
-  &_color {
-    width: 10px;
-    height: 10px;
-  }
-}
-

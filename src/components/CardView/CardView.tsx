@@ -1,5 +1,5 @@
-import React, {useCallback, useRef, useState} from 'react';
-import {Card, CardMaker, Colors, Coordinates, History, Size, TypeDate} from "../../models/types";
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Card, CardMaker, Coordinates, History, Size, TypeDate} from "../../models/types";
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
 import style from './../../style/style.module.scss'
@@ -20,6 +20,7 @@ import {toPng} from 'html-to-image';
 import ItemView from "./ItemView/ItemView";
 import SaveCard from "../SaveCard/SaveCard";
 import Modal from "../Style components/Modal/Modal";
+import {store} from "../../reduser/redusers";
 
 interface CardViewProps {
     card: Card,
@@ -30,9 +31,13 @@ interface CardViewProps {
     movingItems: (coordinate: Coordinates) => MovingItemsActionsType,
     movingItem: (id: ID, coordinate: Coordinates) => MovingItemActionsType,
     resizeItem: (id: ID, size: Size, coordinate: Coordinates) => ResizeItemActionsType,
+    multipleChoice: boolean,
 }
 
+let isPressed = false
+
 const CardView: React.FC<CardViewProps> = ({
+    multipleChoice,
                                                movingItems,
                                                movingItem,
                                                resizeItem,
@@ -42,13 +47,49 @@ const CardView: React.FC<CardViewProps> = ({
                                                addFocusItem,
                                                removeFocusItems,
                                            }) => {
+
+
+    function topFocusItems() {
+        removeFocusItems()
+    }
+
+    function kyeUpHandler(event: KeyboardEvent) {
+        if (event.code == 'Delete') {
+            isPressed = false
+        }
+    }
+
+    function kyeDownHandler(event: KeyboardEvent) {
+        if (event.code == 'Delete') {
+            //deleteFocusItems(focusItems)
+            isPressed = true
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (!isPressed) {
+                kyeDownHandler(event)
+            }
+        })
+    })
+    useEffect(() => {
+        document.addEventListener("keyup", (event: KeyboardEvent) => {
+            if (isPressed) {
+                kyeUpHandler(event)
+            }
+        })
+    })
+
+
+
+
+
     const styleCard = {
         width: card.size.width,
         height: card.size.height,
         transition: "all 0.3s",
     }
-
-
     function itsFocus(el: ID, listID: ID[]): boolean {
         for (let i = 0; i < listID.length; i++) {
             if (el == listID[i]) {
@@ -57,7 +98,6 @@ const CardView: React.FC<CardViewProps> = ({
         }
         return false
     }
-
     type editSizeMode = {
         widthRight: boolean,
         widthLeft: boolean,
@@ -140,13 +180,6 @@ const CardView: React.FC<CardViewProps> = ({
             if (height < minSize) {
                 height = minSize
             }
-            // if (width > height) {
-            //     height = width
-            // }
-            // if (height > width) {
-            //     width = height
-            // }
-            //
             let biasX = event.pageX - startCoordinates.x
             if (biasX > size.width - minSize) {
                 biasX = size.width - minSize
@@ -406,6 +439,15 @@ const CardView: React.FC<CardViewProps> = ({
                 <SaveCard removeFocusItems={removeFocusItems} saveJPEG={saveJPEG}
                           savePNG={savePNG}/>
             </div>
+
+            <div style={{
+                position: "fixed",
+                zIndex: 10000,
+                top: '50px',
+                right: '10px',
+            }} className={style.button} onClick={() => {
+                console.log(JSON.stringify(store.getState().card))
+            }}>Сохранить</div>
             <div style={styleCard}
                  className={c.card}
                  onMouseOverCapture={(event) => {
@@ -414,7 +456,7 @@ const CardView: React.FC<CardViewProps> = ({
                  }}
             >
                 <div ref={ref} className={c.card__background} style={{backgroundColor: card.background}}>
-                    <div className={c.card__filter} style={card.filter == Colors.None ? {opacity: 1} : {
+                    <div className={c.card__filter} style={card.filter == 'transparent' ? {opacity: 1} : {
                         backgroundColor: card.filter,
                         opacity: 0.5
                     }}>
@@ -599,6 +641,7 @@ const CardView: React.FC<CardViewProps> = ({
 
 function mapStateToProps(state: CardMaker) {
     return {
+        multipleChoice: state.card.multipleChoice,
         focusItems: state.card.focusItems,
     }
 }

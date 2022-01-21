@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import c from './SizeCardTool.module.scss'
-import {Colors, Size} from "../../models/types";
+import {Size} from "../../models/types";
 import {ChangeFilterActionsType, ResizeCardActionsType} from "../../actions/actions";
 
 

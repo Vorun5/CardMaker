@@ -3,7 +3,6 @@ import {ID} from "../../models/id";
 import {
     Art,
     CardMaker,
-    Colors,
     Fonts,
     FontStyleText,
     IMG,
@@ -33,7 +32,7 @@ interface EditPanelToProps {
     focusItems: ID[];
     items: Item[];
     restyleText: (fontStyleText: FontStyleText) => RestyleTextActionsType,
-    recolorTexts: (color: Colors) => RecolorTextsActionsType,
+    recolorTexts: (color: string) => RecolorTextsActionsType,
     changeFontText: (fontFamily: Fonts) => ChangeFontTextActionsType,
     changeTexts: (body: string) => ChangeTextsActionsType,
     changeFontSizeText: (fontSize: number) => ChangeFontSizeTexts,
