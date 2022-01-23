@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import c from './SizeCardTool.module.scss'
 import {Size} from "../../models/types";
 import {ChangeFilterActionsType, ResizeCardActionsType} from "../../actions/actions";
+import {store} from "../../reduser/redusers";
 
 
 interface SizeCardToolProps {
@@ -16,9 +17,11 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
 
     const [width, setWidth] = useState<number>(size.width)
     const [height, setHeight] = useState<number>(size.height)
+
     const max = 9999
     const min = 100
-    function onKeyDownHandle(event:  React.KeyboardEvent<HTMLInputElement>) {
+
+    function onKeyDownHandle(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
             let w = width
             let h = height
@@ -44,6 +47,14 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
             })
         }
     }
+
+    useEffect(() => {
+        store.subscribe(() => {
+            setWidth(store.getState().card.size.width)
+            setHeight(store.getState().card.size.height)
+        })
+    })
+
     return (
         <div className={c.container}>
             <div className={c.input_container}>
@@ -55,7 +66,9 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
                        onKeyDown={(event) => onKeyDownHandle(event)}
                 />
             </div>
-            <div className={c.input_x}></div>
+
+            <div className={c.input_x}/>
+
             <div className={c.input_container}>
                 <input className={c.input} type="number"
                        value={height}

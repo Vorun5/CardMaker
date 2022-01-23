@@ -7,19 +7,18 @@ import {id, ID} from "../../models/id";
 import {
     addFocusItem,
     movingItem,
-    movingItems,
+    movingItemsByDiff,
     removeFocusItems,
-    resizeItem
+    resizeItem, resizeItemsByDiff, scaleItems
 } from "../../actions/actionsCreaters";
 import {
     AddFocusItemActionsType, MovingItemActionsType,
     MovingItemsActionsType,
-    RemoveFocusItemsActionsType, ResizeItemActionsType,
+    RemoveFocusItemsActionsType, ResizeItemActionsType, ResizeItemsByDiffActionType, ScaleItemsActionType,
 } from "../../actions/actions";
 import {toPng} from 'html-to-image';
 import ItemView from "./ItemView/ItemView";
 import SaveCard from "../SaveCard/SaveCard";
-import Modal from "../Style components/Modal/Modal";
 import {store} from "../../reduser/redusers";
 
 interface CardViewProps {
@@ -28,17 +27,19 @@ interface CardViewProps {
     focusItems: ID[],
     addFocusItem: (id: ID) => AddFocusItemActionsType,
     removeFocusItems: () => RemoveFocusItemsActionsType,
-    movingItems: (coordinate: Coordinates) => MovingItemsActionsType,
+    movingItemsByDiff: (coordinate: Coordinates) => MovingItemsActionsType,
     movingItem: (id: ID, coordinate: Coordinates) => MovingItemActionsType,
     resizeItem: (id: ID, size: Size, coordinate: Coordinates) => ResizeItemActionsType,
     multipleChoice: boolean,
+    resizeItemsByDiff: (size: Size) => ResizeItemsByDiffActionType,
+    scaleItems: (scale: number) => ScaleItemsActionType,
 }
 
 let isPressed = false
-
 const CardView: React.FC<CardViewProps> = ({
-    multipleChoice,
-                                               movingItems,
+                                               resizeItemsByDiff,
+                                               multipleChoice,
+                                               movingItemsByDiff,
                                                movingItem,
                                                resizeItem,
                                                focusItems,
@@ -46,22 +47,69 @@ const CardView: React.FC<CardViewProps> = ({
                                                history,
                                                addFocusItem,
                                                removeFocusItems,
+                                               scaleItems
                                            }) => {
 
-
-    function topFocusItems() {
-        removeFocusItems()
-    }
-
     function kyeUpHandler(event: KeyboardEvent) {
-        if (event.code == 'Delete') {
+        event.preventDefault()
+        if (event.code == 'ArrowUp' || event.code == 'ArrowDown' || event.code == 'ArrowLeft' || event.code == 'ArrowRight') {
             isPressed = false
         }
     }
 
     function kyeDownHandler(event: KeyboardEvent) {
-        if (event.code == 'Delete') {
-            //deleteFocusItems(focusItems)
+        const step: number = 5
+        event.preventDefault()
+        if (event.ctrlKey) {
+            if (event.code == 'ArrowUp') {
+                isPressed = true
+                scaleItems(1.1)
+            }
+            if (event.code == 'ArrowDown') {
+                isPressed = true
+                scaleItems(0.9)
+            }
+            return
+        }
+
+        if (event.shiftKey) {
+            if (event.code == 'ArrowUp') {
+                isPressed = true
+                resizeItemsByDiff({width: 0, height: -step})
+            }
+            if (event.code == 'ArrowDown') {
+                isPressed = true
+                resizeItemsByDiff({width: 0, height: step})
+            }
+            if (event.code == 'ArrowLeft') {
+                isPressed = true
+                resizeItemsByDiff({width: -step, height: 0})
+            }
+            if (event.code == 'ArrowRight') {
+                isPressed = true
+                resizeItemsByDiff({width: step, height: 0})
+            }
+            return
+        }
+
+        if (event.code == 'ArrowUp') {
+            setStartCoordinates({x: startCoordinates.x, y: startCoordinates.y - step})
+            movingItemsByDiff({x: 0, y: -step})
+            isPressed = true
+        }
+        if (event.code == 'ArrowDown') {
+            setStartCoordinates({x: startCoordinates.x, y: startCoordinates.y + step})
+            movingItemsByDiff({x: 0, y: step})
+            isPressed = true
+        }
+        if (event.code == 'ArrowLeft') {
+            setStartCoordinates({y: startCoordinates.y, x: startCoordinates.x - step})
+            movingItemsByDiff({x: -step, y: 0})
+            isPressed = true
+        }
+        if (event.code == 'ArrowRight') {
+            setStartCoordinates({y: startCoordinates.y, x: startCoordinates.x + step})
+            movingItemsByDiff({x: step, y: 0})
             isPressed = true
         }
     }
@@ -82,14 +130,12 @@ const CardView: React.FC<CardViewProps> = ({
     })
 
 
-
-
-
     const styleCard = {
         width: card.size.width,
         height: card.size.height,
         transition: "all 0.3s",
     }
+
     function itsFocus(el: ID, listID: ID[]): boolean {
         for (let i = 0; i < listID.length; i++) {
             if (el == listID[i]) {
@@ -98,6 +144,7 @@ const CardView: React.FC<CardViewProps> = ({
         }
         return false
     }
+
     type editSizeMode = {
         widthRight: boolean,
         widthLeft: boolean,
@@ -433,11 +480,9 @@ const CardView: React.FC<CardViewProps> = ({
     }, [ref])
 
     return (
-        <div className={c.container} onClick={() => {
-        }}>
+        <div className={c.container}>
             <div className={c.save}>
-                <SaveCard removeFocusItems={removeFocusItems} saveJPEG={saveJPEG}
-                          savePNG={savePNG}/>
+                <SaveCard removeFocusItems={removeFocusItems} saveJPEG={saveJPEG} savePNG={savePNG}/>
             </div>
 
             <div style={{
@@ -447,14 +492,16 @@ const CardView: React.FC<CardViewProps> = ({
                 right: '10px',
             }} className={style.button} onClick={() => {
                 console.log(JSON.stringify(store.getState().card))
-            }}>Сохранить</div>
+            }}>Сохранить
+            </div>
+
             <div style={styleCard}
                  className={c.card}
                  onMouseOverCapture={(event) => {
                      changeCoordinatesItem(event, itemId, editCoordinatesMode, startCoordinates, coordinates)
                      changeSizeItem(event, itemId, editSizeMode, startCoordinates, coordinates, size)
-                 }}
-            >
+                 }}>
+
                 <div ref={ref} className={c.card__background} style={{backgroundColor: card.background}}>
                     <div className={c.card__filter} style={card.filter == 'transparent' ? {opacity: 1} : {
                         backgroundColor: card.filter,
@@ -462,17 +509,27 @@ const CardView: React.FC<CardViewProps> = ({
                     }}>
                         {card.items.map((item) =>
                             <div key={item.id}>
-                                <div className={style.view_container}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                <div className={c.view_container}
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          margin: '-0.4vh',
                                          border: '0.4vh solid #FF6779',
                                          cursor: "move",
                                          position: "absolute",
                                          zIndex: 300,
-                                         top: coordinatesFocus.y,
-                                         left: coordinatesFocus.x,
-                                         width: sizeFocus.width,
-                                         height: sizeFocus.height
+                                         top: item.coordinates.y,
+                                         left: item.coordinates.x,
+                                         width: item.size.width,
+                                         height: item.size.height,
+                                     } : itsFocus(item.id, card.focusItems) && focusItems.length > 1 ? {
+                                         cursor: "pointer",
+                                         position: "absolute",
+                                         top: item.coordinates.y,
+                                         left: item.coordinates.x,
+                                         width: item.size.width,
+                                         height: item.size.height,
+                                         zIndex: 300,
+                                         margin: '-0.4vh',
+                                         border: '0.4vh solid #FF6779',
                                      } : {
                                          cursor: "pointer",
                                          position: "absolute",
@@ -481,15 +538,18 @@ const CardView: React.FC<CardViewProps> = ({
                                          width: item.size.width,
                                          height: item.size.height
                                      }}
-                                     draggable={itsFocus(item.id, card.focusItems)}
+                                     draggable={itsFocus(item.id, card.focusItems) && focusItems.length == 1}
                                      onMouseDown={(event) => {
-                                         editCoordinatesItem(event, item.id, item.coordinates, itsFocus(item.id, card.focusItems))
+                                         editCoordinatesItem(event, item.id, item.coordinates, itsFocus(item.id, card.focusItems) && focusItems.length == 1)
                                      }}
-                                     onMouseUp={(event) => {
+                                     onMouseEnter={(event) => {
+
+                                     }}
+                                     onMouseUp={() => {
                                          setEditCoordinatesMode(false)
                                      }}
                                      onClick={() => {
-                                         if (focusItems.length == 0) {
+                                         if (focusItems.length == 0 || multipleChoice) {
                                              addFocusItemView(item.id, item.size, item.coordinates)
                                          } else {
                                              removeFocusItems()
@@ -506,33 +566,30 @@ const CardView: React.FC<CardViewProps> = ({
                                          editSize(event, item.id, sizeFocus, coordinatesFocus)
                                          setEditSizeMode({...editSizeMode, heightTop: true})
                                      }}
-
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, heightTop: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "row-resize",
                                          top: item.coordinates.y - sizeBorder / 2,
                                          left: item.coordinates.x,
                                          width: item.size.width
                                      } : {display: "none"}}/>
-
                                 <div className={c.border + " " + c.border_right}
                                      draggable={true}
                                      onMouseDown={(event) => {
                                          editSize(event, item.id, sizeFocus, coordinatesFocus)
                                          setEditSizeMode({...editSizeMode, widthRight: true})
                                      }}
-                                     onMouseUp={(event) => {
+                                     onMouseUp={() => {
                                          setEditSizeMode({...editSizeMode, widthRight: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "col-resize",
                                          top: item.coordinates.y,
                                          left: item.coordinates.x + item.size.width - sizeBorder / 2,
                                          height: item.size.height
                                      } : {display: "none"}}/>
-
                                 <div className={c.border + " " + c.border_button}
                                      draggable={true}
                                      onMouseDown={(event) => {
@@ -542,30 +599,27 @@ const CardView: React.FC<CardViewProps> = ({
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, heightButton: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "row-resize",
                                          top: item.coordinates.y + item.size.height - sizeBorder / 2,
                                          left: item.coordinates.x,
                                          width: item.size.width,
                                      } : {display: "none"}}/>
-
                                 <div className={c.border + " " + c.border_left}
                                      draggable={true}
                                      onMouseDown={(event) => {
                                          editSize(event, item.id, sizeFocus, coordinatesFocus)
                                          setEditSizeMode({...editSizeMode, widthLeft: true})
                                      }}
-                                     onMouseUp={(event) => {
+                                     onMouseUp={() => {
                                          setEditSizeMode({...editSizeMode, widthLeft: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "col-resize",
                                          top: item.coordinates.y,
                                          left: item.coordinates.x - sizeBorder / 2,
                                          height: item.size.height
                                      } : {display: "none"}}/>
-
-
                                 <div className={c.corner}
                                     //corner top-left
                                      draggable={true}
@@ -576,7 +630,7 @@ const CardView: React.FC<CardViewProps> = ({
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, cornerTopLeft: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "nwse-resize",
                                          top: item.coordinates.y - sizeBorder / 2,
                                          left: item.coordinates.x - sizeBorder / 2,
@@ -592,7 +646,7 @@ const CardView: React.FC<CardViewProps> = ({
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, cornerTopRight: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "nesw-resize",
                                          top: item.coordinates.y - sizeBorder / 2,
                                          left: item.coordinates.x + item.size.width - sizeBorder / 2,
@@ -608,7 +662,7 @@ const CardView: React.FC<CardViewProps> = ({
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "nesw-resize",
                                          top: item.coordinates.y + item.size.height - sizeBorder / 2,
                                          left: item.coordinates.x - sizeBorder / 2,
@@ -624,7 +678,7 @@ const CardView: React.FC<CardViewProps> = ({
                                      onMouseUp={(event) => {
                                          setEditSizeMode({...editSizeMode, cornerButtonRight: false})
                                      }}
-                                     style={itsFocus(item.id, card.focusItems) ? {
+                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
                                          cursor: "nwse-resize",
                                          top: item.coordinates.y + item.size.height - sizeBorder / 2,
                                          left: item.coordinates.x + item.size.width - sizeBorder / 2,
@@ -649,9 +703,11 @@ function mapStateToProps(state: CardMaker) {
 const mapDispatchToProps = {
     addFocusItem,
     removeFocusItems,
-    movingItems,
+    movingItemsByDiff,
     movingItem,
-    resizeItem
+    resizeItem,
+    resizeItemsByDiff,
+    scaleItems
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardView);

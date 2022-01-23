@@ -7,8 +7,7 @@ import {
     ChangeCardActionType,
     ChangeFilterActionsType,
     ChangeFontSizeTexts,
-    ChangeFontTextActionsType,
-    ChangeMultipleChoice,
+    ChangeFontTextActionsType, ChangeMultipleChoiceActionType,
     ChangeTextsActionsType,
     ChangeTypeArtsActionType,
     CreateNewCardMakerActionType,
@@ -22,9 +21,9 @@ import {
     RemoveFocusItemsActionsType,
     RemoveItemsActionsType,
     ResizeCardActionsType,
-    ResizeItemActionsType,
+    ResizeItemActionsType, ResizeItemsByDiffActionType,
     RestyleTextActionsType,
-    ScaleItemActionType,
+    ScaleItemsActionType,
     UndoHistoryActionsType,
     UpLayerActionType
 } from "./actions";
@@ -32,7 +31,14 @@ import {Card, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../m
 import {ID} from "../models/id";
 
 
-export const changeMultipleChoice = (multipleChoice: boolean): ChangeMultipleChoice => {
+export const resizeItemsByDiff = (size: Size): ResizeItemsByDiffActionType => {
+    return {
+        type: ActionType.RESIZE_ITEMS_BY_DIFF,
+        size: size
+    }
+}
+
+export const changeMultipleChoice = (multipleChoice: boolean): ChangeMultipleChoiceActionType => {
     return {
         type: ActionType.CHANGE_MULTIPLE_CHOICE,
         multipleChoice: multipleChoice
@@ -113,9 +119,9 @@ export const movingItem = (id: ID, coordinate: Coordinates): MovingItemActionsTy
     }
 }
 
-export const movingItems = (coordinate: Coordinates): MovingItemsActionsType => {
+export const movingItemsByDiff = (coordinate: Coordinates): MovingItemsActionsType => {
     return {
-        type: ActionType.MOVING_ITEMS,
+        type: ActionType.MOVING_ITEMS_BY_DIFF,
         coordinates: coordinate,
     }
 }
@@ -198,9 +204,9 @@ export const undoHistory = (): UndoHistoryActionsType => {
     }
 }
 
-export const scaleItem = (scale: number): ScaleItemActionType => {
+export const scaleItems = (scale: number): ScaleItemsActionType => {
     return  {
-        type: ActionType.SCALE_ITEM,
+        type: ActionType.SCALE_ITEMS,
         scale: scale
     }
 }

@@ -110,6 +110,7 @@ export type Card = Readonly<{
     size: Size,
 }>
 
+export const emptyMultipleChoice: boolean = false
 export type CardMaker = Readonly<{
     templates: Template[],
     history: History,

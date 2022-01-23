@@ -2,30 +2,13 @@ import {ActionsType, ActionType} from "../actions/actions";
 import {Card, CardMaker, emptyFocusItems, Item, TypeDate,} from "../models/types";
 import {createStore} from "redux";
 
+
+const minSize = 30
 const initialState: CardMaker = {
     templates: [],
     history: {
-        list: [JSON.stringify({
-            zone: {
-                coordinates: {
-                    x: 0,
-                    y: 0,
-                },
-                size: {
-                    width: 0,
-                    height: 0,
-                }
-            },
-            background: '#FFFFFF',
-            filter: 'transparent',
-            size: {
-                width: 800,
-                height: 600
-            },
-            items: [],
-            focusItems: emptyFocusItems
-        })],
-        currentIndex: 0
+        list: [],
+        currentIndex: -1
     },
     card: {
         multipleChoice: false,
@@ -165,6 +148,25 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             }
             return state
         }
+        case ActionType.MOVING_ITEMS_BY_DIFF: {
+            for (let i = 0; i < state.card.focusItems.length; i++) {
+
+                for (let j = 0; j < state.card.items.length; j++) {
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                        state.card.items[j] = {
+                            ...state.card.items[j],
+                            coordinates: {
+                                x: state.card.items[j].coordinates.x + action.coordinates.x,
+                                y: state.card.items[j].coordinates.y + action.coordinates.y
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            return state
+        }
         case ActionType.RESIZE_ITEM: {
             for (let j = 0; j < state.card.items.length; j++) {
                 if (state.card.items[j].id == action.id) {
@@ -178,14 +180,54 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             }
             return state
         }
-        case ActionType.MOVING_ITEMS: {
+
+        case ActionType.SCALE_ITEMS: {
             for (let i = 0; i < state.card.focusItems.length; i++) {
 
                 for (let j = 0; j < state.card.items.length; j++) {
                     if (state.card.items[j].id == state.card.focusItems[i]) {
+                        let width = state.card.items[j].size.width * action.scale
+                        let height = state.card.items[j].size.height * action.scale
+                        if (width < minSize) {
+                            width = minSize
+                        }
+                        if (height < minSize) {
+                            height = minSize
+                        }
                         state.card.items[j] = {
                             ...state.card.items[j],
-                            coordinates: action.coordinates
+                            size: {
+                                width: width,
+                                height: height,
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            return state
+        }
+
+        case ActionType.RESIZE_ITEMS_BY_DIFF: {
+            for (let i = 0; i < state.card.focusItems.length; i++) {
+
+                for (let j = 0; j < state.card.items.length; j++) {
+                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                        let width = state.card.items[j].size.width + action.size.width
+                        let height = state.card.items[j].size.height + action.size.height
+                        if (width < minSize) {
+                            width = minSize
+                        }
+                        if (height < minSize) {
+                            height = minSize
+                        }
+                        state.card.items[j] = {
+                            ...state.card.items[j],
+                            size: {
+                                width: width,
+                                height: height,
+                            }
                         }
                     }
 

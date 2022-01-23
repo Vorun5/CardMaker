@@ -18,9 +18,10 @@ export enum ActionType {
     ADD_ITEM = 'ADD_ITEM',
     REMOVE_ITEMS = 'REMOVE_ITEMS',
     MOVING_ITEM = 'MOVING_ITEM',
-    MOVING_ITEMS = 'MOVING_ITEMS',
+    MOVING_ITEMS_BY_DIFF = 'MOVING_ITEMS_BY_DIFF',
     RESIZE_ITEM = 'RESIZE_ITEM',
-    SCALE_ITEM = 'SCALE_ITEM',
+    RESIZE_ITEMS_BY_DIFF = 'RESIZE_ITEMS_BY_DIFF',
+    SCALE_ITEMS = 'SCALE_ITEMS',
     RECOLOR_TEXTS = 'RECOLOR_TEXTS',
     CHANGE_TYPE_ARTS = 'CHANGE_TYPE_ARTS',
     CHANGE_FONT_SIZE_TEXTS = 'CHANGE_FONT_SIZE_TEXTS',
@@ -41,7 +42,12 @@ export enum ActionType {
     CHANGE_MULTIPLE_CHOICE = 'CHANGE_MULTIPLE_CHOICE',
 }
 
-export type ChangeMultipleChoice = {
+export type ResizeItemsByDiffActionType = {
+    type: ActionType.RESIZE_ITEMS_BY_DIFF,
+    size: Size
+}
+
+export type ChangeMultipleChoiceActionType = {
     type: ActionType.CHANGE_MULTIPLE_CHOICE,
     multipleChoice: boolean,
 }
@@ -54,8 +60,8 @@ export type DownLayerActionType = {
     type: ActionType.DOWN_LAYER,
 }
 
-export type ScaleItemActionType = {
-    type: ActionType.SCALE_ITEM,
+export type ScaleItemsActionType = {
+    type: ActionType.SCALE_ITEMS,
     scale: number
 }
 
@@ -122,7 +128,7 @@ export type MovingItemActionsType = {
 }
 
 export type MovingItemsActionsType = {
-    type: ActionType.MOVING_ITEMS,
+    type: ActionType.MOVING_ITEMS_BY_DIFF,
     coordinates: Coordinates,
 }
 
@@ -203,7 +209,8 @@ export type ActionsType =
     | RemoveAllHistoryActionType
     | RemoveAllItemsActionType
     | ChangeTypeArtsActionType
-    | ScaleItemActionType
+    | ScaleItemsActionType
     | UpLayerActionType
     | DownLayerActionType
-    | ChangeMultipleChoice
+    | ChangeMultipleChoiceActionType
+    | ResizeItemsByDiffActionType

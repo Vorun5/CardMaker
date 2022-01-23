@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Card,
-    CardMaker, emptyFocusItems,
+    CardMaker, emptyFocusItems, emptyMultipleChoice,
     History,
 } from "../../models/types";
 import c from "./CardHistory.module.scss"
@@ -29,8 +29,6 @@ let isPressed = false
 
 
 const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, redoHistory, undoHistory}) => {
-
-
     function kyeUpHandler(event: KeyboardEvent) {
         if (event.code == 'KeyZ') {
             isPressed = false
@@ -40,23 +38,18 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
         }
 
     }
-
     function kyeDownHandler(event: KeyboardEvent) {
         if (event.ctrlKey) {
             if (event.code == 'KeyZ') {
                 isPressed = true
-                console.log("undo")
                 undoHistory()
             }
             if (event.code == 'KeyX') {
-                  isPressed = true
-
-                console.log("redo")
+                isPressed = true
                 redoHistory()
             }
         }
     }
-
     useEffect(() => {
         document.addEventListener("keydown", (event: KeyboardEvent) => {
             if (!isPressed) {
@@ -75,10 +68,14 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
 
     function handleChange() {
         const history: History = store.getState().history
-        const card: Card = {...store.getState().card, focusItems: emptyFocusItems}
+        const card: Card = {...store.getState().card, focusItems: emptyFocusItems, multipleChoice: emptyMultipleChoice}
         const cardString = JSON.stringify(card)
-        if (history.list[history.currentIndex] !== cardString) {
+        if (history.currentIndex == -1) {
             addHistory(cardString)
+        } else {
+            if (history.list[history.currentIndex] !== cardString) {
+                addHistory(cardString)
+            }
         }
     }
 

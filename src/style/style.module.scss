@@ -41,17 +41,6 @@
   }
 }
 
-.view_container {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 0.25rem;
-
-  &:hover {
-    margin: -0.4vh;
-    border: 0.4vh solid #bbbbbb;
-  }
-}
 
 .button {
   transition: box-shadow 0.2s;
