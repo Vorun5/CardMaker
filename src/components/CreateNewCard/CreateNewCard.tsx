@@ -21,7 +21,7 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({createNewCardMaker}) => {
     const [warning, setWarning] = useState<boolean>(false)
 
     return (
-        <div className={c.container}>
+        <div>
             <div className={style.button + " " + c.create}
                  onClick={() => {
                      setWarning(true)

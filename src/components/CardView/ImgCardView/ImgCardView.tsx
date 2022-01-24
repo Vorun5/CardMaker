@@ -7,7 +7,7 @@ interface ImgCardViewProps {
 }
 const ImgCardView: React.FC<ImgCardViewProps> = ({imgCard}) => {
     return (
-        <img src={imgCard.url} alt={imgCard.url} className={c.img}/>
+        <img src={imgCard.url} alt={'error'} className={c.img}/>
     );
 };
 

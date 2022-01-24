@@ -73,8 +73,6 @@ export type Template = Readonly<{
     card: string
 }>
 
-const allTemplates: Template[] = []
-
 export type IMG = Readonly<{
     type: TypeDate.IMG,
     url: string

@@ -14,17 +14,6 @@
   margin: 0 -2rem -2rem 0;
 }
 
-.view_container {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 0.25rem;
- // transition: height, width, top, left 0.3s;
-  &:hover {
-    margin: -0.4vh;
-    border: 0.4vh solid #bbbbbb;
-  }
-}
 
 .card {
   border: 2px solid #bbbbbb;
@@ -44,44 +33,5 @@
     position: absolute;
     height: 100%;
     width: 100%;
-  }
-}
-
-.border {
-  position: absolute;
-  z-index: 301;
-  &_top {
-    height: 16px;
-  }
-
-  &_button {
-    height: 16px;
-  }
-
-  &_right {
-    width: 16px;
-  }
-
-  &_left {
-    width: 16px;
-  }
-}
-
-.corner {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background-color: #FF6779;
-  z-index: 302;
-  &_top {
-  }
-
-  &_button {
-  }
-
-  &_right {
-  }
-
-  &_left {
   }
 }

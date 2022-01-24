@@ -18,7 +18,7 @@ const TemplatesTool: React.FC<TemplatesToolProps> = ({}) => {
             {modal ?
                 <Modal>
                     <div className={c.modal_title}>Выберете шаблон</div>
-                    <div className={c.modal_content}></div>
+                    <div className={c.modal_content}/>
                     <div className={c.modal_button}>
                         <div onClick={() => setModal(false)} className={c.modal_close + " " + style.button}>Close</div>
                     </div>

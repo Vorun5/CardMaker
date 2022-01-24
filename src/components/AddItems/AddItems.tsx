@@ -28,7 +28,8 @@ interface AddItemsProps {
     addItem: (item: Item) => AddItemActionsType,
     addFocusItem: (id: ID) => AddFocusItemActionsType,
     removeFocusItems: () => RemoveFocusItemsActionsType,
-    resizeCard: (size: Size) => ResizeCardActionsType;
+    resizeCard: (size: Size) => ResizeCardActionsType,
+    multipleChoice: boolean,
 }
 
 const AddItems: React.FC<AddItemsProps> = ({
@@ -36,7 +37,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                                                addFocusItem,
                                                removeFocusItems,
                                                sizeCard,
-                                               resizeCard
+                                               resizeCard,
+                                               multipleChoice
                                            }) => {
 
 
@@ -56,7 +58,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             }
         },
         size: {
-            width: 120,
+            width: 150,
             height: 50,
         },
         coordinates: {
@@ -72,7 +74,7 @@ const AddItems: React.FC<AddItemsProps> = ({
         },
         size: {
             width: 100,
-            height: 100,
+            height: 300,
         },
         coordinates: {
             x: padding,
@@ -82,14 +84,17 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     function add(item: Item) {
         const idItem = id()
-        removeFocusItems()
         addItem(
             {
                 ...item,
                 id: idItem
             }
         )
-        //addFocusItem(idItem)
+        if (multipleChoice) {
+
+            // addFocusItem(idItem)
+        }
+        removeFocusItems()
     }
 
     const [imgSelected, setImgSelected] = useState<boolean>(false)
@@ -119,7 +124,7 @@ const AddItems: React.FC<AddItemsProps> = ({
             } else {
                 const idItem = id()
                 add({
-                    id: id(),
+                    id: idItem,
                     data: {
                         type: TypeDate.IMG,
                         url: images[i].src,
@@ -199,13 +204,13 @@ const AddItems: React.FC<AddItemsProps> = ({
         closeModalImg()
     }
 
-    function dragStartHandler(e: React.DragEvent) {
-        e.preventDefault()
+    function dragStartHandler(event: React.DragEvent) {
+        event.preventDefault()
         setDrag(true)
     }
 
-    function dragLeaveHandler(e: React.DragEvent) {
-        e.preventDefault()
+    function dragLeaveHandler(event: React.DragEvent) {
+        event.preventDefault()
         setDrag(false)
     }
 
@@ -219,12 +224,12 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     function dragOnDropHandler(e: React.DragEvent) {
         e.preventDefault()
-        if (e.dataTransfer.files != null) {
-            if (e.dataTransfer.files.length != 1) {
+        if (e.dataTransfer.files !== null) {
+            if (e.dataTransfer.files.length !== 1) {
                 setWarningOneImg(true)
             } else {
                 let file = e.dataTransfer.files[0]
-                if (file.type == "image/png" || file.type == "image/jpeg") {
+                if (file.type === "image/png" || file.type === "image/jpeg") {
                     let reader = new FileReader()
                     reader.readAsDataURL(file)
                     reader.onload = () => {
@@ -249,10 +254,9 @@ const AddItems: React.FC<AddItemsProps> = ({
             if (!imgSelected) {
                 setDrag(false)
             }
+
         }
     }
-
-
     const [modalArt, setModalArt] = useState<boolean>(false)
 
     return (
@@ -304,16 +308,16 @@ const AddItems: React.FC<AddItemsProps> = ({
                             drag
                                 ?
                                 <div className={c.drag_areal}
-                                     onDragStart={e => dragStartHandler(e)}
-                                     onDragLeave={e => dragLeaveHandler(e)}
-                                     onDragOver={e => dragStartHandler(e)}
-                                     onDrop={e => dragOnDropHandler(e)}>
+                                     onDragStart={event => dragStartHandler(event)}
+                                     onDragLeave={event => dragLeaveHandler(event)}
+                                     onDragOver={event => dragStartHandler(event)}
+                                     onDrop={event => dragOnDropHandler(event)}>
                                     Отпустите изображение, чтобы загрузить</div>
                                 : <div
                                     className={c.drag_areal}
-                                    onDragStart={e => dragStartHandler(e)}
-                                    onDragLeave={e => dragLeaveHandler(e)}
-                                    onDragOver={e => dragStartHandler(e)}>
+                                    onDragStart={event => dragStartHandler(event)}
+                                    onDragLeave={event => dragLeaveHandler(event)}
+                                    onDragOver={event => dragStartHandler(event)}>
                                     <p> Перенести <b style={warningOneImg ? {
                                         color: '#E76363',
                                         fontWeight: 500
@@ -379,7 +383,7 @@ const AddItems: React.FC<AddItemsProps> = ({
                     </div>
                     <div className={c.art_modal_content}>
                         {allTypeArtList.map((art) =>
-                            <div className={c.art_modal_item}
+                            <div key={id()} className={c.art_modal_item}
                                 onClick={() => {
                                     add({
                                         ...artItem,
@@ -412,6 +416,7 @@ const AddItems: React.FC<AddItemsProps> = ({
 function mapStateToProps(state: CardMaker) {
     return {
         sizeCard: state.card.size,
+        multipleChoice: state.card.multipleChoice
     }
 }
 

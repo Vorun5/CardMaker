@@ -2,9 +2,7 @@ import {
     Card,
     Coordinates,
     Fonts,
-    FontStyle,
     FontStyleText,
-    History,
     Item,
     Size,
     TypeArt,
@@ -117,7 +115,7 @@ export type AddHistoryActionsType = {
 
 export type AddItemActionsType = {
     type: ActionType.ADD_ITEM,
-    item: Item,
+    item: Item
 }
 
 

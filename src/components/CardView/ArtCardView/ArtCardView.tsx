@@ -1,13 +1,12 @@
 import React from 'react';
-import {Art, Size, TypeArt} from "../../../models/types";
+import {Art} from "../../../models/types";
 
 interface ArtCardViewProps {
-    size: Size,
-    art: Art,
+    art: Art
 }
 
 
-const ArtCardView: React.FC<ArtCardViewProps> = ({size, art}) => {
+const ArtCardView: React.FC<ArtCardViewProps> = ({art}) => {
 
     return (
        <div>

@@ -1,5 +1,5 @@
 import {ActionsType, ActionType} from "../actions/actions";
-import {Card, CardMaker, emptyFocusItems, Item, TypeDate,} from "../models/types";
+import {Card, CardMaker, Item, TypeDate,} from "../models/types";
 import {createStore} from "redux";
 
 
@@ -56,11 +56,11 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
         case ActionType.REMOVE_FOCUS_ITEMS:
             return {...state, card: {...state.card, focusItems: []}}
         case ActionType.REDO_HISTORY: {
-            if (state.history.currentIndex == -1) {
+            if (state.history.currentIndex === -1) {
                 return state
             }
 
-            if (state.history.currentIndex + 1 == state.history.list.length) {
+            if (state.history.currentIndex + 1 === state.history.list.length) {
                 return {
                     ...state,
                     history: {
@@ -81,7 +81,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
         }
         case ActionType.UNDO_HISTORY: {
 
-            if (state.history.list.length == 0) {
+            if (state.history.list.length === 0) {
                 return {
                     ...state,
                     history: {
@@ -138,7 +138,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             return {...state, card: {...state.card, items: [...state.card.items, action.item]}}
         case ActionType.MOVING_ITEM: {
             for (let j = 0; j < state.card.items.length; j++) {
-                if (state.card.items[j].id == action.id) {
+                if (state.card.items[j].id === action.id) {
                     state.card.items[j] = {
                         ...state.card.items[j],
                         coordinates: action.coordinates
@@ -152,7 +152,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             for (let i = 0; i < state.card.focusItems.length; i++) {
 
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         state.card.items[j] = {
                             ...state.card.items[j],
                             coordinates: {
@@ -169,7 +169,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
         }
         case ActionType.RESIZE_ITEM: {
             for (let j = 0; j < state.card.items.length; j++) {
-                if (state.card.items[j].id == action.id) {
+                if (state.card.items[j].id === action.id) {
                     state.card.items[j] = {
                         ...state.card.items[j],
                         size: action.size,
@@ -185,7 +185,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             for (let i = 0; i < state.card.focusItems.length; i++) {
 
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let width = state.card.items[j].size.width * action.scale
                         let height = state.card.items[j].size.height * action.scale
                         if (width < minSize) {
@@ -213,7 +213,7 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             for (let i = 0; i < state.card.focusItems.length; i++) {
 
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let width = state.card.items[j].size.width + action.size.width
                         let height = state.card.items[j].size.height + action.size.height
                         if (width < minSize) {
@@ -241,9 +241,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type === TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
@@ -271,9 +271,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type === TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
@@ -301,9 +301,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.Art) {
+                        if (bufDate.type === TypeDate.Art) {
 
                             bufDate = {
                                 ...bufDate,
@@ -330,9 +330,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type === TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
@@ -359,9 +359,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type === TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
@@ -388,9 +388,9 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
 
                 for (let j = 0; j < state.card.items.length; j++) {
 
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         let bufDate = state.card.items[j].data
-                        if (bufDate.type == TypeDate.TextCard) {
+                        if (bufDate.type === TypeDate.TextCard) {
 
                             bufDate = {
                                 ...bufDate,
@@ -416,13 +416,13 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
         case ActionType.REMOVE_ITEMS: {
             for (let i = 0; i < state.card.focusItems.length; i++) {
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         state = {
                             ...state,
                             card: {
                                 ...state.card,
                                 items: state.card.items.filter((el) => {
-                                    if (!(el.id == state.card.focusItems[i])) {
+                                    if (!(el.id === state.card.focusItems[i])) {
                                         return el
                                     }
                                 })
@@ -441,14 +441,14 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             let bufItems: Item[] = []
             for (let i = 0; i < state.card.focusItems.length; i++) {
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         bufItems = [...bufItems, state.card.items[j]]
                         state = {
                             ...state,
                             card: {
                                 ...state.card,
                                 items: state.card.items.filter((el) => {
-                                    if (!(el.id == state.card.focusItems[i])) {
+                                    if (!(el.id === state.card.focusItems[i])) {
                                         return el
                                     }
                                 })
@@ -473,14 +473,14 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             let bufItems: Item[] = []
             for (let i = 0; i < state.card.focusItems.length; i++) {
                 for (let j = 0; j < state.card.items.length; j++) {
-                    if (state.card.items[j].id == state.card.focusItems[i]) {
+                    if (state.card.items[j].id === state.card.focusItems[i]) {
                         bufItems = [...bufItems, state.card.items[j]]
                         state = {
                             ...state,
                             card: {
                                 ...state.card,
                                 items: state.card.items.filter((el) => {
-                                    if (!(el.id == state.card.focusItems[i])) {
+                                    if (!(el.id === state.card.focusItems[i])) {
                                         return el
                                     }
                                 })

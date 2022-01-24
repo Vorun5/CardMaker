@@ -3,6 +3,8 @@ import c from "./SaveCard.module.scss"
 import style from "./../../style/style.module.scss"
 import Modal from "../Style components/Modal/Modal";
 import {RemoveFocusItemsActionsType} from "../../actions/actions";
+import {removeFocusItems} from "../../actions/actionsCreaters";
+import {connect} from "react-redux";
 
 interface SaveCardProps {
     savePNG: () => void,
@@ -19,7 +21,7 @@ const SaveCard: React.FC<SaveCardProps> = ({
 
     const [saveModal, setSaveModal] = useState<boolean>(false)
     return (
-        <div className={c.container}>
+        <div>
 
 
             <div onClick={() => setSaveModal(true)} className={style.button + " " + c.save}>
@@ -64,4 +66,10 @@ const SaveCard: React.FC<SaveCardProps> = ({
     );
 };
 
-export default SaveCard;
+
+
+const mapDispatchToProps = {
+    removeFocusItems,
+}
+
+export default connect(null, mapDispatchToProps)(SaveCard);

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import c from "./DeleteItems.module.scss"
 import style from "../../style/style.module.scss"
 import {CardMaker} from "../../models/types";
@@ -31,13 +31,13 @@ const DeleteItems: React.FC<DeleteItemProps> = ({
     }
 
     function kyeUpHandler(event: KeyboardEvent) {
-        if (event.code == 'Delete') {
+        if (event.code === 'Delete') {
             isPressed = false
         }
     }
 
     function kyeDownHandler(event: KeyboardEvent) {
-        if (event.code == 'Delete') {
+        if (event.code === 'Delete') {
             deleteFocusItems(focusItems)
             isPressed = true
         }
@@ -63,9 +63,9 @@ const DeleteItems: React.FC<DeleteItemProps> = ({
 
 
         <div
-            className={focusItems.length != 0 ? c.container + " " + style.button : c.container + " " + style.button + " " + style.button_inactive}
+            className={focusItems.length !== 0 ? c.container + " " + style.button : c.container + " " + style.button + " " + style.button_inactive}
             onClick={() => {
-                if (focusItems.length != 0) {
+                if (focusItems.length !== 0) {
                     deleteFocusItems(focusItems)
                 }
             }}

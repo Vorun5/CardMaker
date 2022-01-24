@@ -20,7 +20,6 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
 
     const max = 9999
     const min = 100
-
     function onKeyDownHandle(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
             let w = width

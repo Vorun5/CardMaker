@@ -2,30 +2,23 @@ import React, {useState} from 'react';
 import c from './EditArt.module.scss'
 import style from '../../../style/style.module.scss'
 import {
-    allFontsList,
     allTypeArtList,
     Art,
-    Fonts,
-    FontStyleText,
-    TextCard,
     TypeArt
 } from "../../../models/types";
-import {id, ID} from "../../../models/id";
+import {id} from "../../../models/id";
 import {ChangeTypeArtsActionType} from "../../../actions/actions";
 
 interface EditArtProps {
     title: string,
     art: Art,
-    focusItems: ID[],
     changeTypeArts: (typeArt: TypeArt) => ChangeTypeArtsActionType,
 }
 
 const EditArt: React.FC<EditArtProps> = ({
                                              title,
                                              art,
-                                             focusItems,
                                              changeTypeArts,
-
                                          }) => {
     const [activeTypeArt, setActiveTypeArt] = useState<boolean>(false)
     const [typeArt, setTypeArt] = useState<TypeArt>(art.typeArt)

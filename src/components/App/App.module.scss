@@ -39,13 +39,8 @@ table {
 
 
 .App {
-  overflow: hidden;
-}
-
-.container {
-  overflow: hidden;
-  min-width: 100vw;
-  min-height: 100vh;
+//  overflow: hidden;
+  background-color: #1aa4fb;
 }
 
 .header_tools {
@@ -55,15 +50,11 @@ table {
   background-color: #2c2c2c;
   width: 100%;
   height: 40px;
-
+  padding: 0 0.25rem;
   // .header_tools_item
   &_item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.5rem;
+    margin: 0 0.25rem;
   }
-
 }
 
 .header_card {
@@ -110,7 +101,16 @@ table {
   height: 100vh;
   top: 0;
   left: 0;
-  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  /* хром, сафари */
+  &::-webkit-scrollbar { width: 0; }
+
+  /* ie 10+ */
+  & { -ms-overflow-style: none; }
+
+  /* фф (свойство больше не работает, других способов тоже нет)*/
+  & { overflow: -moz-scrollbars-none; }
+  //box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
 }
 
 .card_container {

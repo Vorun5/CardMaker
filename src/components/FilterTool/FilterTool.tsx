@@ -1,7 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import c from './FilterTool.module.scss'
 import style from '../../style/style.module.scss'
-import ColorSelect from "../ColorSelect/ColorSelect";
 import {CardMaker} from "../../models/types";
 import {connect} from "react-redux";
 import {changeFilter} from "../../actions/actionsCreaters";

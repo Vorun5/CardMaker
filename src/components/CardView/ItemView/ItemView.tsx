@@ -17,7 +17,7 @@ const ItemView: React.FC<ItemViewProps> = ({item,}) => {
         case TypeDate.IMG:
             return <ImgCardView imgCard={data}/>
         case TypeDate.Art:
-            return <ArtCardView size={item.size} art={data}/>
+            return <ArtCardView art={data}/>
     }
 };
 

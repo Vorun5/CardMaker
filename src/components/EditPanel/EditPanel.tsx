@@ -27,7 +27,7 @@ import {
 } from "../../actions/actions";
 import EditText from "./EditText/EditText";
 import EditArt from "./EditArt/EditArt";
-
+import c from './EditPanel.module.scss'
 interface EditPanelToProps {
     focusItems: ID[];
     items: Item[];
@@ -42,9 +42,9 @@ interface EditPanelToProps {
 function firstTextIndex(focusItems: ID[], items: Item[]): TextCard | null {
     for (let j = 0; j < focusItems.length; j++) {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == focusItems[j]) {
+            if (items[i].id === focusItems[j]) {
                 const itemData = items[i].data
-                if (itemData.type == TypeDate.TextCard) {
+                if (itemData.type === TypeDate.TextCard) {
                     return itemData
                 }
             }
@@ -56,9 +56,9 @@ function firstTextIndex(focusItems: ID[], items: Item[]): TextCard | null {
 function firstArtIndex(focusItems: ID[], items: Item[]): Art | null {
     for (let j = 0; j < focusItems.length; j++) {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == focusItems[j]) {
+            if (items[i].id === focusItems[j]) {
                 const itemData = items[i].data
-                if (itemData.type == TypeDate.Art) {
+                if (itemData.type === TypeDate.Art) {
                     return itemData
                 }
             }
@@ -70,9 +70,9 @@ function firstArtIndex(focusItems: ID[], items: Item[]): Art | null {
 function firstImgIndex(focusItems: ID[], items: Item[]): IMG | null {
     for (let j = 0; j < focusItems.length; j++) {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == focusItems[j]) {
+            if (items[i].id === focusItems[j]) {
                 const itemData = items[i].data
-                if (itemData.type == TypeDate.IMG) {
+                if (itemData.type === TypeDate.IMG) {
                     return itemData
                 }
             }
@@ -95,8 +95,8 @@ const EditPanel: React.FC<EditPanelToProps> = ({
 
     function isOneText(id: ID, items: Item[]): boolean {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == id) {
-                return items[i].data.type == TypeDate.TextCard;
+            if (items[i].id === id) {
+                return items[i].data.type === TypeDate.TextCard;
             }
         }
         return false
@@ -104,8 +104,8 @@ const EditPanel: React.FC<EditPanelToProps> = ({
 
     function isOneArt(id: ID, items: Item[]): boolean {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == id) {
-                return items[i].data.type == TypeDate.Art;
+            if (items[i].id === id) {
+                return items[i].data.type === TypeDate.Art;
             }
         }
         return false
@@ -113,8 +113,8 @@ const EditPanel: React.FC<EditPanelToProps> = ({
 
     function isOneImg(id: ID, items: Item[]): boolean {
         for (let i = 0; i < items.length; i++) {
-            if (items[i].id == id) {
-                return items[i].data.type == TypeDate.TextCard;
+            if (items[i].id === id) {
+                return items[i].data.type === TypeDate.TextCard;
             }
         }
         return false
@@ -125,7 +125,7 @@ const EditPanel: React.FC<EditPanelToProps> = ({
     const artItemData = firstArtIndex(focusItems, items)
     const imgItemData = firstImgIndex(focusItems, items)
     return (
-        <div>
+        <div className={c.container}>
             {textItemData
             && <EditText
                 changeTexts={changeTexts}
@@ -141,7 +141,6 @@ const EditPanel: React.FC<EditPanelToProps> = ({
             && <EditArt
                 title={"Edit art"}
                 art={artItemData}
-                focusItems={focusItems}
                 changeTypeArts={changeTypeArts}
             />}
 

@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Card, CardMaker, Coordinates, History, Size, TypeDate} from "../../models/types";
+import React, {useEffect, useRef, useState} from 'react';
+import {Card, CardMaker, Coordinates, History, Size} from "../../models/types";
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
 import style from './../../style/style.module.scss'
-import {id, ID} from "../../models/id";
+import {ID} from "../../models/id";
 import {
     addFocusItem,
     movingItem,
@@ -16,10 +16,10 @@ import {
     MovingItemsActionsType,
     RemoveFocusItemsActionsType, ResizeItemActionsType, ResizeItemsByDiffActionType, ScaleItemsActionType,
 } from "../../actions/actions";
-import {toPng} from 'html-to-image';
 import ItemView from "./ItemView/ItemView";
-import SaveCard from "../SaveCard/SaveCard";
 import {store} from "../../reduser/redusers";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
+import ItemsContainerView from "./ItemsContainerView/ItemsContainerView";
 
 interface CardViewProps {
     card: Card,
@@ -33,6 +33,7 @@ interface CardViewProps {
     multipleChoice: boolean,
     resizeItemsByDiff: (size: Size) => ResizeItemsByDiffActionType,
     scaleItems: (scale: number) => ScaleItemsActionType,
+    refSave: React.LegacyRef<HTMLDivElement> | undefined
 }
 
 let isPressed = false
@@ -47,25 +48,25 @@ const CardView: React.FC<CardViewProps> = ({
                                                history,
                                                addFocusItem,
                                                removeFocusItems,
-                                               scaleItems
+                                               scaleItems,
+                                               refSave
                                            }) => {
 
     function kyeUpHandler(event: KeyboardEvent) {
-        event.preventDefault()
-        if (event.code == 'ArrowUp' || event.code == 'ArrowDown' || event.code == 'ArrowLeft' || event.code == 'ArrowRight') {
+        if (event.code === 'ArrowUp' || event.code === 'ArrowDown' || event.code === 'ArrowLeft' || event.code === 'ArrowRight') {
             isPressed = false
         }
     }
 
     function kyeDownHandler(event: KeyboardEvent) {
         const step: number = 5
-        event.preventDefault()
+
         if (event.ctrlKey) {
-            if (event.code == 'ArrowUp') {
+            if (event.code === 'ArrowUp') {
                 isPressed = true
                 scaleItems(1.1)
             }
-            if (event.code == 'ArrowDown') {
+            if (event.code === 'ArrowDown') {
                 isPressed = true
                 scaleItems(0.9)
             }
@@ -73,41 +74,41 @@ const CardView: React.FC<CardViewProps> = ({
         }
 
         if (event.shiftKey) {
-            if (event.code == 'ArrowUp') {
+            if (event.code === 'ArrowUp') {
                 isPressed = true
                 resizeItemsByDiff({width: 0, height: -step})
             }
-            if (event.code == 'ArrowDown') {
+            if (event.code === 'ArrowDown') {
                 isPressed = true
                 resizeItemsByDiff({width: 0, height: step})
             }
-            if (event.code == 'ArrowLeft') {
+            if (event.code === 'ArrowLeft') {
                 isPressed = true
                 resizeItemsByDiff({width: -step, height: 0})
             }
-            if (event.code == 'ArrowRight') {
+            if (event.code === 'ArrowRight') {
                 isPressed = true
                 resizeItemsByDiff({width: step, height: 0})
             }
             return
         }
 
-        if (event.code == 'ArrowUp') {
+        if (event.code === 'ArrowUp') {
             setStartCoordinates({x: startCoordinates.x, y: startCoordinates.y - step})
             movingItemsByDiff({x: 0, y: -step})
             isPressed = true
         }
-        if (event.code == 'ArrowDown') {
+        if (event.code === 'ArrowDown') {
             setStartCoordinates({x: startCoordinates.x, y: startCoordinates.y + step})
             movingItemsByDiff({x: 0, y: step})
             isPressed = true
         }
-        if (event.code == 'ArrowLeft') {
+        if (event.code === 'ArrowLeft') {
             setStartCoordinates({y: startCoordinates.y, x: startCoordinates.x - step})
             movingItemsByDiff({x: -step, y: 0})
             isPressed = true
         }
-        if (event.code == 'ArrowRight') {
+        if (event.code === 'ArrowRight') {
             setStartCoordinates({y: startCoordinates.y, x: startCoordinates.x + step})
             movingItemsByDiff({x: step, y: 0})
             isPressed = true
@@ -138,7 +139,7 @@ const CardView: React.FC<CardViewProps> = ({
 
     function itsFocus(el: ID, listID: ID[]): boolean {
         for (let i = 0; i < listID.length; i++) {
-            if (el == listID[i]) {
+            if (el === listID[i]) {
                 return true;
             }
         }
@@ -169,16 +170,8 @@ const CardView: React.FC<CardViewProps> = ({
     const [startCoordinates, setStartCoordinates] = useState<Coordinates>({x: 0, y: 0})
     const [coordinates, setCoordinates] = useState<Coordinates>({x: 0, y: 0})
     const [size, setSize] = useState<Size>({width: 0, height: 0})
-    const [coordinatesFocus, setCoordinatesFocus] = useState<Coordinates>({x: 0, y: 0})
-    const [sizeFocus, setSizeFocus] = useState<Size>({width: 0, height: 0})
     const [itemId, setItemID] = useState<ID>("")
     const sizeBorder = 16
-
-    function addFocusItemView(id: ID, size: Size, coordinates: Coordinates) {
-        addFocusItem(id)
-        setSizeFocus(size)
-        setCoordinatesFocus(coordinates)
-    }
 
     function editCoordinatesItem(event: React.MouseEvent, id: ID, coordinates: Coordinates, focus: boolean) {
         if (focus) {
@@ -197,17 +190,13 @@ const CardView: React.FC<CardViewProps> = ({
             x: event.pageX,
             y: event.pageY,
         })
+        setCoordinates(coordinates)
         setSize(size)
         setItemID(id)
-        setCoordinates(coordinates)
     }
 
     function changeCoordinatesItem(event: React.MouseEvent, id: ID, editCoordinatesMode: boolean, startCoordinates: Coordinates, coordinates: Coordinates) {
         if (editCoordinatesMode) {
-            setCoordinatesFocus({
-                x: event.pageX - startCoordinates.x + coordinates.x,
-                y: event.pageY - startCoordinates.y + coordinates.y
-            })
             movingItem(id, {
                 x: event.pageX - startCoordinates.x + coordinates.x,
                 y: event.pageY - startCoordinates.y + coordinates.y
@@ -216,8 +205,17 @@ const CardView: React.FC<CardViewProps> = ({
         }
     }
 
+
     function changeSizeItem(event: React.MouseEvent, id: ID, editSizeMode: editSizeMode, startCoordinates: Coordinates, coordinates: Coordinates, size: Size) {
         const minSize = 30
+
+        function change(id: ID, coordinates: Coordinates, size: Size, esm: editSizeMode) {
+            setStartCoordinates(coordinates)
+            setSize(size)
+            resizeItem(id, size, coordinates)
+            setEditSizeMode(esm)
+        }
+
         if (editSizeMode.cornerTopLeft) {
             let width = size.width - (event.pageX - startCoordinates.x)
             if (width < minSize) {
@@ -235,22 +233,13 @@ const CardView: React.FC<CardViewProps> = ({
             if (biasY > size.height - minSize) {
                 biasY = size.height - minSize
             }
-            setSizeFocus({
-                width: width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: biasX + coordinates.x,
-                y: biasY + coordinates.y,
-            })
-            resizeItem(id, {
-                width: width,
-                height: height
-            }, {
-                x: biasX + coordinates.x,
-                y: biasY + coordinates.y,
-            })
-            setEditSizeMode({...editSizeMode, cornerTopLeft: false})
+            change(id,
+                {x: biasX + coordinates.x, y: biasY + coordinates.y},
+                {
+                    width: width,
+                    height: height
+                },
+                {...editSizeMode, cornerTopLeft: false})
         }
         if (editSizeMode.cornerTopRight) {
             let width = event.pageX - startCoordinates.x + size.width
@@ -266,23 +255,13 @@ const CardView: React.FC<CardViewProps> = ({
                 biasY = size.height - minSize
             }
 
-            setSizeFocus({
-                width: width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: coordinates.x,
-                y: biasY + coordinates.y,
-            })
-
-            resizeItem(id, {
-                width: width,
-                height: height
-            }, {
-                x: coordinates.x,
-                y: biasY + coordinates.y,
-            })
-            setEditSizeMode({...editSizeMode, cornerTopRight: false})
+            change(id,
+                {x: coordinates.x, y: biasY + coordinates.y,},
+                {width: width, height: height},
+                {
+                    ...editSizeMode,
+                    cornerTopRight: false
+                })
         }
         if (editSizeMode.cornerButtonRight) {
             let width = event.pageX - startCoordinates.x + size.width
@@ -293,22 +272,15 @@ const CardView: React.FC<CardViewProps> = ({
             if (height < minSize) {
                 height = minSize
             }
-            setSizeFocus({
-                width: width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: coordinates.x,
-                y: coordinates.y
-            })
-            resizeItem(id, {
-                width: width,
-                height: height
-            }, {
-                x: coordinates.x,
-                y: coordinates.y
-            })
-            setEditSizeMode({...editSizeMode, cornerButtonRight: false})
+
+
+            change(id,
+                {x: coordinates.x, y: coordinates.y},
+                {width: width, height: height},
+                {
+                    ...editSizeMode,
+                    cornerButtonRight: false
+                })
         }
         if (editSizeMode.cornerButtonLeft) {
             let width = size.width - (event.pageX - startCoordinates.x)
@@ -324,48 +296,32 @@ const CardView: React.FC<CardViewProps> = ({
                 biasX = size.width - minSize
             }
 
-            setSizeFocus({
-                width: width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: biasX + coordinates.x,
-                y: coordinates.y,
-            })
-
-            resizeItem(id, {
-                width: width,
-                height: height
-            }, {
-                x: biasX + coordinates.x,
-                y: coordinates.y,
-            })
-            setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
+            change(id,
+                {
+                    x: biasX + coordinates.x,
+                    y: coordinates.y,
+                },
+                {
+                    width: width,
+                    height: height
+                },
+                {...editSizeMode, cornerButtonLeft: false})
         }
         if (editSizeMode.widthRight) {
             let width = event.pageX - startCoordinates.x + size.width
             if (width < minSize) {
                 width = minSize
             }
-
-
-            setSizeFocus({
-                width: width,
-                height: size.height
-            })
-            setCoordinatesFocus({
-                x: coordinates.x,
-                y: coordinates.y
-            })
-
-            resizeItem(id, {
-                width: width,
-                height: size.height
-            }, {
-                x: coordinates.x,
-                y: coordinates.y
-            })
-            setEditSizeMode({...editSizeMode, widthRight: false})
+            change(id,
+                {
+                    x: coordinates.x,
+                    y: coordinates.y
+                },
+                {
+                    width: width,
+                    height: size.height
+                },
+                {...editSizeMode, widthRight: false})
         }
         if (editSizeMode.widthLeft) {
             let width = size.width - (event.pageX - startCoordinates.x)
@@ -379,45 +335,32 @@ const CardView: React.FC<CardViewProps> = ({
             }
 
 
-            setSizeFocus({
-                width: width,
-                height: size.height
-            })
-            setCoordinatesFocus({
-                x: biasX + coordinates.x,
-                y: coordinates.y
-            })
-            resizeItem(id, {
-                width: width,
-                height: size.height
-            }, {
-                x: biasX + coordinates.x,
-                y: coordinates.y
-            })
-            setEditSizeMode({...editSizeMode, widthLeft: false})
+            change(id,
+                {
+                    x: biasX + coordinates.x,
+                    y: coordinates.y
+                },
+                {
+                    width: width,
+                    height: size.height
+                },
+                {...editSizeMode, widthLeft: false})
         }
         if (editSizeMode.heightButton) {
             let height = event.pageY - startCoordinates.y + size.height
             if (height < minSize) {
                 height = minSize
             }
-
-            setSizeFocus({
-                width: size.width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: coordinates.x,
-                y: coordinates.y
-            })
-            resizeItem(id, {
-                width: size.width,
-                height: height
-            }, {
-                x: coordinates.x,
-                y: coordinates.y
-            })
-            setEditSizeMode({...editSizeMode, heightButton: false})
+            change(id,
+                {
+                    x: coordinates.x,
+                    y: coordinates.y
+                },
+                {
+                    width: size.width,
+                    height: height
+                },
+                {...editSizeMode, heightButton: false})
         }
         if (editSizeMode.heightTop) {
             let height = size.height - (event.pageY - startCoordinates.y)
@@ -428,62 +371,21 @@ const CardView: React.FC<CardViewProps> = ({
             if (biasY > size.height - minSize) {
                 biasY = size.height - minSize
             }
-
-            setSizeFocus({
-                width: size.width,
-                height: height
-            })
-            setCoordinatesFocus({
-                x: coordinates.x,
-                y: biasY + coordinates.y
-            })
-            resizeItem(id, {
-                width: size.width,
-                height: height
-            }, {
-                x: coordinates.x,
-                y: biasY + coordinates.y
-            })
-            setEditSizeMode({...editSizeMode, heightTop: false})
+            change(id,
+                {
+                    x: coordinates.x,
+                    y: biasY + coordinates.y
+                },
+                {
+                    width: size.width,
+                    height: height
+                },
+                {...editSizeMode, heightTop: false})
         }
     }
 
-    const ref = useRef<HTMLDivElement>(null)
-    const savePNG = useCallback(() => {
-        if (ref.current === null) {
-            return
-        }
-
-        toPng(ref.current, {cacheBust: true,})
-            .then((dataUrl) => {
-                const link = document.createElement('a')
-                link.download = 'card.png'
-                link.href = dataUrl
-                link.click()
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [ref])
-    const saveJPEG = useCallback(() => {
-        if (ref.current === null) {
-            return
-        }
-
-        toPng(ref.current, {cacheBust: true,})
-            .then(function (dataUrl) {
-                const link = document.createElement('a');
-                link.download = 'card.jpeg';
-                link.href = dataUrl;
-                link.click();
-            })
-    }, [ref])
-
     return (
         <div className={c.container}>
-            <div className={c.save}>
-                <SaveCard removeFocusItems={removeFocusItems} saveJPEG={saveJPEG} savePNG={savePNG}/>
-            </div>
 
             <div style={{
                 position: "fixed",
@@ -500,195 +402,202 @@ const CardView: React.FC<CardViewProps> = ({
                  onMouseOverCapture={(event) => {
                      changeCoordinatesItem(event, itemId, editCoordinatesMode, startCoordinates, coordinates)
                      changeSizeItem(event, itemId, editSizeMode, startCoordinates, coordinates, size)
-                 }}>
+                 }}                                     >
 
-                <div ref={ref} className={c.card__background} style={{backgroundColor: card.background}}>
-                    <div className={c.card__filter} style={card.filter == 'transparent' ? {opacity: 1} : {
+                <div ref={refSave} className={c.card__background} style={{backgroundColor: card.background}}>
+                    <div className={c.card__filter} style={card.filter === 'transparent' ? {opacity: 1} : {
                         backgroundColor: card.filter,
                         opacity: 0.5
                     }}>
                         {card.items.map((item) =>
                             <div key={item.id}>
-                                <div className={c.view_container}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         margin: '-0.4vh',
-                                         border: '0.4vh solid #FF6779',
-                                         cursor: "move",
-                                         position: "absolute",
-                                         zIndex: 300,
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x,
-                                         width: item.size.width,
-                                         height: item.size.height,
-                                     } : itsFocus(item.id, card.focusItems) && focusItems.length > 1 ? {
-                                         cursor: "pointer",
-                                         position: "absolute",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x,
-                                         width: item.size.width,
-                                         height: item.size.height,
-                                         zIndex: 300,
-                                         margin: '-0.4vh',
-                                         border: '0.4vh solid #FF6779',
-                                     } : {
-                                         cursor: "pointer",
-                                         position: "absolute",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x,
-                                         width: item.size.width,
-                                         height: item.size.height
-                                     }}
-                                     draggable={itsFocus(item.id, card.focusItems) && focusItems.length == 1}
-                                     onMouseDown={(event) => {
-                                         editCoordinatesItem(event, item.id, item.coordinates, itsFocus(item.id, card.focusItems) && focusItems.length == 1)
-                                     }}
-                                     onMouseEnter={(event) => {
-
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditCoordinatesMode(false)
-                                     }}
-                                     onClick={() => {
-                                         if (focusItems.length == 0 || multipleChoice) {
-                                             addFocusItemView(item.id, item.size, item.coordinates)
-                                         } else {
-                                             removeFocusItems()
-                                         }
-                                     }}
-                                >
-                                    <ItemView item={item}/>
-                                </div>
+                                <ItemsContainerView item={item} focusItems={focusItems} removeFocusItems={removeFocusItems} addFocusItem={addFocusItem}/>
+                                {/*<div className={c.view_container}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         margin: '-0.4vh',*/}
+                                {/*         border: '0.4vh solid #FF6779',*/}
+                                {/*         cursor: "move",*/}
+                                {/*         position: "absolute",*/}
+                                {/*         zIndex: 300,*/}
+                                {/*         top: item.coordinates.y,*/}
+                                {/*         left: item.coordinates.x,*/}
+                                {/*         width: item.size.width,*/}
+                                {/*         height: item.size.height,*/}
+                                {/*     } : itsFocus(item.id, card.focusItems) && focusItems.length > 1 ? {*/}
+                                {/*         cursor: "pointer",*/}
+                                {/*         position: "absolute",*/}
+                                {/*         top: item.coordinates.y,*/}
+                                {/*         left: item.coordinates.x,*/}
+                                {/*         width: item.size.width,*/}
+                                {/*         height: item.size.height,*/}
+                                {/*         zIndex: 300,*/}
+                                {/*         margin: '-0.4vh',*/}
+                                {/*         border: '0.4vh solid #FF6779',*/}
+                                {/*     } : {*/}
+                                {/*         cursor: "pointer",*/}
+                                {/*         position: "absolute",*/}
+                                {/*         top: item.coordinates.y,*/}
+                                {/*         left: item.coordinates.x,*/}
+                                {/*         width: item.size.width,*/}
+                                {/*         height: item.size.height*/}
+                                {/*     }}*/}
+                                {/*     draggable={itsFocus(item.id, card.focusItems) && focusItems.length === 1}*/}
+                                {/*     onMouseDown={(event) => {*/}
+                                {/*         editCoordinatesItem(event, item.id, item.coordinates, itsFocus(item.id, card.focusItems) && focusItems.length === 1)*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={() => {*/}
+                                {/*         setEditCoordinatesMode(false)*/}
+                                {/*     }}*/}
+                                {/*     onClick={() => {*/}
+                                {/*         if (focusItems.length === 0 || multipleChoice) {*/}
+                                {/*             addFocusItem(item.id)*/}
+                                {/*         } else {*/}
+                                {/*             removeFocusItems()*/}
+                                {/*         }*/}
+                                {/*     }}*/}
+                                {/*>*/}
+                                {/*    <ItemView item={item}/>*/}
+                                {/*</div>*/}
 
 
-                                <div className={c.border + " " + c.border_top}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, heightTop: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, heightTop: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "row-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x,
-                                         width: item.size.width
-                                     } : {display: "none"}}/>
-                                <div className={c.border + " " + c.border_right}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, widthRight: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, widthRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "col-resize",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                         height: item.size.height
-                                     } : {display: "none"}}/>
-                                <div className={c.border + " " + c.border_button}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, heightButton: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, heightButton: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "row-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x,
-                                         width: item.size.width,
-                                     } : {display: "none"}}/>
-                                <div className={c.border + " " + c.border_left}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, widthLeft: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, widthLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "col-resize",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                         height: item.size.height
-                                     } : {display: "none"}}/>
-                                <div className={c.corner}
-                                    //corner top-left
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, cornerTopLeft: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, cornerTopLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "nwse-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                     } : {display: "none"}}
-                                />
-                                <div className={c.corner}
-                                    //corner top-right
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, cornerTopRight: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, cornerTopRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "nesw-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                     } : {display: "none"}}
-                                />
-                                <div className={c.corner}
-                                    //corner button-left
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, cornerButtonLeft: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "nesw-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                     } : {display: "none"}}
-                                />
-                                <div className={c.corner}
-                                    //corner button-right
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, sizeFocus, coordinatesFocus)
-                                         setEditSizeMode({...editSizeMode, cornerButtonRight: true})
-                                     }}
-                                     onMouseUp={(event) => {
-                                         setEditSizeMode({...editSizeMode, cornerButtonRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && focusItems.length == 1 ? {
-                                         cursor: "nwse-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                     } : {display: "none"}}
-                                />
+                                {/*<div className={c.border + " " + c.border_top}*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, heightTop: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, heightTop: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "row-resize",*/}
+                                {/*         top: item.coordinates.y - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x,*/}
+                                {/*         width: item.size.width*/}
+                                {/*     } : {display: "none"}}/>*/}
+                                {/*<div className={c.border + " " + c.border_right}*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, widthRight: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={() => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, widthRight: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "col-resize",*/}
+                                {/*         top: item.coordinates.y,*/}
+                                {/*         left: item.coordinates.x + item.size.width - sizeBorder / 2,*/}
+                                {/*         height: item.size.height*/}
+                                {/*     } : {display: "none"}}/>*/}
+                                {/*<div className={c.border + " " + c.border_button}*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, heightButton: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, heightButton: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "row-resize",*/}
+                                {/*         top: item.coordinates.y + item.size.height - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x,*/}
+                                {/*         width: item.size.width,*/}
+                                {/*     } : {display: "none"}}/>*/}
+                                {/*<div className={c.border + " " + c.border_left}*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, widthLeft: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={() => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, widthLeft: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "col-resize",*/}
+                                {/*         top: item.coordinates.y,*/}
+                                {/*         left: item.coordinates.x - sizeBorder / 2,*/}
+                                {/*         height: item.size.height*/}
+                                {/*     } : {display: "none"}}/>*/}
+                                {/*<div className={c.corner}*/}
+                                {/*    //corner top-left*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerTopLeft: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerTopLeft: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "nwse-resize",*/}
+                                {/*         top: item.coordinates.y - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x - sizeBorder / 2,*/}
+                                {/*     } : {display: "none"}}*/}
+                                {/*/>*/}
+                                {/*<div className={c.corner}*/}
+                                {/*    //corner top-right*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerTopRight: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerTopRight: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "nesw-resize",*/}
+                                {/*         top: item.coordinates.y - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x + item.size.width - sizeBorder / 2,*/}
+                                {/*     } : {display: "none"}}*/}
+                                {/*/>*/}
+                                {/*<div className={c.corner}*/}
+                                {/*    //corner button-left*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerButtonLeft: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerButtonLeft: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "nesw-resize",*/}
+                                {/*         top: item.coordinates.y + item.size.height - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x - sizeBorder / 2,*/}
+                                {/*     } : {display: "none"}}*/}
+                                {/*/>*/}
+                                {/*<div className={c.corner}*/}
+                                {/*    //corner button-right*/}
+                                {/*     draggable={true}*/}
+                                {/*     onMouseDown={(event) => {*/}
+
+                                {/*         editSize(event, item.id, item.size, item.coordinates)*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerButtonRight: true})*/}
+                                {/*     }}*/}
+                                {/*     onMouseUp={(event) => {*/}
+                                {/*         setEditSizeMode({...editSizeMode, cornerButtonRight: false})*/}
+                                {/*     }}*/}
+                                {/*     style={itsFocus(item.id, card.focusItems) && focusItems.length === 1 ? {*/}
+                                {/*         cursor: "nwse-resize",*/}
+                                {/*         top: item.coordinates.y + item.size.height - sizeBorder / 2,*/}
+                                {/*         left: item.coordinates.x + item.size.width - sizeBorder / 2,*/}
+                                {/*     } : {display: "none"}}*/}
+                                {/*/>*/}
                             </div>
                         )}
                     </div>
                 </div>
             </div>
+
+
         </div>
     );
 };

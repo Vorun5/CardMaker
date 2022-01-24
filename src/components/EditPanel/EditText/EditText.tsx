@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import c from './EditText.module.scss'
 import style from '../../../style/style.module.scss'
 import {
@@ -10,7 +10,7 @@ import {
     TextCard,
     TextDecoration
 } from "../../../models/types";
-import {id, ID} from "../../../models/id";
+import {id} from "../../../models/id";
 import {
     ChangeFontSizeTexts,
     ChangeFontTextActionsType,
@@ -46,7 +46,7 @@ const EditText: React.FC<EditTextProps> = ({
     const [fontSizeText, setFontSizeText] = useState<number>(textCard.fontSize)
 
     function reverseFontWeight(fw: FontWeight): FontWeight {
-        if (fw == FontWeight.normal) {
+        if (fw === FontWeight.normal) {
             return FontWeight.bolt
         } else {
             return FontWeight.normal
@@ -54,7 +54,7 @@ const EditText: React.FC<EditTextProps> = ({
     }
 
     function reverseFontStyle(fs: FontStyle): FontStyle {
-        if (fs == FontStyle.normal) {
+        if (fs === FontStyle.normal) {
             return FontStyle.italic
         } else {
             return FontStyle.normal
@@ -62,7 +62,7 @@ const EditText: React.FC<EditTextProps> = ({
     }
 
     function reverseTextDecoration(td: TextDecoration): TextDecoration {
-        if (td == TextDecoration.normal) {
+        if (td === TextDecoration.normal) {
             return TextDecoration.lineThrough
         } else {
             return TextDecoration.normal
@@ -70,7 +70,7 @@ const EditText: React.FC<EditTextProps> = ({
     }
 
     const [activeFont, setActiveFont] = useState(false);
-
+    const ref = useRef(null)
 
 
     return (
@@ -79,7 +79,7 @@ const EditText: React.FC<EditTextProps> = ({
                 {title}
             </div>
             <div className={c.input_container}>
-                <input type="text" value={valueText}
+                <input ref={ref} type="text" value={valueText}
                        onChange={(event) => {
                            setValueText(event.target.value)
                            changeTexts(event.target.value)
@@ -97,7 +97,7 @@ const EditText: React.FC<EditTextProps> = ({
             </div>
             <div className={c.fs}>
                 <div className={c.fs_item + ' ' + c.fs_item__bolt}
-                     style={styleText.fontWeight == FontWeight.bolt ? {
+                     style={styleText.fontWeight === FontWeight.bolt ? {
                          backgroundColor: '#dadada'
                      } : {}}
 
@@ -110,7 +110,7 @@ const EditText: React.FC<EditTextProps> = ({
                      }}/>
 
                 <div className={c.fs_item + ' ' + c.fs_item__italic}
-                     style={styleText.fontStyle == FontStyle.italic ? {
+                     style={styleText.fontStyle === FontStyle.italic ? {
                          backgroundColor: '#dadada'
                      } : {}}
 
@@ -124,7 +124,7 @@ const EditText: React.FC<EditTextProps> = ({
 
                 <div className={c.fs_item + ' ' + c.fs_item__strikethrough}
 
-                     style={styleText.textDecoration == TextDecoration.lineThrough ? {
+                     style={styleText.textDecoration === TextDecoration.lineThrough ? {
                          backgroundColor: '#dadada'
                      } : {}}
 

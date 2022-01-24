@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
     Card,
     CardMaker, emptyFocusItems, emptyMultipleChoice,
@@ -30,21 +30,21 @@ let isPressed = false
 
 const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, redoHistory, undoHistory}) => {
     function kyeUpHandler(event: KeyboardEvent) {
-        if (event.code == 'KeyZ') {
+        if (event.code === 'KeyZ') {
             isPressed = false
         }
-        if (event.code == 'KeyX') {
+        if (event.code === 'KeyX') {
             isPressed = false
         }
 
     }
     function kyeDownHandler(event: KeyboardEvent) {
         if (event.ctrlKey) {
-            if (event.code == 'KeyZ') {
+            if (event.code === 'KeyZ') {
                 isPressed = true
                 undoHistory()
             }
-            if (event.code == 'KeyX') {
+            if (event.code === 'KeyX') {
                 isPressed = true
                 redoHistory()
             }
@@ -70,7 +70,7 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
         const history: History = store.getState().history
         const card: Card = {...store.getState().card, focusItems: emptyFocusItems, multipleChoice: emptyMultipleChoice}
         const cardString = JSON.stringify(card)
-        if (history.currentIndex == -1) {
+        if (history.currentIndex === -1) {
             addHistory(cardString)
         } else {
             if (history.list[history.currentIndex] !== cardString) {
@@ -89,7 +89,7 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
                 <div className={c.undo_icon + " " + c.icon}/>
             </div>
             <div onClick={() => redoHistory()}
-                 className={history.currentIndex + 1 == history.list.length ? style.button + " " + c.button + " " + style.button_inactive : style.button + " " + c.button}>
+                 className={history.currentIndex + 1 === history.list.length ? style.button + " " + c.button + " " + style.button_inactive : style.button + " " + c.button}>
                 <div className={c.redo_icon + " " + c.icon}/>
             </div>
         </div>

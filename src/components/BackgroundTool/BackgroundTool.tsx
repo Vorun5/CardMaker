@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import c from './BackgroundTool.module.scss'
 import style from '../../style/style.module.scss'
 import {CardMaker} from "../../models/types";
 import {connect} from "react-redux";
-import {changeBackground, changeFilter} from "../../actions/actionsCreaters";
+import {changeBackground} from "../../actions/actionsCreaters";
 import {ChangeBackgroundActionsType} from "../../actions/actions";
 
 interface BackgroundTolProps {
