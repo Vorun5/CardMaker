@@ -56,6 +56,14 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
                 kyeDownHandler(event)
             }
         })
+
+        return () => {
+            document.removeEventListener("keydown", (event: KeyboardEvent) => {
+                if (!isPressed) {
+                    kyeDownHandler(event)
+                }
+            })
+        }
     })
 
     useEffect(() => {
@@ -64,6 +72,15 @@ const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, r
                 kyeUpHandler(event)
             }
         })
+
+        return () => {
+            document.removeEventListener("keyup", (event: KeyboardEvent) => {
+                if (isPressed) {
+                    kyeUpHandler(event)
+                }
+            })
+        }
+
     })
 
     function handleChange() {

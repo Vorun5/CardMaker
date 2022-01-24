@@ -222,13 +222,13 @@ const AddItems: React.FC<AddItemsProps> = ({
     }
     const [images, setImages] = useState<img[]>([])
 
-    function dragOnDropHandler(e: React.DragEvent) {
-        e.preventDefault()
-        if (e.dataTransfer.files !== null) {
-            if (e.dataTransfer.files.length !== 1) {
+    function dragOnDropHandler(event: React.DragEvent) {
+        event.preventDefault()
+        if (event.dataTransfer.files !== null) {
+            if (event.dataTransfer.files.length !== 1) {
                 setWarningOneImg(true)
             } else {
-                let file = e.dataTransfer.files[0]
+                let file = event.dataTransfer.files[0]
                 if (file.type === "image/png" || file.type === "image/jpeg") {
                     let reader = new FileReader()
                     reader.readAsDataURL(file)
