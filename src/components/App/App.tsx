@@ -1,18 +1,12 @@
 import React, {useCallback, useRef} from 'react';
 import './App.module.scss';
 import FilterTool from '../FilterTool/FilterTool';
-import {Card, CardMaker, History, Size} from "../../models/types";
+import {Card, CardMaker, History} from "../../models/types";
 import c from './App.module.scss'
 import CardView from "../CardView/CardView";
 import BackgroundTool from "../BackgroundTool/BackgroundTool";
 import EditPanel from "../EditPanel/EditPanel";
 import {connect} from "react-redux";
-import {
-    addHistory, removeFocusItems,
-    resizeCard,
-
-} from "../../actions/actionsCreaters";
-import {AddHistoryActionsType, RemoveFocusItemsActionsType, ResizeCardActionsType} from "../../actions/actions";
 import SizeCardTool from "../SizeCardTool/SizeCardTool";
 import AddItems from "../AddItems/AddItems";
 import DeleteItems from "../DeleteItems/DeleteItems";
@@ -24,20 +18,16 @@ import ElementLayers from "../ElementLayers/ElementLayers";
 import MultipleChoiceTool from "../MultipleChoiceTool/MultipleChoiceTool";
 import {toPng} from "html-to-image";
 import SaveCard from "../SaveCard/SaveCard";
+import RemoveFocus from "../RemoveFocus/RemoveFocus";
 
 interface AppProps {
     card: Card,
     history: History,
-    resizeCard: (size: Size) => ResizeCardActionsType,
-    addHistory: (card: string) => AddHistoryActionsType,
-    removeFocusItems: () => RemoveFocusItemsActionsType
 }
 
 const App: React.FC<AppProps> = ({
                                      card,
                                      history,
-                                     resizeCard,
-                                     removeFocusItems
                                  }) => {
 
 
@@ -74,11 +64,13 @@ const App: React.FC<AppProps> = ({
     return (
         <div className={c.App}>
 
-
             <div className={c.header_card}>
                 <div className={c.header_card_element_tool}>
                     <div className={c.header_card_element_tool_item}>
                         <DeleteItems/>
+                    </div>
+                    <div className={c.header_card_element_tool_item}>
+                        <RemoveFocus/>
                     </div>
                     <div className={c.header_card_element_tool_item}>
                         <ElementLayers/>
@@ -86,7 +78,7 @@ const App: React.FC<AppProps> = ({
 
                 </div>
                 <div className={c.header_card_size_card}>
-                    <SizeCardTool resizeCard={resizeCard} size={card.size}/>
+                    <SizeCardTool/>
                 </div>
                 <div className={c.header_card_history}>
                     <CardHistory/>
@@ -112,7 +104,6 @@ const App: React.FC<AppProps> = ({
                 <EditPanel/>
             </div>
 
-
         </div>
     );
 }
@@ -124,9 +115,5 @@ function mapStateToProps(state: CardMaker) {
     }
 }
 
-const mapDispatchToProps = {
-    resizeCard,
-    addHistory,
-    removeFocusItems
-}
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default connect(mapStateToProps)(App);

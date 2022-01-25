@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import c from "./SaveCard.module.scss"
 import style from "./../../style/style.module.scss"
 import Modal from "../Style components/Modal/Modal";
-import {RemoveFocusItemsActionsType} from "../../actions/actions";
-import {removeFocusItems} from "../../actions/actionsCreaters";
+import {RemoveFocusItemsActionsType} from "../../store/actions/actions";
+import {removeFocusItems} from "../../store/actions/actionsCreaters";
 import {connect} from "react-redux";
 
 interface SaveCardProps {

@@ -3,8 +3,8 @@ import c from './FilterTool.module.scss'
 import style from '../../style/style.module.scss'
 import {CardMaker} from "../../models/types";
 import {connect} from "react-redux";
-import {changeFilter} from "../../actions/actionsCreaters";
-import {ChangeFilterActionsType} from "../../actions/actions";
+import {changeFilter} from "../../store/actions/actionsCreaters";
+import {ChangeFilterActionsType} from "../../store/actions/actions";
 
 interface FilterToolProps {
     filter: string,
@@ -25,8 +25,8 @@ const FilterTool: React.FC<FilterToolProps> = ({filter, changeFilter}) => {
                 </div>
                 <div className={c.body__remove_color}>
                     <div className={c.body__remove_color_button} onClick={() => {
-                        setColorPreview('#FFFFFF')
                         changeFilter('transparent');
+                        setColorPreview('#FFFFFF')
                     }}/>
                 </div>
                 <div className={c.body__color}>

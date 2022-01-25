@@ -7,7 +7,7 @@ import {
     TypeArt
 } from "../../../models/types";
 import {id} from "../../../models/id";
-import {ChangeTypeArtsActionType} from "../../../actions/actions";
+import {ChangeTypeArtsActionType} from "../../../store/actions/actions";
 
 interface EditArtProps {
     title: string,

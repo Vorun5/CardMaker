@@ -1,5 +1,5 @@
 import {ActionsType, ActionType} from "../actions/actions";
-import {Card, CardMaker, Item, TypeDate,} from "../models/types";
+import {Card, CardMaker, Item, TypeDate,} from "../../models/types";
 import {createStore} from "redux";
 
 
@@ -106,14 +106,6 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                 }
             }
         }
-        case ActionType.REMOVE_ALL_HISTORY:
-            return {
-                ...state,
-                history: {
-                    list: [],
-                    currentIndex: -1
-                }
-            }
         case ActionType.ADD_HISTORY:
             if (state.history.list.length > state.history.currentIndex + 1) {
                 state = {
@@ -132,8 +124,6 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                     currentIndex: currentIndex,
                 }
             }
-        case ActionType.REMOVE_ALL_ITEMS:
-            return {...state, card: {...state.card, items: []}}
         case ActionType.ADD_ITEM:
             return {...state, card: {...state.card, items: [...state.card.items, action.item]}}
         case ActionType.MOVING_ITEM: {

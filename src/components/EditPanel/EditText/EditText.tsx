@@ -17,7 +17,7 @@ import {
     ChangeTextsActionsType,
     RecolorTextsActionsType,
     RestyleTextActionsType
-} from "../../../actions/actions";
+} from "../../../store/actions/actions";
 
 interface EditTextProps {
     title: string

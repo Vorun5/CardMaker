@@ -6,95 +6,71 @@ import {
 } from "../../models/types";
 import c from "./CardHistory.module.scss"
 import style from "./../../style/style.module.scss"
-import {store} from "../../reduser/redusers";
+import {store} from "../../store/reduser/redusers";
 import {
-    AddHistoryActionsType,
-    ChangeCardActionType,
     RedoHistoryActionsType,
     UndoHistoryActionsType
-} from "../../actions/actions";
-import {addHistory, changeCard, redoHistory, undoHistory} from "../../actions/actionsCreaters";
+} from "../../store/actions/actions";
+import {addHistory, redoHistory, undoHistory} from "../../store/actions/actionsCreaters";
 import {connect} from "react-redux";
-
-interface HistoryProps {
-    history: History,
-    addHistory: (card: string) => AddHistoryActionsType,
-    changeCard: (card: Card) => ChangeCardActionType,
-    redoHistory: () => RedoHistoryActionsType,
-    undoHistory: () => UndoHistoryActionsType,
-
-}
 
 let isPressed = false
 
-
-const CardHistory: React.FC<HistoryProps> = ({history, addHistory, changeCard, redoHistory, undoHistory}) => {
-    function kyeUpHandler(event: KeyboardEvent) {
+function kyeUpHandler(event: KeyboardEvent) {
+    if (isPressed) {
         if (event.code === 'KeyZ') {
             isPressed = false
         }
         if (event.code === 'KeyX') {
             isPressed = false
         }
-
     }
-    function kyeDownHandler(event: KeyboardEvent) {
+}
+
+function kyeDownHandler(event: KeyboardEvent) {
+    if (!isPressed) {
         if (event.ctrlKey) {
             if (event.code === 'KeyZ') {
                 isPressed = true
-                undoHistory()
+                store.dispatch(undoHistory())
             }
             if (event.code === 'KeyX') {
                 isPressed = true
-                redoHistory()
+                store.dispatch(redoHistory())
             }
         }
     }
-    useEffect(() => {
-        document.addEventListener("keydown", (event: KeyboardEvent) => {
-            if (!isPressed) {
-                kyeDownHandler(event)
-            }
-        })
+}
 
-        return () => {
-            document.removeEventListener("keydown", (event: KeyboardEvent) => {
-                if (!isPressed) {
-                    kyeDownHandler(event)
-                }
-            })
-        }
-    })
-
-    useEffect(() => {
-        document.addEventListener("keyup", (event: KeyboardEvent) => {
-            if (isPressed) {
-                kyeUpHandler(event)
-            }
-        })
-
-        return () => {
-            document.removeEventListener("keyup", (event: KeyboardEvent) => {
-                if (isPressed) {
-                    kyeUpHandler(event)
-                }
-            })
-        }
-
-    })
-
-    function handleChange() {
-        const history: History = store.getState().history
-        const card: Card = {...store.getState().card, focusItems: emptyFocusItems, multipleChoice: emptyMultipleChoice}
-        const cardString = JSON.stringify(card)
-        if (history.currentIndex === -1) {
-            addHistory(cardString)
-        } else {
-            if (history.list[history.currentIndex] !== cardString) {
-                addHistory(cardString)
-            }
+function handleChange() {
+    const history: History = store.getState().history
+    const card: Card = {...store.getState().card, focusItems: emptyFocusItems, multipleChoice: emptyMultipleChoice}
+    const cardString = JSON.stringify(card)
+    if (history.currentIndex === -1) {
+        store.dispatch(addHistory(cardString))
+    } else {
+        if (history.list[history.currentIndex] !== cardString) {
+            store.dispatch(addHistory(cardString))
         }
     }
+}
+
+interface HistoryProps {
+    history: History,
+    redoHistory: () => RedoHistoryActionsType,
+    undoHistory: () => UndoHistoryActionsType,
+
+}
+
+const CardHistory: React.FC<HistoryProps> = ({history, redoHistory, undoHistory}) => {
+    useEffect(() => {
+        document.addEventListener("keydown", kyeDownHandler)
+        document.addEventListener("keyup", kyeUpHandler)
+        return () => {
+            document.removeEventListener("keydown", kyeDownHandler)
+            document.removeEventListener("keyup", kyeUpHandler)
+        }
+    })
 
     const unsubscribe = store.subscribe(handleChange)
 
@@ -120,8 +96,6 @@ function mapStateToProps(state: CardMaker) {
 }
 
 const mapDispatchToProps = {
-    addHistory,
-    changeCard,
     redoHistory,
     undoHistory
 }

@@ -14,14 +14,61 @@ import {
     TypeDate
 } from "../../models/types";
 import {ID, id} from "../../models/id";
-import {addFocusItem, addItem, removeFocusItems, resizeCard} from "../../actions/actionsCreaters";
+import {addFocusItem, addItem, removeFocusItems, resizeCard} from "../../store/actions/actionsCreaters";
 import {connect} from "react-redux";
 import {
     AddFocusItemActionsType,
     AddItemActionsType,
     RemoveFocusItemsActionsType,
     ResizeCardActionsType
-} from "../../actions/actions";
+} from "../../store/actions/actions";
+
+
+
+
+
+const padding = 20
+const textItem: Item = {
+    id: id(),
+    data: {
+        fontSize: 16,
+        type: TypeDate.TextCard,
+        body: "Example text",
+        color: '#11a1fb',
+        fontFamily: Fonts.Montserrat,
+        fontStyle: {
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.bolt,
+            textDecoration: TextDecoration.normal,
+        }
+    },
+    size: {
+        width: 150,
+        height: 50,
+    },
+    coordinates: {
+        x: padding,
+        y: padding,
+    }
+}
+const artItem: Item = {
+    id: id(),
+    data: {
+        type: TypeDate.Art,
+        typeArt: TypeArt.Bat
+    },
+    size: {
+        width: 100,
+        height: 300,
+    },
+    coordinates: {
+        x: padding,
+        y: padding,
+    }
+}
+
+
+
 
 interface AddItemsProps {
     sizeCard: Size,
@@ -41,47 +88,6 @@ const AddItems: React.FC<AddItemsProps> = ({
                                                multipleChoice
                                            }) => {
 
-
-    const padding = 20
-    const textItem: Item = {
-        id: id(),
-        data: {
-            fontSize: 16,
-            type: TypeDate.TextCard,
-            body: "Example text",
-            color:  '#11a1fb',
-            fontFamily: Fonts.Montserrat,
-            fontStyle: {
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.bolt,
-                textDecoration: TextDecoration.normal,
-            }
-        },
-        size: {
-            width: 150,
-            height: 50,
-        },
-        coordinates: {
-            x: padding,
-            y: padding,
-        }
-    }
-    const artItem: Item = {
-        id: id(),
-        data: {
-            type: TypeDate.Art,
-            typeArt: TypeArt.Bat
-        },
-        size: {
-            width: 100,
-            height: 300,
-        },
-        coordinates: {
-            x: padding,
-            y: padding,
-        }
-    }
-
     function add(item: Item) {
         const idItem = id()
         addItem(
@@ -91,10 +97,11 @@ const AddItems: React.FC<AddItemsProps> = ({
             }
         )
         if (multipleChoice) {
-
-            // addFocusItem(idItem)
+            addFocusItem(idItem)
+        } else {
+            removeFocusItems()
+            addFocusItem(idItem)
         }
-        removeFocusItems()
     }
 
     const [imgSelected, setImgSelected] = useState<boolean>(false)
@@ -118,7 +125,7 @@ const AddItems: React.FC<AddItemsProps> = ({
 
     function saveImg() {
         for (let i = 0; i < images.length; i++) {
-            if (images[i].width + padding * 2 > sizeCard.width || images[i].height + padding * 2 > sizeCard.height) {
+            if (images[i].width > sizeCard.width || images[i].height > sizeCard.height) {
                 setBigImg(true)
                 return
             } else {
@@ -134,8 +141,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                         height: images[i].height,
                     },
                     coordinates: {
-                        x: padding,
-                        y: padding,
+                        x: 0,
+                        y: 0,
                     }
                 })
                 setImages([])
@@ -160,8 +167,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                         height: images[i].height,
                     },
                     coordinates: {
-                        x: padding,
-                        y: padding,
+                        x: 0,
+                        y: 0,
                     }
                 })
                 added = true
@@ -177,8 +184,8 @@ const AddItems: React.FC<AddItemsProps> = ({
         for (let i = 0; i < images.length; i++) {
             if (!added) {
                 resizeCard({
-                    width: images[i].width + 2 * padding,
-                    height: images[i].height + 2 * padding,
+                    width: images[i].width,
+                    height: images[i].height,
                 })
                 const idItem = id()
                 add({
@@ -192,8 +199,8 @@ const AddItems: React.FC<AddItemsProps> = ({
                         height: images[i].height,
                     },
                     coordinates: {
-                        x: padding,
-                        y: padding,
+                        x: 0,
+                        y: 0,
                     }
                 })
                 added = true
@@ -257,6 +264,7 @@ const AddItems: React.FC<AddItemsProps> = ({
 
         }
     }
+
     const [modalArt, setModalArt] = useState<boolean>(false)
 
     return (
@@ -384,19 +392,20 @@ const AddItems: React.FC<AddItemsProps> = ({
                     <div className={c.art_modal_content}>
                         {allTypeArtList.map((art) =>
                             <div key={id()} className={c.art_modal_item}
-                                onClick={() => {
-                                    add({
-                                        ...artItem,
-                                        data: {
-                                            type: TypeDate.Art,
-                                            typeArt: art,
-                                        }
-                                    })
-                                    setModalArt(false)
-                                }}>
+                                 onClick={() => {
+                                     add({
+                                         ...artItem,
+                                         data: {
+                                             type: TypeDate.Art,
+                                             typeArt: art,
+                                         }
+                                     })
+                                     setModalArt(false)
+                                 }}>
 
-                                <img className={c.art_modal_item_icon} width={50} src={require(`../../static/art/${String(art)}.svg`).default}
-                                     alt={String(art)}/></div>
+                                <img className={c.art_modal_item_icon} width={50}
+                                     src={require(`../../static/art/${String(art)}.svg`).default}
+                                     alt={"error"}/></div>
                         )}
                     </div>
                     <div className={c.modal_close}>

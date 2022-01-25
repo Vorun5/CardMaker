@@ -3,8 +3,8 @@ import c from './BackgroundTool.module.scss'
 import style from '../../style/style.module.scss'
 import {CardMaker} from "../../models/types";
 import {connect} from "react-redux";
-import {changeBackground} from "../../actions/actionsCreaters";
-import {ChangeBackgroundActionsType} from "../../actions/actions";
+import {changeBackground} from "../../store/actions/actionsCreaters";
+import {ChangeBackgroundActionsType} from "../../store/actions/actions";
 
 interface BackgroundTolProps {
     background: string,

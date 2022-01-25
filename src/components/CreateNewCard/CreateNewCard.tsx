@@ -5,11 +5,11 @@ import {connect} from "react-redux";
 import {
     CreateNewCardMakerActionType,
 
-} from "../../actions/actions";
+} from "../../store/actions/actions";
 import {
     createNewCardMaker,
 
-} from "../../actions/actionsCreaters";
+} from "../../store/actions/actionsCreaters";
 import Modal from "../Style components/Modal/Modal";
 
 interface CreateNewCardProps {

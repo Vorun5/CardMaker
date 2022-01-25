@@ -1,8 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import c from './SizeCardTool.module.scss'
-import {Size} from "../../models/types";
-import {ChangeFilterActionsType, ResizeCardActionsType} from "../../actions/actions";
-import {store} from "../../reduser/redusers";
+import {CardMaker, Size} from "../../models/types";
+import {ResizeCardActionsType} from "../../store/actions/actions";
+import {store} from "../../store/reduser/redusers";
+import {resizeCard} from "../../store/actions/actionsCreaters";
+import {connect} from "react-redux";
 
 
 interface SizeCardToolProps {
@@ -20,6 +22,7 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
 
     const max = 9999
     const min = 100
+
     function onKeyDownHandle(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
             let w = width
@@ -52,6 +55,12 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
             setWidth(store.getState().card.size.width)
             setHeight(store.getState().card.size.height)
         })
+        return () => {
+            store.subscribe(() => {
+                setWidth(store.getState().card.size.width)
+                setHeight(store.getState().card.size.height)
+            })
+        }
     })
 
     return (
@@ -81,4 +90,15 @@ const SizeCardTool: React.FC<SizeCardToolProps> = ({
     );
 };
 
-export default SizeCardTool;
+
+function mapStateToProps(state: CardMaker) {
+    return {
+        size: state.card.size,
+    }
+}
+
+const mapDispatchToProps = {
+    resizeCard
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SizeCardTool);

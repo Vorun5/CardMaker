@@ -16,8 +16,6 @@ import {
     MovingItemsActionsType,
     RecolorTextsActionsType,
     RedoHistoryActionsType,
-    RemoveAllHistoryActionType,
-    RemoveAllItemsActionType,
     RemoveFocusItemsActionsType,
     RemoveItemsActionsType,
     ResizeCardActionsType,
@@ -27,8 +25,8 @@ import {
     UndoHistoryActionsType,
     UpLayerActionType
 } from "./actions";
-import {Card, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../models/types";
-import {ID} from "../models/id";
+import {Card, Coordinates, Fonts, FontStyleText, Item, Size, TypeArt} from "../../models/types";
+import {ID} from "../../models/id";
 
 
 export const resizeItemsByDiff = (size: Size): ResizeItemsByDiffActionType => {
@@ -85,11 +83,6 @@ export const addHistory = (card: string): AddHistoryActionsType => {
     }
 }
 
-export const removeAllHistory = (): RemoveAllHistoryActionType => {
-    return {
-        type: ActionType.REMOVE_ALL_HISTORY,
-    }
-}
 
 
 export const addItem = (item: Item): AddItemActionsType => {
@@ -99,11 +92,6 @@ export const addItem = (item: Item): AddItemActionsType => {
     }
 }
 
-export const removeAllItems = (): RemoveAllItemsActionType => {
-    return {
-        type: ActionType.REMOVE_ALL_ITEMS,
-    }
-}
 
 export const removeItems = (): RemoveItemsActionsType => {
     return {

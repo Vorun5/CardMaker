@@ -5,7 +5,6 @@ import {
     CardMaker,
     Fonts,
     FontStyleText,
-    IMG,
     Item,
     TextCard, TypeArt,
     TypeDate
@@ -18,13 +17,13 @@ import {
     changeTexts, changeTypeArts,
     recolorTexts,
     restyleText
-} from "../../actions/actionsCreaters";
+} from "../../store/actions/actionsCreaters";
 import {
     ChangeFontSizeTexts,
     ChangeFontTextActionsType,
     ChangeTextsActionsType, ChangeTypeArtsActionType, RecolorTextsActionsType,
     RestyleTextActionsType
-} from "../../actions/actions";
+} from "../../store/actions/actions";
 import EditText from "./EditText/EditText";
 import EditArt from "./EditArt/EditArt";
 import c from './EditPanel.module.scss'
@@ -67,19 +66,6 @@ function firstArtIndex(focusItems: ID[], items: Item[]): Art | null {
     return null
 }
 
-function firstImgIndex(focusItems: ID[], items: Item[]): IMG | null {
-    for (let j = 0; j < focusItems.length; j++) {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === focusItems[j]) {
-                const itemData = items[i].data
-                if (itemData.type === TypeDate.IMG) {
-                    return itemData
-                }
-            }
-        }
-    }
-    return null
-}
 
 const EditPanel: React.FC<EditPanelToProps> = ({
                                                    changeFontSizeText,
@@ -93,37 +79,8 @@ const EditPanel: React.FC<EditPanelToProps> = ({
                                                }) => {
 
 
-    function isOneText(id: ID, items: Item[]): boolean {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-                return items[i].data.type === TypeDate.TextCard;
-            }
-        }
-        return false
-    }
-
-    function isOneArt(id: ID, items: Item[]): boolean {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-                return items[i].data.type === TypeDate.Art;
-            }
-        }
-        return false
-    }
-
-    function isOneImg(id: ID, items: Item[]): boolean {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-                return items[i].data.type === TypeDate.TextCard;
-            }
-        }
-        return false
-    }
-
-
     const textItemData = firstTextIndex(focusItems, items)
     const artItemData = firstArtIndex(focusItems, items)
-    const imgItemData = firstImgIndex(focusItems, items)
     return (
         <div className={c.container}>
             {textItemData

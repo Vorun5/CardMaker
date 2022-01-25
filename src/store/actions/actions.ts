@@ -6,13 +6,12 @@ import {
     Item,
     Size,
     TypeArt,
-} from "../models/types";
-import {ID} from "../models/id";
+} from "../../models/types";
+import {ID} from "../../models/id";
 
 export enum ActionType {
     RESIZE_CARD = 'RESIZE_CARD',
     ADD_HISTORY = 'ADD_HISTORY',
-    REMOVE_ALL_ITEMS = 'REMOVE_ALL_ITEMS',
     ADD_ITEM = 'ADD_ITEM',
     REMOVE_ITEMS = 'REMOVE_ITEMS',
     MOVING_ITEM = 'MOVING_ITEM',
@@ -27,7 +26,6 @@ export enum ActionType {
     CHANGE_FONT_TEXT = 'CHANGE_FONT_TEXT',
     CHANGE_FILTER = 'CHANGE_FILTER',
     CHANGE_BACKGROUND = 'CHANGE_BACKGROUND',
-    REMOVE_ALL_HISTORY = 'REMOVE_ALL_HISTORY',
     REDO_HISTORY = 'REDO_HISTORY',
     UNDO_HISTORY = 'UNDO_HISTORY',
     ADD_FOCUS_ITEM = 'ADD_FOCUS_ITEM',
@@ -68,14 +66,6 @@ export type ChangeTypeArtsActionType = {
     typeArt: TypeArt,
 }
 
-export type RemoveAllItemsActionType = {
-    type: ActionType.REMOVE_ALL_ITEMS,
-}
-
-
-export type RemoveAllHistoryActionType = {
-    type: ActionType.REMOVE_ALL_HISTORY,
-}
 
 export type CreateNewCardMakerActionType = {
     type: ActionType.CREATE_NEW_CARD_MAKER
@@ -204,8 +194,6 @@ export type ActionsType =
     | RemoveItemsActionsType
     | CreateNewCardMakerActionType
     | ChangeCardActionType
-    | RemoveAllHistoryActionType
-    | RemoveAllItemsActionType
     | ChangeTypeArtsActionType
     | ScaleItemsActionType
     | UpLayerActionType
