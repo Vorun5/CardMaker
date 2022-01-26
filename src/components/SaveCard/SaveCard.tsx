@@ -30,7 +30,7 @@ const SaveCard: React.FC<SaveCardProps> = ({
             {saveModal ?
                 <Modal>
                     <div className={c.save_title}>
-                        Скачать.
+                        Скачать
                     </div>
                     <div className={c.save_container}>
                         <div className={c.save_description}>Скачать открытку как</div>

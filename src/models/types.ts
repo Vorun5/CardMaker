@@ -20,9 +20,12 @@ export enum TypeArt {
     Present = "Подарок",
     Cake = "Торт",
     Astronaut = "Космонавт",
+    Coffee = "Кофе",
+    Cat = "Котёнок",
+    Peach = "Персик",
 }
 
-export const allTypeArtList = [TypeArt.Astronaut, TypeArt.Cake, TypeArt.Present, TypeArt.Stars, TypeArt.NightCat, TypeArt.Santa, TypeArt.Snowflake, TypeArt.Snow, TypeArt.Fox, TypeArt.Bat, TypeArt.World, TypeArt.Butterfly, TypeArt.Moon, TypeArt.Rocket, TypeArt.Sun, TypeArt.NewYear, TypeArt.ChristmasTree]
+export const allTypeArtList = [TypeArt.Peach, TypeArt.Coffee, TypeArt.Astronaut, TypeArt.Cake, TypeArt.Present, TypeArt.Stars, TypeArt.NightCat, TypeArt.Santa, TypeArt.Snowflake, TypeArt.Snow, TypeArt.Fox, TypeArt.Bat, TypeArt.World, TypeArt.Butterfly, TypeArt.Moon, TypeArt.Rocket, TypeArt.Sun, TypeArt.NewYear, TypeArt.ChristmasTree,  TypeArt.Cat,]
 
 export enum TypeDate {
     TextCard = 'TextCard',

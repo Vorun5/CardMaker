@@ -19,6 +19,7 @@ import MultipleChoiceTool from "../MultipleChoiceTool/MultipleChoiceTool";
 import {toPng} from "html-to-image";
 import SaveCard from "../SaveCard/SaveCard";
 import RemoveFocus from "../RemoveFocus/RemoveFocus";
+import Info from "../Info/Info";
 
 interface AppProps {
     card: Card,
@@ -104,6 +105,10 @@ const App: React.FC<AppProps> = ({
                 <EditPanel/>
             </div>
 
+
+            <div className={c.info}>
+                <Info/>
+            </div>
         </div>
     );
 }

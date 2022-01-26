@@ -75,9 +75,10 @@
 
 .corner {
   position: absolute;
-  width: 16px;
-  height: 16px;
-  background-color: #FF6779;
+  width: 20px;
+  height: 20px;
+  border-radius: 0.25rem;
+  background-color: #11a1fb;
   z-index: 302;
   &_top {
   }

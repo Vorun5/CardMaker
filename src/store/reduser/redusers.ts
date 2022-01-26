@@ -2,8 +2,7 @@ import {ActionsType, ActionType} from "../actions/actions";
 import {Card, CardMaker, Item, TypeDate,} from "../../models/types";
 import {createStore} from "redux";
 
-
-const minSize = 30
+const minSize = 60
 const initialState: CardMaker = {
     templates: [],
     history: {
@@ -116,6 +115,13 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
                     }
                 }
             }
+
+            if (state.history.list.length > 20) {
+                state = {
+                    ...state,
+                    history: {...state.history, list: state.history.list.slice(-20)}
+                }
+            }
             let currentIndex = state.history.list.length
             return {
                 ...state,
@@ -170,7 +176,6 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             }
             return state
         }
-
         case ActionType.SCALE_ITEMS: {
             for (let i = 0; i < state.card.focusItems.length; i++) {
 
@@ -198,7 +203,6 @@ const cardMakerReducer = (state = initialState, action: ActionsType): CardMaker 
             }
             return state
         }
-
         case ActionType.RESIZE_ITEMS_BY_DIFF: {
             for (let i = 0; i < state.card.focusItems.length; i++) {
 

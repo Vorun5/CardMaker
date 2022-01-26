@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Card, CardMaker, Coordinates, History, Size} from "../../models/types";
 import {connect} from "react-redux";
 import c from './CardView.module.scss'
-import style from './../../style/style.module.scss'
 import {ID} from "../../models/id";
 import {
     addFocusItem,
@@ -103,8 +102,8 @@ function itsFocus(el: ID, listID: ID[]): boolean {
     return false
 }
 
-const sizeBorder = 16
-const minSize = 30
+const sizeBorder = 20
+const minSize = 60
 
 
 interface CardViewProps {
@@ -358,16 +357,6 @@ const CardView: React.FC<CardViewProps> = ({
     return (
         <div className={c.container}>
 
-            <div style={{
-                position: "fixed",
-                zIndex: 10000,
-                top: '50px',
-                right: '10px',
-            }} className={style.button} onClick={() => {
-                console.log(JSON.stringify(store.getState().card))
-            }}>Сохранить
-            </div>
-
             <div style={{width: card.size.width, height: card.size.height,}}
                  className={c.card}
                  onMouseOverCapture={(event) => {
@@ -385,7 +374,7 @@ const CardView: React.FC<CardViewProps> = ({
                                 <div className={c.view_container}
                                      style={card.focusItems.length === 1 && itsFocus(item.id, card.focusItems) ? {
                                          margin: '-0.4vh',
-                                         border: '0.4vh solid #FF6779',
+                                         border: '0.4vh solid #11a1fb',
                                          cursor: "move",
                                          position: "absolute",
                                          zIndex: 300,
@@ -402,7 +391,7 @@ const CardView: React.FC<CardViewProps> = ({
                                          height: item.size.height,
                                          zIndex: 300,
                                          margin: '-0.4vh',
-                                         border: '0.4vh solid #FF6779',
+                                         border: '0.4vh solid #11a1fb',
                                      } : {
                                          cursor: "pointer",
                                          position: "absolute",

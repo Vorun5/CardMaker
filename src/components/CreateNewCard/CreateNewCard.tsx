@@ -32,7 +32,7 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({createNewCardMaker}) => {
                 <Modal>
                     <div className={c.warning}>
 
-                        <div className={c.warning_title}>Создать новую открытку.</div>
+                        <div className={c.warning_title}>Создать новую открытку</div>
                         <div className={c.warning_content}>
                            Вы действительно хотите создать новую открытку? <br/>  Все несохраненные изменения будут удаленны!
                         </div>
@@ -42,11 +42,11 @@ const CreateNewCard: React.FC<CreateNewCardProps> = ({createNewCardMaker}) => {
                                     createNewCardMaker()
                                     setWarning(false)
                                 }}
-                                className={c.warning_buttons_yes + " " + style.button}>Yes
+                                className={c.warning_buttons_yes + " " + style.button}>Да
                             </div>
                             <div
                                 onClick={() => setWarning(false)}
-                                className={c.warning_buttons_no + " " + style.button}>No
+                                className={c.warning_buttons_no + " " + style.button}>Нет
                             </div>
                         </div>
                     </div>

@@ -79,11 +79,11 @@ const CardHistory: React.FC<HistoryProps> = ({history, redoHistory, undoHistory}
             <div
                 onClick={() => undoHistory()}
                 className={history.currentIndex > 0 ? style.button + " " + c.button : style.button + " " + c.button + " " + style.button_inactive}>
-                <div className={c.undo_icon + " " + c.icon}/>
+                <div className={history.currentIndex > 0 ? c.undo_icon + " " + c.icon : c.undo_icon_inactive + " " + c.icon}/>
             </div>
             <div onClick={() => redoHistory()}
                  className={history.currentIndex + 1 === history.list.length ? style.button + " " + c.button + " " + style.button_inactive : style.button + " " + c.button}>
-                <div className={c.redo_icon + " " + c.icon}/>
+                <div className={history.currentIndex + 1 === history.list.length ? c.redo_icon_inactive + " " + c.icon : c.redo_icon + " " + c.icon}/>
             </div>
         </div>
     );

@@ -20,6 +20,13 @@
   background: url("../../static/icon/redo.svg") center no-repeat;
 }
 
+.redo_icon_inactive {
+  background: url("../../static/icon/redo_inactive.svg") center no-repeat;
+}
+
 .undo_icon {
   background: url("../../static/icon/undo.svg") center no-repeat;
+}
+.undo_icon_inactive {
+  background: url("../../static/icon/undo_inactive.svg") center no-repeat;
 }
