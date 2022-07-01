@@ -1,0 +1,48 @@
+.container {
+  cursor: default;
+  background-color: white;
+  height: 40px;
+  border: 1px solid #bbbbbb;
+  border-bottom: none;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  background: url("../../static/icon/multiple_choice.svg") center no-repeat;
+}
+
+.title {
+  flex: 1 0 auto;
+  padding: 0 10px 0 0;
+  color: #6f6f6f;
+  font-size: 1rem;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.button {
+  cursor: pointer;
+  margin: 0 8px 0 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 0.25rem;
+  background-color: white;
+  border: 1px solid #bbbbbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // .button_done
+  &_done {
+    width: 20px;
+    height: 20px;
+    background: url("../../static/icon/done.svg") center no-repeat;
+  }
+}

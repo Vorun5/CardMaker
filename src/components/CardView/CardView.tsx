@@ -135,8 +135,7 @@ const CardView: React.FC<CardViewProps> = ({
             document.removeEventListener("keydown", kyeDownHandler)
             document.removeEventListener("keyup", kyeUpHandler)
         }
-    })
-
+    }, [])
     const [editCoordinatesMode, setEditCoordinatesMode] = useState<boolean>(false)
     const [editSizeMode, setEditSizeMode] = useState<editSizeMode>({
         widthRight: false,
@@ -422,138 +421,141 @@ const CardView: React.FC<CardViewProps> = ({
                                 >
                                     <ItemView item={item}/>
                                 </div>
+                                {itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ?
+                                    <div>
+                                        <div className={c.border + " " + c.border_top}
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, heightTop: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, heightTop: false})
+                                             }}
+                                             style={{
+                                                 cursor: "row-resize",
+                                                 top: item.coordinates.y - sizeBorder / 2,
+                                                 left: item.coordinates.x,
+                                                 width: item.size.width
+                                             }}/>
+                                        <div className={c.border + " " + c.border_right}
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, widthRight: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, widthRight: false})
+                                             }}
+                                             style={{
+                                                 cursor: "col-resize",
+                                                 top: item.coordinates.y,
+                                                 left: item.coordinates.x + item.size.width - sizeBorder / 2,
+                                                 height: item.size.height
+                                             }}/>
+                                        <div className={c.border + " " + c.border_button}
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, heightButton: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, heightButton: false})
+                                             }}
+                                             style={{
+                                                 cursor: "row-resize",
+                                                 top: item.coordinates.y + item.size.height - sizeBorder / 2,
+                                                 left: item.coordinates.x,
+                                                 width: item.size.width,
+                                             }}/>
+                                        <div className={c.border + " " + c.border_left}
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, widthLeft: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, widthLeft: false})
+                                             }}
+                                             style={{
+                                                 cursor: "col-resize",
+                                                 top: item.coordinates.y,
+                                                 left: item.coordinates.x - sizeBorder / 2,
+                                                 height: item.size.height
+                                             }}/>
+                                        <div className={c.corner}
+                                            //corner top-left
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, cornerTopLeft: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, cornerTopLeft: false})
+                                             }}
+                                             style={{
+                                                 cursor: "nwse-resize",
+                                                 top: item.coordinates.y - sizeBorder / 2,
+                                                 left: item.coordinates.x - sizeBorder / 2,
+                                             }}
+                                        />
+                                        <div className={c.corner}
+                                            //corner top-right
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, cornerTopRight: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, cornerTopRight: false})
+                                             }}
+                                             style={{
+                                                 cursor: "nesw-resize",
+                                                 top: item.coordinates.y - sizeBorder / 2,
+                                                 left: item.coordinates.x + item.size.width - sizeBorder / 2,
+                                             }}
+                                        />
+                                        <div className={c.corner}
+                                            //corner button-left
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, cornerButtonLeft: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
+                                             }}
+                                             style={{
+                                                 cursor: "nesw-resize",
+                                                 top: item.coordinates.y + item.size.height - sizeBorder / 2,
+                                                 left: item.coordinates.x - sizeBorder / 2,
+                                             }}
+                                        />
+                                        <div className={c.corner}
+                                            //corner button-right
+                                             draggable={true}
+                                             onMouseDown={(event) => {
+
+                                                 editSize(event, item.id, item.size, item.coordinates)
+                                                 setEditSizeMode({...editSizeMode, cornerButtonRight: true})
+                                             }}
+                                             onMouseUp={() => {
+                                                 setEditSizeMode({...editSizeMode, cornerButtonRight: false})
+                                             }}
+                                             style={{
+                                                 cursor: "nwse-resize",
+                                                 top: item.coordinates.y + item.size.height - sizeBorder / 2,
+                                                 left: item.coordinates.x + item.size.width - sizeBorder / 2,
+                                             }}
+                                        />
+                                    </div> : null}
 
 
-                                <div className={c.border + " " + c.border_top}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, heightTop: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, heightTop: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "row-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x,
-                                         width: item.size.width
-                                     } : {width: 0, height: 0}}/>
-                                <div className={c.border + " " + c.border_right}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, widthRight: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, widthRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "col-resize",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                         height: item.size.height
-                                     } : {width: 0, height: 0}}/>
-                                <div className={c.border + " " + c.border_button}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, heightButton: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, heightButton: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "row-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x,
-                                         width: item.size.width,
-                                     } : {width: 0, height: 0}}/>
-                                <div className={c.border + " " + c.border_left}
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, widthLeft: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, widthLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "col-resize",
-                                         top: item.coordinates.y,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                         height: item.size.height
-                                     } : {width: 0, height: 0}}/>
-                                <div className={c.corner}
-                                    //corner top-left
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, cornerTopLeft: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, cornerTopLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "nwse-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                     } : {width: 0, height: 0}}
-                                />
-                                <div className={c.corner}
-                                    //corner top-right
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, cornerTopRight: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, cornerTopRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "nesw-resize",
-                                         top: item.coordinates.y - sizeBorder / 2,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                     } : {width: 0, height: 0}}
-                                />
-                                <div className={c.corner}
-                                    //corner button-left
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, cornerButtonLeft: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, cornerButtonLeft: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "nesw-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x - sizeBorder / 2,
-                                     } : {width: 0, height: 0}}
-                                />
-                                <div className={c.corner}
-                                    //corner button-right
-                                     draggable={true}
-                                     onMouseDown={(event) => {
-
-                                         editSize(event, item.id, item.size, item.coordinates)
-                                         setEditSizeMode({...editSizeMode, cornerButtonRight: true})
-                                     }}
-                                     onMouseUp={() => {
-                                         setEditSizeMode({...editSizeMode, cornerButtonRight: false})
-                                     }}
-                                     style={itsFocus(item.id, card.focusItems) && card.focusItems.length === 1 ? {
-                                         cursor: "nwse-resize",
-                                         top: item.coordinates.y + item.size.height - sizeBorder / 2,
-                                         left: item.coordinates.x + item.size.width - sizeBorder / 2,
-                                     } : {width: 0, height: 0}}
-                                />
                             </div>
                         )}
                     </div>

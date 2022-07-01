@@ -3,46 +3,40 @@ import style from "../../style/style.module.scss"
 import {CardMaker} from "../../models/types";
 import {
     removeFocusItems,
-    removeItems,
 } from "../../store/actions/actionsCreaters";
 import {connect} from "react-redux";
 import {ID} from "../../models/id";
-import {RemoveFocusItemsActionsType, RemoveItemsActionsType} from "../../store/actions/actions";
+import {RemoveFocusItemsActionsType} from "../../store/actions/actions";
 import {store} from "../../store/reduser/redusers";
 
 
-interface DeleteItemProps {
+interface RemoveFocusProps {
     focusItems: ID[],
-    removeItems: () => RemoveItemsActionsType,
     removeFocusItems: () => RemoveFocusItemsActionsType,
 }
 
 let isPressed = false
-
 function kyeUpHandler(event: KeyboardEvent) {
     if (isPressed) {
-        if (event.code === 'Delete') {
+        if (event.code === 'Minus') {
             isPressed = false
         }
     }
 
 }
-
 function kyeDownHandler(event: KeyboardEvent) {
     if (!isPressed) {
-        if (event.code === 'Delete') {
-            store.dispatch(removeItems())
-            store.dispatch(removeFocusItems())
+        if (event.code === 'Minus') {
+            store.dispatch( removeFocusItems())
             isPressed = true
         }
     }
 }
 
-const DeleteItems: React.FC<DeleteItemProps> = ({
-                                                    focusItems,
-                                                    removeItems,
-                                                    removeFocusItems,
-                                                }) => {
+const RemoveFocus: React.FC<RemoveFocusProps> = ({
+                                                     focusItems,
+                                                     removeFocusItems,
+                                                 }) => {
 
     useEffect(() => {
         document.addEventListener("keydown", kyeDownHandler)
@@ -51,7 +45,9 @@ const DeleteItems: React.FC<DeleteItemProps> = ({
             document.removeEventListener("keydown", kyeDownHandler)
             document.removeEventListener("keyup", kyeUpHandler)
         }
-    }, [])
+    })
+
+
 
     return (
 
@@ -59,12 +55,11 @@ const DeleteItems: React.FC<DeleteItemProps> = ({
             className={focusItems.length !== 0 ? style.button : style.button + " " + style.button_inactive}
             onClick={() => {
                 if (focusItems.length !== 0) {
-                    removeItems()
                     removeFocusItems()
                 }
             }}
         >
-            Delete
+            Remove focus
         </div>
     );
 };
@@ -77,8 +72,7 @@ function mapStateToProps(state: CardMaker) {
 }
 
 const mapDispatchToProps = {
-    removeItems,
     removeFocusItems,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeleteItems);
+export default connect(mapStateToProps, mapDispatchToProps)(RemoveFocus);

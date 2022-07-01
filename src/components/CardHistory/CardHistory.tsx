@@ -70,7 +70,7 @@ const CardHistory: React.FC<HistoryProps> = ({history, redoHistory, undoHistory}
             document.removeEventListener("keydown", kyeDownHandler)
             document.removeEventListener("keyup", kyeUpHandler)
         }
-    })
+    }, [])
 
     const unsubscribe = store.subscribe(handleChange)
 

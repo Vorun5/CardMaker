@@ -1,0 +1,46 @@
+.container {
+  position: relative;
+}
+
+.icon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background: url("../../static/icon/info.svg") center no-repeat;
+  background-size: 30px;
+  border-radius: 50%;
+  transition: box-shadow 0.3s;
+  &:hover {
+    box-shadow: 0 0 0 0.3rem #11a1fb;
+  }
+  &_active {
+    box-shadow: 0 0 0 0.3rem #11a1fb;
+  }
+}
+
+.info {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  top: calc(-220px - 1rem);
+  left: calc(-445px - 1rem);
+  position: absolute;
+  width: 480px;
+  height: 210px;
+  background-color: #2c2c2c;
+  &_item {
+    margin: 0.5rem 0;
+    height: 20px;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    color: #bbbbbb;
+    font-size: 14px;
+    display: flex;
+    padding: 0 0 5px 0;
+    border-bottom: 1px solid rgba(187, 187, 187, 0.50);
+    justify-content: space-between;
+    &_kye {
+      color: #6fbcec;
+      font-size: 18px;
+    }
+  }
+}
